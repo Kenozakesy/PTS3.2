@@ -126,8 +126,8 @@
          </children>
       </VBox>
       <Label layoutX="525.0" layoutY="157.0" prefHeight="21.0" prefWidth="125.0" text="Card sets: " />
-      <ListView fx:id="taCardsets" layoutX="608.0" layoutY="157.0" prefHeight="200.0" prefWidth="458.0" />
-      <ListView layoutX="12.0" layoutY="493.0" prefHeight="220.0" prefWidth="323.0" />
+      <ListView fx:id="lvCardsets" layoutX="608.0" layoutY="157.0" prefHeight="200.0" prefWidth="458.0" />
+      <ListView fx:id="lvScore" layoutX="12.0" layoutY="493.0" prefHeight="220.0" prefWidth="323.0" />
       <Label alignment="CENTER" layoutX="11.0" layoutY="451.0" prefHeight="42.0" prefWidth="323.0" style="-fx-background-color: gray;" text="Scoreboard:">
          <font>
             <Font size="24.0" />
