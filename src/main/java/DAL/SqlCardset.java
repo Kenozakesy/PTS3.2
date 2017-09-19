@@ -1,16 +1,20 @@
-import Business.*;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package DAL;
 
+import Business.*;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Properties;
+import java.util.*;
 
 /**
- * Created by JelleSchrader on 12-9-2017.
+ *
+ * @author JelleSchrader
  */
-
-
-public class DatabaseTest {
-    private Connection connection;
+public class SqlCardset {
+        private Connection connection;
     private Properties properties;
     private String user = "dbi299244";
     private String pass = "PTS3Groep1";
@@ -30,7 +34,7 @@ public class DatabaseTest {
             return null;
         }
     }
-
+    // Deze is static omdat we niet weten waarom het static moet zijn, maar er genoeg reden voor waren, alleen die hebben we niet meer onthouden.
     public static Connection connect(){
         try{
             return DriverManager.getConnection("Server=mssql.fhict.local;Database=dbi299244;", "dbi299244", "PTS3Groep1");
@@ -51,15 +55,36 @@ public class DatabaseTest {
     
     }
     public ArrayList<Cardset> getAllCardsets(){
-        return null;
+        try{
+            connection = connect();
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM Deck;";
+            ResultSet result = statement.executeQuery(query);
+            
+            ArrayList<Cardset> sets = new ArrayList<Cardset>();
+            
+            while(result.next()){
+                int id = result.getInt(0);
+                String name = result.getString(1);
+                
+                Cardset set = new Cardset(id, name);
+                
+                ArrayList<Cards> cards = sqlCard.get
+                set.setCardsInCardset(cards);
+                
+                System.out.println(set.getId() + " " + set.getName());
+                sets.add(set);
+            }
+            return sets;
+        } catch(Exception ex){
+            ex.printStackTrace();
+            return null;
+        }
     }
     public ArrayList<Cards> getAllCardsFromCardSet(int cardsetId){
         return null;
     }
     public Cardset getCardsetById(int cardsetId){
-        return null;
-    }
-    public Cards getCardFromCardsetById(int cardId, int cardsetId){
         return null;
     }
 }

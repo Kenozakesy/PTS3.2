@@ -17,6 +17,11 @@ public class PlayCard extends Cards
 
         this.blank = blank;
     }
+    
+    public PlayCard(int id, String text, Cardset cardset, boolean blank) {
+        super(id, text, cardset);
+        this.blank = blank;
+    }
 
 }
 
