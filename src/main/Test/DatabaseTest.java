@@ -1,5 +1,4 @@
 import Business.*;
-import org.junit.Test;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -51,10 +50,16 @@ public class DatabaseTest {
         }
     
     }
-    
-    public ArrayList<Cards> getCardsFromDeck(String deck){
-        
+    public ArrayList<Cardset> getAllCardsets(){
+        return null;
     }
-    
-
+    public ArrayList<Cards> getAllCardsFromCardSet(int cardsetId){
+        return null;
+    }
+    public Cardset getCardsetById(int cardsetId){
+        return null;
+    }
+    public Cards getCardFromCardsetById(int cardId, int cardsetId){
+        return null;
+    }
 }
