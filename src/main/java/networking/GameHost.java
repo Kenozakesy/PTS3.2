@@ -15,20 +15,28 @@ public class GameHost {
     private final int maxPlayers;
     private final GameServerEvents eventHandler;
 
-
-
     public GameHost(int maxPlayers, GameServerEvents eventHandler) throws IOException {
         this.eventHandler = eventHandler;
+        this.maxPlayers = maxPlayers;
         server = new ServerSocket(1337);
         clients = new HashSet<>();
-        this.maxPlayers = maxPlayers;
-
         acceptor = new ClientAcceptor(this);
+    }
+
+    public void start() {
         acceptor.start();
     }
 
     public void stopAccepting() {
         acceptor.acceptClients = false;
+    }
+
+    public void close() {
+        this.stopAccepting();
+
+        for (ClientHandler client : clients) {
+            client.close();
+        }
     }
 
     public void messageAll(String message) {
@@ -106,8 +114,11 @@ public class GameHost {
                         host.eventHandler.onClientMessage(client, new String(buffer, "UTF-8"));
                         buffer = new byte[512];
                     }
+
+                    if (len == -1) this.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    this.close();
                 }
             }
         }
@@ -118,17 +129,18 @@ public class GameHost {
                 out.flush();
             } catch (IOException e) {
                 e.printStackTrace();
-                closeClient();
+                this.close();
             }
         }
 
-        private void closeClient() {
+        private void close() {
             try {
                 this.client.close();
                 this.out.close();
                 this.in.close();
-                this.interrupt();
+                this.receiveMessages = false;
                 host.clients.remove(this);
+                host.eventHandler.onClientLeave(client);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Could not close client: " + client.getRemoteSocketAddress());

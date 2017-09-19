@@ -10,11 +10,11 @@ public class GameServerEventHandler implements GameServerEvents {
 
     @Override
     public void onClientJoin(Socket client) {
-
+        System.out.println(client.getRemoteSocketAddress() + " just joined!");
     }
 
     @Override
     public void onClientLeave(Socket client) {
-
+        System.out.println(client.getRemoteSocketAddress() + " just left!");
     }
 }
