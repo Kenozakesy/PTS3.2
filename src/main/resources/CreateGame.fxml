@@ -14,10 +14,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="726.0" prefWidth="1157.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="726.0" prefWidth="1157.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StartGameController">
    <children>
       <TextArea fx:id="taChat" layoutX="334.0" layoutY="451.0" prefHeight="230.0" prefWidth="809.0" />
-      <Button fx:id="btnSend" layoutX="1043.0" layoutY="681.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Send" />
+      <Button fx:id="btnSend" layoutX="1043.0" layoutY="681.0" mnemonicParsing="false" onAction="#btnSend" prefHeight="31.0" prefWidth="100.0" text="Send" />
       <TextField fx:id="tfChatBox" layoutX="335.0" layoutY="681.0" prefHeight="31.0" prefWidth="708.0" />
       <Label layoutX="14.0" layoutY="55.0" prefHeight="62.0" prefWidth="163.0" text="Game options:">
          <font>
@@ -126,8 +126,8 @@
          </children>
       </VBox>
       <Label layoutX="525.0" layoutY="157.0" prefHeight="21.0" prefWidth="125.0" text="Card sets: " />
-      <ListView fx:id="taCardsets" layoutX="608.0" layoutY="157.0" prefHeight="200.0" prefWidth="458.0" />
-      <ListView layoutX="12.0" layoutY="493.0" prefHeight="220.0" prefWidth="323.0" />
+      <ListView fx:id="lvCardsets" layoutX="608.0" layoutY="157.0" prefHeight="200.0" prefWidth="458.0" />
+      <ListView fx:id="lvScore" layoutX="12.0" layoutY="493.0" prefHeight="220.0" prefWidth="323.0" />
       <Label alignment="CENTER" layoutX="11.0" layoutY="451.0" prefHeight="42.0" prefWidth="323.0" style="-fx-background-color: gray;" text="Scoreboard:">
          <font>
             <Font size="24.0" />
@@ -135,17 +135,17 @@
       </Label>
       <HBox prefHeight="62.0" prefWidth="1157.0" style="-fx-background-color: gray;">
          <children>
-            <Button fx:id="btnStartGame" mnemonicParsing="false" prefHeight="31.0" prefWidth="100.0" text="Start game">
+            <Button fx:id="btnStartGame" mnemonicParsing="false" onAction="#btnStartGame" prefHeight="31.0" prefWidth="100.0" text="Start game">
                <HBox.margin>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="btnLeaveGame" mnemonicParsing="false" prefHeight="31.0" prefWidth="107.0" text="Leave game">
+            <Button fx:id="btnLeaveGame" mnemonicParsing="false" onAction="#btnLeaveGame" prefHeight="31.0" prefWidth="107.0" text="Leave game">
                <HBox.margin>
                   <Insets top="15.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="btnChangeNickname" mnemonicParsing="false" prefHeight="31.0" prefWidth="146.0" text="ChangeNickname">
+            <Button fx:id="btnChangeNickname" mnemonicParsing="false" onAction="#btnChangeNickName" prefHeight="31.0" prefWidth="146.0" text="ChangeNickname">
                <HBox.margin>
                   <Insets left="750.0" top="15.0" />
                </HBox.margin>
