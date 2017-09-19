@@ -21,23 +21,5 @@ public class Controller {
         if (player.getName() == name) {
             System.out.println("Playername: " + name);
         }
-
-
     }
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
 }

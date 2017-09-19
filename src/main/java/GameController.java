@@ -7,65 +7,65 @@ import java.util.List;
 
 public class GameController {
     @FXML
-    Button BtnChat;
+    Button btnChat;
     @FXML
-    Button BtnChoose;
+    Button btnChoose;
     @FXML
-    ListView LvPlayers;
+    ListView lvPlayers;
     @FXML
-    RadioButton RbtnCard1;
+    RadioButton rbtnCard1;
     @FXML
-    RadioButton RbtnCard2;
+    RadioButton rbtnCard2;
     @FXML
-    RadioButton RbtnCard3;
+    RadioButton rbtnCard3;
     @FXML
-    RadioButton RbtnCard4;
+    RadioButton rbtnCard4;
     @FXML
-    RadioButton RbtnCard5;
+    RadioButton rbtnCard5;
     @FXML
-    RadioButton RbtnCard6;
+    RadioButton rbtnCard6;
     @FXML
-    RadioButton RbtnCard7;
+    RadioButton rbtnCard7;
     @FXML
-    RadioButton RbtnCard8;
+    RadioButton rbtnCard8;
     @FXML
-    TextArea TaCard1;
+    TextArea taCard1;
     @FXML
-    TextArea TaCard2;
+    TextArea taCard2;
     @FXML
-    TextArea TaCard3;
+    TextArea taCard3;
     @FXML
-    TextArea TaCard4;
+    TextArea taCard4;
     @FXML
-    TextArea TaCard5;
+    TextArea taCard5;
     @FXML
-    TextArea TaCard6;
+    TextArea taCard6;
     @FXML
-    TextArea TaCard7;
+    TextArea taCard7;
     @FXML
-    TextArea TaCard8;
+    TextArea taCard8;
     @FXML
-    TextArea TaBlackCard;
+    TextArea taBlackCard;
     @FXML
-    TextArea TaChatHistory;
+    TextArea taChatHistory;
     @FXML
-    TextField TbChat;
+    TextField tbChat;
 
-    List<String> chatList = new ArrayList<String>();
+    private List<String> chatList = new ArrayList<String>();
 
     public void click( Event e){
         String chat;
 
-        chat = TbChat.getText();
+        chat = tbChat.getText();
         chatList.add(chat);
 
 //        for (String line : chatList){
 //
-//            TaChatHistory.setText(TaChatHistory.getText() + line);
+//            taChatHistory.setText(taChatHistory.getText() + line);
 //        }
     }
 
-    public void Choose(Event e){
+    public void choose(Event e){
         System.out.println("Kaart gekozen");
     }
 
