@@ -1,10 +1,12 @@
+import Business.*;
 import org.junit.Test;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
- * Created by Gebruiker on 12-9-2017.
+ * Created by JelleSchrader on 12-9-2017.
  */
 
 
@@ -15,7 +17,7 @@ public class DatabaseTest {
     private String pass = "PTS3Groep1";
             //"Server=mssql.fhict.local;Database=dbi299244;User Id=dbi299244;Password=PTS3Groep1;";
 
-    private Properties GetProperties() {
+    private Properties getProperties() {
         try {
             if (properties == null) {
                 properties = new Properties();
@@ -30,7 +32,7 @@ public class DatabaseTest {
         }
     }
 
-    public static Connection Connect(){
+    public static Connection connect(){
         try{
             return DriverManager.getConnection("Server=mssql.fhict.local;Database=dbi299244;", "dbi299244", "PTS3Groep1");
         }
@@ -39,7 +41,7 @@ public class DatabaseTest {
             return null;
         }
     }
-    public void Disconnect(){
+    public void disconnect(){
         if (connection != null) {
             try {
                 connection.close();
@@ -47,6 +49,11 @@ public class DatabaseTest {
                 e.printStackTrace();
             }
         }
+    
+    }
+    
+    public ArrayList<Cards> getCardsFromDeck(String deck){
+        
     }
     
 
