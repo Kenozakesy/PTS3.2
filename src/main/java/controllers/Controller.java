@@ -27,7 +27,7 @@ public class Controller {
     }
 
     public void btnClient_Clicked() {
-        client = new GameClient(new GameClientEventHandler());
+        client = new GameClient("145.93.133.77", new GameClientEventHandler());
         client.start();
     }
 
