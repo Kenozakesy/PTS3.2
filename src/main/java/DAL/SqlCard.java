@@ -60,7 +60,7 @@ public class SqlCard {
     public ArrayList<Cards> getAllCards(){
         return null;
     }
-    public ArrayList<Cards> getAllCardsFromCardSet(int cardsetId) {
+    public ArrayList<Cards> getAllCardsFromCardSet(Cardset cardset) {
         try{
             sqlCardset = new SqlCardset();
             connection = connect();
@@ -68,7 +68,7 @@ public class SqlCard {
             String query = "SELECT * FROM Card WHERE DeckId = ?;";
             
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, cardsetId);
+            ps.setInt(1, cardset.getId());
             
             ResultSet result = statement.executeQuery(query);
             
@@ -77,7 +77,6 @@ public class SqlCard {
                 int id = result.getInt(0);
                 String name = result.getString(1);
                 Boolean blanc = result.getBoolean(2);
-                Cardset cardset = sqlCardset.getCardsetById(cardsetId);
                 
                 Cards card = new PlayCard(id, name, cardset, blanc);
                 System.out.println(card.getId() + " " + card.getText() + " " + ((PlayCard)card).getBlank());
@@ -89,7 +88,31 @@ public class SqlCard {
             return null;
         }
     }
-    public Cardset getCardById(int cardsetId){
-        return null;
+    public Cards getCardById(int cardId){
+        try{
+            sqlCardset = new SqlCardset();
+            connection = connect();
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM Card WHERE Id = ?;";
+            
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, cardId);
+            
+            ResultSet result = statement.executeQuery(query);
+            
+            Cards card = null;
+            while(result.next()) {
+                int id = result.getInt(0);
+                String name = result.getString(1);
+                Boolean blanc = result.getBoolean(2);
+                Cardset cardset = sqlCardset.getCardsetById(result.getInt(3));
+                
+                card = new PlayCard(id, name, cardset, blanc);
+            }
+            return card;
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }
