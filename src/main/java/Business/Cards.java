@@ -7,16 +7,16 @@ public abstract class Cards {
 
     private String text;
 
-    private Cardset cardset;
+    private Cardset cardSet;
 
-    public void SetText(String n) {this.text = n;}
-    public String GetText() {return this.text;}
+    public void setText(String n) {this.text = n;}
+    public String getText() {return this.text;}
 
-    public Cardset GetCardset() {return this.cardset;}
+    public Cardset getCardset() {return this.cardSet;}
 
     public Cards(String Text, Cardset Cardset)
     {
-        this.cardset = Cardset;
+        this.cardSet = Cardset;
         this.text = Text;
     }
 

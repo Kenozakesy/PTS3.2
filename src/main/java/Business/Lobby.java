@@ -11,40 +11,40 @@ import java.util.ArrayList;
 public class Lobby {
 
     //Relations
-    private ArrayList<CzarCard> CzarDeck;
-    private ArrayList<PlayCard> Deck;
+    private ArrayList<CzarCard> czarDeck;
+    private ArrayList<PlayCard> deck;
     private ArrayList<Cardset> cardsets;
 
-    private ArrayList<Player> Spectators;
-    private ArrayList<Player> Players;
+    private ArrayList<Player> spectators;
+    private ArrayList<Player> players;
 
     //Fields
     private String lobbyID;
-    private int maxplayers;
-    private int maxspectators;
-    private int scorelimit;
-    private int blankcards;
-    private Time timelimit;
+    private int maxPlayers;
+    private int maxSpectators;
+    private int scoreLimit;
+    private int blankCards;
+    private Time timeLimit;
     private String password;
     private Status status;
 
     //Properties
     public String getLobbyID() { return lobbyID;}
 
-    public int getMaxplayers() {return maxplayers;}
-    public void setMaxplayers(int maxplayers) {this.maxplayers = maxplayers;}
+    public int getMaxPlayers() {return maxPlayers;}
+    public void setMaxPlayers(int maxplayers) {this.maxPlayers = maxplayers;}
 
-    public int getMaxspectators() {return maxspectators;}
-    public void setMaxspectators(int maxspectators) {this.maxspectators = maxspectators;}
+    public int getMaxSpectators() {return maxSpectators;}
+    public void setMaxSpectators(int maxspectators) {this.maxSpectators = maxspectators;}
 
-    public int getScorelimit() {return scorelimit;}
-    public void setScorelimit(int scorelimit) {this.scorelimit = scorelimit;}
+    public int getScoreLimit() {return scoreLimit;}
+    public void setScoreLimit(int scoreLimit) {this.scoreLimit = scoreLimit;}
 
-    public int getBlankcards() {return blankcards;}
-    public void setBlankcards(int blankcards) {this.blankcards = blankcards;}
+    public int getBlankCards() {return blankCards;}
+    public void setBlankCards(int blankCards) {this.blankCards = blankCards;}
 
-    public Time getTimelimit() {return timelimit;}
-    public void setTimelimit(Time timelimit) {this.timelimit = timelimit;}
+    public Time getTimeLimit() {return timeLimit;}
+    public void setTimeLimit(Time timeLimit) {this.timeLimit = timeLimit;}
 
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
@@ -67,22 +67,22 @@ public class Lobby {
 
     public void addplayer(Player pleb)
     {
-        Players.add(pleb);
+        players.add(pleb);
     }
 
     public void removeplayer(Player pleb)
     {
-        Players.remove(pleb);
+        players.remove(pleb);
     }
 
     public void addSpectator(Player spectator)
     {
-        Players.add(spectator);
+        players.add(spectator);
     }
 
     public void removeSpectator(Player spectator)
     {
-        Players.remove(spectator);
+        players.remove(spectator);
     }
 
 

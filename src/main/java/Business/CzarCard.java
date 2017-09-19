@@ -7,13 +7,13 @@ public class CzarCard extends Cards {
 
     private int blankspaces;
 
-    public void SetBlankSpaces(int n) {this.blankspaces = n;}
+    public void setBlankSpaces(int n) {this.blankspaces = n;}
 
-    public int GetBlankSpaces() {return this.blankspaces;}
+    public int getBlankSpaces() {return this.blankspaces;}
 
-    public CzarCard(String Text, Cardset cardset, int Blankspaces) {
-        super(Text, cardset);
+    public CzarCard(String text, Cardset cardset, int blankspaces) {
+        super(text, cardset);
 
-        this.blankspaces = Blankspaces;
+        this.blankspaces = blankspaces;
     }
 }

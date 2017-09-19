@@ -7,15 +7,15 @@ public class PlayCard extends Cards
 {
     private boolean blank;
 
-    public void SetBlank(boolean n) {this.blank = n;}
+    public void setBlank(boolean n) {this.blank = n;}
 
-    public boolean GetBlank() {return this.blank;}
+    public boolean getBlank() {return this.blank;}
 
 
-    public PlayCard(String Text, Cardset cardset, boolean Blank) {
-        super(Text, cardset);
+    public PlayCard(String text, Cardset cardset, boolean blank) {
+        super(text, cardset);
 
-        this.blank = Blank;
+        this.blank = blank;
     }
 
 }

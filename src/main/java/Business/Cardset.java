@@ -8,19 +8,19 @@ import java.util.HashSet;
  */
 public class Cardset {
 
-    private ArrayList<Cards> CardsInSet;
+    private ArrayList<Cards> cardsInSet;
 
     private String name;
 
-    public void SetName(String n) {this.name = n;}
-    public String GetName() {return this.name;}
+    public void setName(String n) {this.name = n;}
+    public String getName() {return this.name;}
 
-    public Cardset(String Name)
+    public Cardset(String name)
     {
-        this.name = Name;
+        this.name = name;
     }
 
-    public void GetCardsInSet()
+    public void getCardsInSet()
     {
         //if card set is chosen add all cards from the set to the list
         //to be added later to the two different decks.
