@@ -64,15 +64,16 @@ public class GameClient {
         private void readInput() {
             byte[] buffer = new byte[512];
 
-            while (receiveMessages) {
+            while (receiveMessages && !socket.isClosed()) {
                 try {
-                    int len;
-                    if ((len = in.read(buffer)) != 0) {
+                    int len = in.read(buffer);
+
+                    if (len == -1) this.close();
+
+                    if (len != 0) {
                         client.eventHandler.onHostMessage(new String(buffer, "UTF-8"));
                         buffer = new byte[512];
                     }
-
-                    if (len == -1) close();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     this.close();
@@ -91,10 +92,8 @@ public class GameClient {
 
         private void close() {
             try {
-                this.out.close();
-                this.in.close();
-                this.socket.close();
                 receiveMessages = false;
+                this.socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Could not close client.");

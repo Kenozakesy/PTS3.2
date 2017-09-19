@@ -107,15 +107,16 @@ public class GameHost {
         public void run() {
             byte[] buffer = new byte[512];
 
-            while (receiveMessages) {
-                int len;
+            while (receiveMessages && !client.isClosed()) {
                 try {
-                    if ((len = in.read(buffer)) != 0) {
+                    int len = in.read(buffer);
+
+                    if (len == -1) this.close();
+
+                    if (len != 0) {
                         host.eventHandler.onClientMessage(client, new String(buffer, "UTF-8"));
                         buffer = new byte[512];
                     }
-
-                    if (len == -1) this.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                     this.close();
@@ -135,10 +136,8 @@ public class GameHost {
 
         private void close() {
             try {
-                this.client.close();
-                this.out.close();
-                this.in.close();
                 this.receiveMessages = false;
+                this.client.close();
                 host.clients.remove(this);
                 host.eventHandler.onClientLeave(client);
             } catch (IOException e) {

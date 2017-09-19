@@ -12,4 +12,9 @@ public class GameClientEventHandler implements GameClientEvents {
     public void onJoin(SocketAddress address) {
         System.out.println("Joined server at " + address);
     }
+
+    @Override
+    public void onServerClose() {
+        System.out.println("The server has closed!");
+    }
 }

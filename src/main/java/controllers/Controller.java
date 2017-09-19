@@ -9,7 +9,7 @@ import networking.GameServerEventHandler;
 
 import java.io.IOException;
 
-public class Controller {
+public class Controller  {
 
     private GameHost host;
     private GameClient client;
