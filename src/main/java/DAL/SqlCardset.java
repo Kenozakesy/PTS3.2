@@ -6,6 +6,7 @@
 package DAL;
 
 import Business.*;
+import static DAL.SqlCard.connect;
 import java.sql.*;
 import java.util.*;
 
@@ -72,7 +73,7 @@ public class SqlCardset {
                 
                 Cardset set = new Cardset(id, name);
                 
-                ArrayList<Cards> cards = sqlcard.getAllCardsFromCardSet(id);
+                ArrayList<Cards> cards = sqlcard.getAllCardsFromCardSet(set);
                 set.setCardsInCardset(cards);
                 
                 System.out.println(set.getId() + " " + set.getName());
@@ -88,6 +89,28 @@ public class SqlCardset {
         return null;
     }
     public Cardset getCardsetById(int cardsetId){
-        return null;
+        try{
+            sqlcard = new SqlCard();
+            connection = connect();
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM Deck WHERE Id = ?;";
+            
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, cardsetId);
+            
+            ResultSet result = statement.executeQuery(query);
+            
+            Cardset cardset = null;
+            while(result.next()) {
+                int id = result.getInt(0);
+                String name = result.getString(1);
+                
+                cardset = new Cardset(id, name);
+            }
+            return cardset;
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 }

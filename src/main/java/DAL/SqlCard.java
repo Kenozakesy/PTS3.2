@@ -58,7 +58,30 @@ public class SqlCard {
     
     }
     public ArrayList<Cards> getAllCards(){
-        return null;
+        try{
+            sqlCardset = new SqlCardset();
+            connection = connect();
+            Statement statement = connection.createStatement();
+            String query = "SELECT * FROM Card;";
+            
+            ResultSet result = statement.executeQuery(query);
+            
+            ArrayList<Cards> cards = new ArrayList<Cards>();
+            while(result.next()) {
+                int id = result.getInt(0);
+                String name = result.getString(1);
+                Boolean blanc = result.getBoolean(2);
+                Cardset cs = sqlCardset.getCardsetById(result.getInt(3));
+                
+                Cards card = new PlayCard(id, name, cs, blanc);
+                System.out.println(card.getId() + " " + card.getText() + " " + ((PlayCard)card).getBlank());
+                cards.add(card);
+            }
+            return cards;
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
     public ArrayList<Cards> getAllCardsFromCardSet(Cardset cardset) {
         try{
