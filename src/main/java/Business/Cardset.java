@@ -8,7 +8,7 @@ import java.util.HashSet;
  */
 public class Cardset {
 
-    private ArrayList<Cards> cardsInSet;
+    private ArrayList<Cards> cardsInSet = new ArrayList<Cards>();
 
     private int id;
     private String name;
@@ -33,4 +33,7 @@ public class Cardset {
         //to be added later to the two different decks.
     }
 
+    public void setCardsInCardset(ArrayList<Cards> cards){
+        this.cardsInSet = cards;
+    }
 }

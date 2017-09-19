@@ -14,12 +14,14 @@ import java.util.*;
  * @author JelleSchrader
  */
 public class SqlCardset {
-        private Connection connection;
+    private Connection connection;
     private Properties properties;
     private String user = "dbi299244";
     private String pass = "PTS3Groep1";
             //"Server=mssql.fhict.local;Database=dbi299244;User Id=dbi299244;Password=PTS3Groep1;";
 
+    private SqlCard sqlcard;
+    
     private Properties getProperties() {
         try {
             if (properties == null) {
@@ -56,6 +58,7 @@ public class SqlCardset {
     }
     public ArrayList<Cardset> getAllCardsets(){
         try{
+            sqlcard = new SqlCard();
             connection = connect();
             Statement statement = connection.createStatement();
             String query = "SELECT * FROM Deck;";
@@ -69,7 +72,7 @@ public class SqlCardset {
                 
                 Cardset set = new Cardset(id, name);
                 
-                ArrayList<Cards> cards = sqlCard.get
+                ArrayList<Cards> cards = sqlcard.getAllCardsFromCardSet(id);
                 set.setCardsInCardset(cards);
                 
                 System.out.println(set.getId() + " " + set.getName());
