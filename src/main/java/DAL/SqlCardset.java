@@ -6,7 +6,6 @@
 package DAL;
 
 import Business.*;
-import static DAL.SqlCard.connect;
 import java.sql.*;
 import java.util.*;
 
@@ -15,7 +14,7 @@ import java.util.*;
  * @author JelleSchrader
  */
 public class SqlCardset {
-    private Connection connection;
+    private SqlMain sqlMain = new SqlMain();
     private Properties properties;
     private String user = "dbi299244";
     private String pass = "PTS3Groep1";
@@ -37,39 +36,19 @@ public class SqlCardset {
             return null;
         }
     }
-    // Deze is static omdat we niet weten waarom het static moet zijn, maar er genoeg reden voor waren, alleen die hebben we niet meer onthouden.
-    public static Connection connect(){
-        try{
-            return DriverManager.getConnection("Server=mssql.fhict.local;Database=dbi299244;", "dbi299244", "PTS3Groep1");
-        }
-        catch(Exception exception){
-            exception.printStackTrace();
-            return null;
-        }
-    }
-    public void disconnect(){
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    
-    }
+
     public ArrayList<Cardset> getAllCardsets(){
         try{
             sqlcard = new SqlCard();
-            connection = connect();
-            Statement statement = connection.createStatement();
+            sqlMain.setStatement(sqlMain.getConnection().createStatement());
             String query = "SELECT * FROM Deck;";
-            ResultSet result = statement.executeQuery(query);
+            sqlMain.setResult(sqlMain.getStatement().executeQuery(query));
             
             ArrayList<Cardset> sets = new ArrayList<Cardset>();
             
-            while(result.next()){
-                int id = result.getInt(0);
-                String name = result.getString(1);
+            while(sqlMain.getResult().next()){
+                int id = sqlMain.getResult().getInt(1);
+                String name = sqlMain.getResult().getString(2);
                 
                 Cardset set = new Cardset(id, name);
                 
@@ -84,6 +63,9 @@ public class SqlCardset {
             ex.printStackTrace();
             return null;
         }
+        finally{
+            sqlMain.closeAll();
+        }
     }
     public ArrayList<Cards> getAllCardsFromCardSet(int cardsetId){
         return null;
@@ -91,19 +73,18 @@ public class SqlCardset {
     public Cardset getCardsetById(int cardsetId){
         try{
             sqlcard = new SqlCard();
-            connection = connect();
-            Statement statement = connection.createStatement();
+            sqlMain.setStatement(sqlMain.getConnection().createStatement());
             String query = "SELECT * FROM Deck WHERE Id = ?;";
             
-            PreparedStatement ps = connection.prepareStatement(query);
+            PreparedStatement ps = sqlMain.getConnection().prepareStatement(query);
             ps.setInt(1, cardsetId);
             
-            ResultSet result = statement.executeQuery(query);
+            sqlMain.setResult(sqlMain.getStatement().executeQuery(query));
             
             Cardset cardset = null;
-            while(result.next()) {
-                int id = result.getInt(0);
-                String name = result.getString(1);
+            while(sqlMain.getResult().next()) {
+                int id = sqlMain.getResult().getInt(1);
+                String name = sqlMain.getResult().getString(2);
                 
                 cardset = new Cardset(id, name);
             }
@@ -111,6 +92,9 @@ public class SqlCardset {
         } catch(Exception ex) {
             ex.printStackTrace();
             return null;
+        }
+        finally{
+            sqlMain.closeAll();
         }
     }
 }
