@@ -14,6 +14,15 @@ public class GameHost {
     private final ClientAcceptor acceptor;
     private final int maxPlayers;
     private final GameServerEvents eventHandler;
+    private final Object playerLockObj = new Object();
+
+    public void removeClient(ClientHandler handler) {
+        clients.remove(handler);
+
+        synchronized (playerLockObj) {
+            playerLockObj.notify();
+        }
+    }
 
     public GameHost(int maxPlayers, GameServerEvents eventHandler) throws IOException {
         this.eventHandler = eventHandler;
@@ -66,18 +75,22 @@ public class GameHost {
 
         @Override
         public void run() {
-            while (acceptClients) {
-                try {
-                    if (host.clients.size() == maxPlayers) continue;
+            synchronized (playerLockObj) {
+                while (acceptClients) {
+                    try {
+                        if (clients.size() == maxPlayers) playerLockObj.wait();
 
-                    Socket client = host.server.accept();
-                    host.eventHandler.onClientJoin(client);
+                        Socket client = host.server.accept();
+                        host.eventHandler.onClientJoin(client);
 
-                    ClientHandler handler = new ClientHandler(host, client);
-                    host.clients.add(handler);
-                    handler.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        ClientHandler handler = new ClientHandler(host, client);
+                        host.clients.add(handler);
+                        handler.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -138,7 +151,7 @@ public class GameHost {
             try {
                 this.receiveMessages = false;
                 this.client.close();
-                host.clients.remove(this);
+                host.removeClient(this);
                 host.eventHandler.onClientLeave(client);
             } catch (IOException e) {
                 e.printStackTrace();

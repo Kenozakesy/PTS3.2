@@ -10,8 +10,8 @@ public class GameClient {
     private ClientHandler clientHandler;
     private GameClientEvents eventHandler;
 
-    public GameClient(String hostIP, GameClientEvents eventHandler) {
-        clientHandler = new ClientHandler(this, hostIP);
+    public GameClient(String hostIP, int port,  GameClientEvents eventHandler) {
+        clientHandler = new ClientHandler(this, hostIP, port);
         this.eventHandler = eventHandler;
     }
 
@@ -35,19 +35,21 @@ public class GameClient {
         private OutputStream out;
 
         private final String hostIP;
+        private final int port;
 
         private boolean receiveMessages = true;
 
-        ClientHandler(GameClient client, String hostIP) {
+        ClientHandler(GameClient client, String hostIP, int port) {
             this.client = client;
             this.hostIP = hostIP;
+            this.port = port;
         }
 
         @Override
         public void run() {
             try {
                 socket = new Socket();
-                socket.connect(new InetSocketAddress(hostIP, 1337));
+                socket.connect(new InetSocketAddress(hostIP, port));
 
                 client.eventHandler.onJoin(socket.getRemoteSocketAddress());
 
