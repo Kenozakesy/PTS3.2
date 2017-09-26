@@ -67,6 +67,7 @@ public class LobbyController implements Initializable, GameClientEvents {
         client.sendMessage(text);
     }
 
+    @FXML
     public void btnCreateGame() {
         //create a new lobby
 
@@ -118,7 +119,6 @@ public class LobbyController implements Initializable, GameClientEvents {
         Platform.runLater(() -> {
             lvChat.getItems().add(message);
         });
-
     }
 
     @Override
