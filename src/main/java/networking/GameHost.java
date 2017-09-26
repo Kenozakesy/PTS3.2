@@ -28,7 +28,7 @@ public class GameHost {
         this.eventHandler = eventHandler;
         this.maxPlayers = maxPlayers;
         server = new ServerSocket(1337);
-        clients = new HashSet<>();
+        clients = new HashSet();
         acceptor = new ClientAcceptor(this);
     }
 
