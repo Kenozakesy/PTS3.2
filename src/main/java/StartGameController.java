@@ -1,33 +1,42 @@
+import Business.Cardset;
 import Business.staticClasses.StaticLobby;
 import Business.staticClasses.StaticPlayer;
+import com.sun.org.omg.CORBA.Initializer;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
 
+import java.net.URL;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 /**
  * Created by Gebruiker on 12-9-2017.
  */
 
 
-public class StartGameController {
+public class StartGameController implements Initializable {
 
     @FXML
     public Button btnStartGame;
+
+    @FXML
+    private ListView lvPickedCards;
+
+    @FXML
+    private ListView lvCardsets;
 
     @FXML
     private ComboBox ddScorelimit;
@@ -49,6 +58,45 @@ public class StartGameController {
 
     @FXML
     private TextField tfChatBox;
+
+    private ArrayList<Cardset> Cardsets = null;
+    private ArrayList<Cardset> CardsetsPicked = null;
+
+
+    public void initialize(URL location, ResourceBundle resources)
+    {
+        Cardsets = new ArrayList<Cardset>();
+        CardsetsPicked = new ArrayList<Cardset>();
+
+        //for loop is for testing
+        for(int x=0; x < 10; x++)
+        {
+            Cardsets.add(new Cardset(x, "Test" + x));
+        }
+        Update();
+    }
+
+    @FXML
+    private void btnRight(Event e)
+    {
+        if(lvCardsets.getSelectionModel().getSelectedItem() != null) {
+            Cardset set = (Cardset) lvCardsets.getSelectionModel().getSelectedItem();
+            Cardsets.remove(set);
+            CardsetsPicked.add(set);
+            Update();
+        }
+    }
+
+    @FXML
+    private void btnLeft(Event e)
+    {
+        if(lvPickedCards.getSelectionModel().getSelectedItem() != null) {
+            Cardset set = (Cardset) lvPickedCards.getSelectionModel().getSelectedItem();
+            CardsetsPicked.remove(set);
+            Cardsets.add(set);
+            Update();
+        }
+    }
 
     @FXML
     private void btnSend(Event e)
@@ -104,4 +152,21 @@ public class StartGameController {
 //                        String.valueOf(StaticLobby.getTimelimit()) + "\n" +
 //                        String.valueOf(StaticLobby.getBlankcards()));
     }
+
+    public void Update()
+    {
+        lvPickedCards.getItems().clear();
+        lvCardsets.getItems().clear();
+
+        for (Cardset C: Cardsets )
+        {
+            lvCardsets.getItems().add(C);
+        }
+        for (Cardset C: CardsetsPicked )
+        {
+            lvPickedCards.getItems().add(C);
+        }
+    }
+
+
 }

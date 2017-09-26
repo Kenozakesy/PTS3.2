@@ -36,4 +36,9 @@ public class Cardset {
     public void setCardsInCardset(ArrayList<Cards> cards){
         this.cardsInSet = cards;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

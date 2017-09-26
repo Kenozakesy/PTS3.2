@@ -24,16 +24,16 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <VBox layoutX="177.0" layoutY="157.0" prefHeight="176.0" prefWidth="184.0" spacing="21.0">
+      <VBox layoutX="75.0" layoutY="157.0" prefHeight="176.0" prefWidth="184.0" spacing="21.0">
          <children>
             <Label prefHeight="21.0" prefWidth="100.0" text="Score limit: " />
             <Label prefHeight="21.0" prefWidth="100.0" text="Player limit: " />
             <Label prefHeight="21.0" prefWidth="107.0" text="Spectator limit: " />
             <Label prefHeight="21.0" prefWidth="110.0" text="Idle timer (min): " />
-            <Label prefHeight="21.0" prefWidth="163.0" text="Blank cards (per deck): " />
+            <Label prefHeight="21.0" prefWidth="163.0" text="Blank cards: " />
          </children>
       </VBox>
-      <VBox layoutX="361.0" layoutY="157.0" prefHeight="200.0" prefWidth="125.0" spacing="10.0">
+      <VBox layoutX="259.0" layoutY="157.0" prefHeight="200.0" prefWidth="125.0" spacing="10.0">
          <children>
             <ComboBox fx:id="ddScorelimit" onAction="#UpdateGameOptions" onInputMethodTextChanged="#UpdateGameOptions" prefHeight="31.0" prefWidth="130.0">
              <items>
@@ -125,8 +125,8 @@
 
          </children>
       </VBox>
-      <Label layoutX="525.0" layoutY="157.0" prefHeight="21.0" prefWidth="125.0" text="Card sets: " />
-      <ListView fx:id="lvCardsets" layoutX="608.0" layoutY="157.0" prefHeight="200.0" prefWidth="458.0" />
+      <Label layoutX="423.0" layoutY="136.0" prefHeight="21.0" prefWidth="125.0" text="Card sets: " />
+      <ListView fx:id="lvCardsets" layoutX="423.0" layoutY="157.0" prefHeight="200.0" prefWidth="270.0" />
       <ListView fx:id="lvScore" layoutX="12.0" layoutY="493.0" prefHeight="220.0" prefWidth="323.0" />
       <Label alignment="CENTER" layoutX="11.0" layoutY="451.0" prefHeight="42.0" prefWidth="323.0" style="-fx-background-color: gray;" text="Scoreboard:">
          <font>
@@ -152,5 +152,9 @@
             </Button>
          </children>
       </HBox>
+      <Label layoutX="850.0" layoutY="136.0" prefHeight="21.0" prefWidth="125.0" text="Picked sets:" />
+      <ListView fx:id="lvPickedCards" layoutX="850.0" layoutY="157.0" prefHeight="200.0" prefWidth="270.0" />
+      <Button fx:id="btnRight" layoutX="746.0" layoutY="209.0" mnemonicParsing="false" onAction="#btnRight" text="---&gt;" />
+      <Button fx:id="btnLeft" layoutX="746.0" layoutY="252.0" mnemonicParsing="false" onAction="#btnLeft" text="&lt;---" />
    </children>
 </AnchorPane>
