@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -124,10 +125,12 @@ public class GameHost {
                 try {
                     int len = in.read(buffer);
 
+                    byte[] resizedBuffer = Arrays.copyOfRange(buffer, 0, len);
+
                     if (len == -1) this.close();
 
                     if (len != 0) {
-                        host.eventHandler.onClientMessage(client, new String(buffer, "UTF-8"));
+                        host.eventHandler.onClientMessage(client, new String(resizedBuffer, "UTF-8"));
                         buffer = new byte[512];
                     }
                 } catch (IOException e) {

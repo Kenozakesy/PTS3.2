@@ -2,6 +2,7 @@ package Business.staticClasses;
 
 
 import Business.Enums.*;
+import Business.Player;
 
 /**
  * Created by Gebruiker on 19-9-2017.
@@ -21,7 +22,11 @@ public class StaticPlayer {
     public static Role getRole() {return role;}
     public static void setRole(Role role) {StaticPlayer.role = role;}
 
-
+    public static Player getPlayer()
+    {
+        Player player = new Player(name);
+        return player;
+    }
 
 
 }

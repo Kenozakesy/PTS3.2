@@ -1,4 +1,6 @@
 import Business.Cardset;
+import Business.Lobby;
+import Business.Player;
 import Business.staticClasses.StaticLobby;
 import Business.staticClasses.StaticPlayer;
 import com.sun.org.omg.CORBA.Initializer;
@@ -12,9 +14,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import networking.GameClient;
+import networking.GameHost;
+import networking.GameServerEvents;
 
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,7 +36,7 @@ import java.util.ResourceBundle;
  */
 
 
-public class StartGameController implements Initializable {
+public class StartGameController implements Initializable, GameServerEvents {
 
     @FXML
     public Button btnStartGame;
@@ -59,12 +68,37 @@ public class StartGameController implements Initializable {
     @FXML
     private TextField tfChatBox;
 
+    private GameHost host;
+    private GameClient client;
+
+    private Stage previousStage;
+
+    public void setPreviousStage(Stage previousStage) {
+        this.previousStage = previousStage;
+    }
+
+    public void setClient(GameClient client) {
+        this.client = client;
+    }
+
     private ArrayList<Cardset> Cardsets = null;
     private ArrayList<Cardset> CardsetsPicked = null;
 
-
     public void initialize(URL location, ResourceBundle resources)
     {
+        try {
+            this.host = new GameHost(6, this);
+            host.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            client.sendMessage("<L>" + StaticPlayer.getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
         Cardsets = new ArrayList<Cardset>();
         CardsetsPicked = new ArrayList<Cardset>();
 
@@ -117,9 +151,24 @@ public class StartGameController implements Initializable {
     }
 
     @FXML
-    private void btnLeaveGame(Event e)
+    private void btnLeaveGame(Event e) //not correct as of now
     {
-        //you leave the game. if you are a host it will delete the game
+        //goes to different view
+        //starts the game with current options
+        Stage stage = (Stage) btnStartGame.getScene().getWindow();
+        stage.close();
+
+        previousStage.show();
+
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyView.fxml"));
+//        Parent root1 = null;
+//        try {
+//            root1 = (Parent) fxmlLoader.load();
+//        } catch (IOException e1) {
+//            e1.printStackTrace();
+//        }
+//        Stage stage2 = new Stage();
+//        stage2.setScene(new Scene(root1)); stage2.show();
     }
 
     @FXML
@@ -169,4 +218,18 @@ public class StartGameController implements Initializable {
     }
 
 
+    @Override
+    public void onClientMessage(Socket client, String message) {
+
+    }
+
+    @Override
+    public void onClientJoin(Socket client) {
+
+    }
+
+    @Override
+    public void onClientLeave(Socket client) {
+
+    }
 }

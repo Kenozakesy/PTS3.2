@@ -23,9 +23,9 @@ public class StaticLobby {
 
     //Fields
     private static String lobbyID;
-    private static int maxplayers = 0;
-    private static int maxspectators = 0;
-    private static int scorelimit = 0;
+    private static int maxplayers = 3;
+    private static int maxspectators = 3;
+    private static int scorelimit = 3;
     private static int blankcards = 0;
     private static String timelimit = "no limit";
     private static String password;

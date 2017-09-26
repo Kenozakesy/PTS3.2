@@ -1,9 +1,12 @@
 package Business;
 
 import Business.Enums.Status;
+import networking.GameClient;
+import networking.GameHost;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by Gebruiker on 12-9-2017.
@@ -14,6 +17,9 @@ public class Lobby {
     private ArrayList<CzarCard> czarDeck;
     private ArrayList<PlayCard> deck;
     private ArrayList<Cardset> cardsets;
+
+    private HashSet<GameClient> clients;
+    private GameHost host;
 
     private ArrayList<Player> spectators;
     private ArrayList<Player> players;
@@ -86,9 +92,8 @@ public class Lobby {
     }
 
 
-
-
-
-
-
+    @Override
+    public String toString() {
+        return lobbyID;
+    }
 }

@@ -1,5 +1,7 @@
 package networking;
 
+import Business.Player;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -10,10 +12,12 @@ import java.util.Arrays;
 public class GameClient {
     private ClientHandler clientHandler;
     private GameClientEvents eventHandler;
+    private Player player;
 
-    public GameClient(String hostIP, int port,  GameClientEvents eventHandler) {
+    public GameClient(String hostIP, int port, GameClientEvents eventHandler, Player player) {
         clientHandler = new ClientHandler(this, hostIP, port);
         this.eventHandler = eventHandler;
+        this.player = player;
     }
 
     public void start() {
@@ -56,6 +60,8 @@ public class GameClient {
 
                 in = socket.getInputStream();
                 out = socket.getOutputStream();
+
+                sendMessage("<D>" + player.getName() + "</D>");
 
                 this.readInput();
             } catch (IOException e) {
