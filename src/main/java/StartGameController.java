@@ -1,10 +1,6 @@
 import Business.Cardset;
-import Business.Lobby;
-import Business.Player;
 import Business.staticClasses.StaticLobby;
 import Business.staticClasses.StaticPlayer;
-import com.sun.org.omg.CORBA.Initializer;
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,18 +9,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import networking.GameClient;
 import networking.GameHost;
 import networking.GameServerEvents;
-
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -158,9 +151,15 @@ public class StartGameController implements Initializable, GameServerEvents {
         Stage stage = (Stage) btnStartGame.getScene().getWindow();
         stage.close();
 
+        client.sendMessage("<L>quit</L>");
+        host.close();
+
         previousStage.show();
 
+<<<<<<< HEAD
         //still needs to be deleted when clicked on
+=======
+>>>>>>> origin/Sprint-1
     }
 
     @FXML
