@@ -1,3 +1,4 @@
+import Business.Lobby;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -16,14 +17,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 /**
  * Created by Gebruiker on 26-9-2017.
  */
-public class LobbyController implements Initializable, GameClientEvents{
+public class LobbyController implements Initializable, GameClientEvents {
 
     //private ArrayList lobbyList
 
@@ -33,7 +33,7 @@ public class LobbyController implements Initializable, GameClientEvents{
     private Button btnCreateGame;
 
     @FXML
-    private ListView lvLobby;
+    private ListView<Lobby> lvLobby;
 
     @FXML
     private Button btnSend;
@@ -44,32 +44,31 @@ public class LobbyController implements Initializable, GameClientEvents{
     @FXML
     private ListView lvChat;
 
+    private HashMap<String, Lobby> lobbies;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         client = new GameClient("145.93.133.180", 1336, this, StaticPlayer.getPlayer());
         client.start();
 
+        lobbies = new HashMap<>();
         //get every lobby
     }
 
     @FXML
-    public void refresh()
-    {
+    public void refresh() {
         client.sendMessage("<LR>!</LR>");
     }
 
     @FXML
-    public void btnSend()
-    {
+    public void btnSend() {
         String text = tfSend.getText();
         //lvChat.getItems().add(text);
         client.sendMessage(text);
     }
 
-    public void btnCreateGame()
-    {
+    public void btnCreateGame() {
         //create a new lobby
-
 
 
         //goes to different view
@@ -90,7 +89,8 @@ public class LobbyController implements Initializable, GameClientEvents{
             root1 = (Parent) fxmlLoader.load();
 
             Stage stage2 = new Stage();
-            stage2.setScene(new Scene(root1)); stage2.show();
+            stage2.setScene(new Scene(root1));
+            stage2.show();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,19 +101,24 @@ public class LobbyController implements Initializable, GameClientEvents{
     public void onHostMessage(String message) {
 
         String lobbyString = StringUtils.substringBetween(message, "<L>", "</L>");
-        if (lobbyString != null)
-        {
+        if (lobbyString != null) {
             String[] data = lobbyString.split(";");
-            Platform.runLater(() -> {
-                lvLobby.getItems().add(data[0] + "'s Lobby, IP address: " + data[1]);
-            });
+            lobbies.put(data[1], new Lobby(data[0], data[1]));
+            refreshLobbyListView();
+            return;
         }
-        else
-        {
-            Platform.runLater(() -> {
-                lvChat.getItems().add(message);
-            });
+
+        String lobbyQuitString = StringUtils.substringBetween(message, "<LQ>", "</LQ>");
+        if (lobbyQuitString != null) {
+            lobbies.remove(lobbyQuitString);
+            refreshLobbyListView();
+            return;
         }
+
+        Platform.runLater(() -> {
+            lvChat.getItems().add(message);
+        });
+
     }
 
     @Override
@@ -124,5 +129,15 @@ public class LobbyController implements Initializable, GameClientEvents{
     @Override
     public void onServerClose() {
 
+    }
+
+    private void refreshLobbyListView() {
+        Platform.runLater(() -> {
+            lvLobby.getItems().clear();
+
+            for (Lobby lobby : lobbies.values()) {
+                lvLobby.getItems().add(lobby);
+            }
+        });
     }
 }
