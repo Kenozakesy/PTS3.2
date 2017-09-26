@@ -160,15 +160,7 @@ public class StartGameController implements Initializable, GameServerEvents {
 
         previousStage.show();
 
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyView.fxml"));
-//        Parent root1 = null;
-//        try {
-//            root1 = (Parent) fxmlLoader.load();
-//        } catch (IOException e1) {
-//            e1.printStackTrace();
-//        }
-//        Stage stage2 = new Stage();
-//        stage2.setScene(new Scene(root1)); stage2.show();
+        //still needs to be deleted when clicked on
     }
 
     @FXML

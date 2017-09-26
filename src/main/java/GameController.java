@@ -1,55 +1,62 @@
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
     @FXML
-    Button btnChat;
+    private Button btnChat;
     @FXML
-    Button btnChoose;
+    private Button btnChoose;
     @FXML
-    ListView lvPlayers;
+    private ListView lvPlayers;
     @FXML
-    RadioButton rbtnCard1;
+    private RadioButton rbtnCard1;
     @FXML
-    RadioButton rbtnCard2;
+    private RadioButton rbtnCard2;
     @FXML
-    RadioButton rbtnCard3;
+    private RadioButton rbtnCard3;
     @FXML
-    RadioButton rbtnCard4;
+    private RadioButton rbtnCard4;
     @FXML
-    RadioButton rbtnCard5;
+    private RadioButton rbtnCard5;
     @FXML
-    RadioButton rbtnCard6;
+    private RadioButton rbtnCard6;
     @FXML
-    RadioButton rbtnCard7;
+    private RadioButton rbtnCard7;
     @FXML
-    RadioButton rbtnCard8;
+    private RadioButton rbtnCard8;
     @FXML
-    TextArea taCard1;
+    private TextArea taCard1;
     @FXML
-    TextArea taCard2;
+    private TextArea taCard2;
     @FXML
-    TextArea taCard3;
+    private TextArea taCard3;
     @FXML
-    TextArea taCard4;
+    private TextArea taCard4;
     @FXML
-    TextArea taCard5;
+    private TextArea taCard5;
     @FXML
-    TextArea taCard6;
+    private TextArea taCard6;
     @FXML
-    TextArea taCard7;
+    private TextArea taCard7;
     @FXML
-    TextArea taCard8;
+    private TextArea taCard8;
     @FXML
-    TextArea taBlackCard;
+    private TextArea taBlackCard;
     @FXML
-    TextArea taChatHistory;
+    private TextArea taChatHistory;
     @FXML
-    TextField tbChat;
+    private TextField tbChat;
+    @FXML
+    private Button btnLeaveGame;
 
     private List<String> chatList = new ArrayList<String>();
 
@@ -67,6 +74,24 @@ public class GameController {
 
     public void choose(Event e){
         System.out.println("Kaart gekozen");
+    }
+
+    public void btnLeaveGame()
+    {
+        //goes to different view
+        //starts the game with current options
+        Stage stage = (Stage) btnLeaveGame.getScene().getWindow();
+        stage.close();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyView.fxml"));
+        Parent root1 = null;
+        try {
+            root1 = (Parent) fxmlLoader.load();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        Stage stage2 = new Stage();
+        stage2.setScene(new Scene(root1)); stage2.show();
     }
 
 

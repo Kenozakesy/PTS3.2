@@ -9,7 +9,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         //primaryStage.initStyle(StageStyle.TRANSPARENT);
-        Parent root = FXMLLoader.load(getClass().getResource("GameView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
         //primaryStage.setTitle("Hello World");
 
         //Scene scene = new Scene(root, Color.TRANSPARENT);
