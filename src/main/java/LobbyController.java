@@ -48,7 +48,7 @@ public class LobbyController implements Initializable, GameClientEvents {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        client = new GameClient("145.93.133.180", 1336, this, StaticPlayer.getPlayer());
+        client = new GameClient("145.93.132.244", 1336, this, StaticPlayer.getPlayer());
         client.start();
 
         lobbies = new HashMap<>();
@@ -64,16 +64,13 @@ public class LobbyController implements Initializable, GameClientEvents {
     public void btnSend() {
         String text = tfSend.getText();
         //lvChat.getItems().add(text);
+        tfSend.setText("");
         client.sendMessage(text);
     }
 
     @FXML
     public void btnCreateGame() {
-        //create a new lobby
 
-
-        //goes to different view
-        //starts the game with current options
         Stage stage = (Stage) btnCreateGame.getScene().getWindow();
         stage.hide();
 
