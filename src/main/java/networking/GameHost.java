@@ -41,8 +41,9 @@ public class GameHost {
         acceptor.acceptClients = false;
     }
 
-    public void close() {
+    public void close() throws IOException {
         this.stopAccepting();
+        this.server.close();
 
         for (ClientHandler client : clients) {
             client.close();
