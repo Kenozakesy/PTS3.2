@@ -14,28 +14,10 @@ import java.util.*;
  * @author JelleSchrader
  */
 public class SqlCard {
-    private Properties properties;
     private SqlMain sqlMain = new SqlMain();
-    private String user = "dbi299244";
-    private String pass = "PTS3Groep1";
             //"Server=mssql.fhict.local;Database=dbi299244;User Id=dbi299244;Password=PTS3Groep1;";
 
     SqlCardset sqlCardset;
-    
-//    private Properties getProperties() {
-//        try {
-//            if (properties == null) {
-//                properties = new Properties();
-//                properties.setProperty("user", user);
-//                properties.setProperty("password", pass);
-//            }
-//            return properties;
-//        }
-//        catch(Exception exception){
-//            exception.printStackTrace();
-//            return null;
-//        }
-//    }
 
     public ArrayList<Cards> getAllCards(){
         try{
