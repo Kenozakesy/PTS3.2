@@ -70,7 +70,7 @@
          </children>
       </HBox>
       <Button fx:id="btnChat" layoutX="1177.0" layoutY="689.0" mnemonicParsing="false" onAction="#click" prefHeight="10.0" prefWidth="106.0" text="Chat" />
-      <Button fx:id="btnChoose" layoutX="14.0" layoutY="228.0" mnemonicParsing="false" onAction="#choose" prefHeight="25.0" prefWidth="150.0" text="Choose" />
+      <Button fx:id="btnChoose" layoutX="14.0" layoutY="228.0" mnemonicParsing="false" onAction="#btnChoose" prefHeight="25.0" prefWidth="150.0" text="Choose" />
       <ListView fx:id="lvPlayers" layoutY="520.0" prefHeight="200.0" prefWidth="279.0" />
       <TextArea fx:id="taBlackCard" layoutX="15.0" layoutY="20.0" prefHeight="200.0" prefWidth="150.0" />
       <TextArea fx:id="taCard1" layoutX="15.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
