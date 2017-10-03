@@ -4,7 +4,6 @@ import Business.Enums.Status;
 import networking.GameClient;
 import networking.GameHost;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -59,6 +58,9 @@ public class Lobby {
     public Status getStatus() {return status;}
     public void setStatus(Status status) {this.status = status;}
 
+    public String getIP() {
+        return IP;
+    }
 
     //Constructor
     public Lobby(String LobbyID, String IP)

@@ -1,6 +1,8 @@
 import Business.Cardset;
+import Business.Player;
 import Business.staticClasses.StaticLobby;
 import Business.staticClasses.StaticPlayer;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,18 +12,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import networking.GameClient;
+import networking.GameClientEvents;
 import networking.GameHost;
 import networking.GameServerEvents;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.net.*;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
  */
 
 
-public class StartGameController implements Initializable, GameServerEvents {
+public class StartGameController implements Initializable, GameServerEvents, GameClientEvents {
 
     @FXML
     public Button btnStartGame;
@@ -56,13 +56,17 @@ public class StartGameController implements Initializable, GameServerEvents {
     private ComboBox ddBlankCards;
 
     @FXML
-    private TextArea taChat;
-
-    @FXML
     private TextField tfChatBox;
 
+    @FXML
+    private ListView lvChat;
+
+
     private GameHost host;
-    private GameClient client;
+    private GameClient mainClient;
+    private GameClient lobbyClient;
+
+    private Map<Socket, Player> players = new HashMap<>();
 
     private Stage previousStage;
 
@@ -70,35 +74,40 @@ public class StartGameController implements Initializable, GameServerEvents {
         this.previousStage = previousStage;
     }
 
-    public void setClient(GameClient client) {
-        this.client = client;
-    }
-
     private ArrayList<Cardset> Cardsets = null;
     private ArrayList<Cardset> CardsetsPicked = null;
 
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            this.host = new GameHost(6, this);
-            host.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            client.sendMessage("<L>" + StaticPlayer.getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        Cardsets = new ArrayList<Cardset>();
-        CardsetsPicked = new ArrayList<Cardset>();
+        Cardsets = new ArrayList<>();
+        CardsetsPicked = new ArrayList<>();
 
         //for loop is for testing
         for (int x = 0; x < 10; x++) {
             Cardsets.add(new Cardset(x, "Test" + x));
         }
         Update();
+    }
+
+    public void setHost(GameClient mainClient) {
+        try {
+            this.host = new GameHost(6, this);
+            host.start();
+
+            this.mainClient = mainClient;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            mainClient.sendMessage("<L>" + StaticPlayer.getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setClient(GameClient client) {
+        this.lobbyClient = client;
+        lobbyClient.start();
     }
 
     @FXML
@@ -123,12 +132,12 @@ public class StartGameController implements Initializable, GameServerEvents {
 
     @FXML
     private void btnSend(Event e) {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        //get current date time with Date()
-        Date date = new Date();
-
-        String Text = tfChatBox.getText();
-        taChat.appendText(dateFormat.format(date) + " " + StaticPlayer.getName() + ": " + Text + "\n");
+        if (host != null) {
+            host.messageAll("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
+            putChatMessage(StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
+        } else {
+            lobbyClient.sendMessage("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
+        }
         tfChatBox.setText("");
     }
 
@@ -138,20 +147,21 @@ public class StartGameController implements Initializable, GameServerEvents {
     }
 
     @FXML
-    private void btnLeaveGame(Event e) //not correct as of now
-    {
-        try {
-            //goes to different view
-            //starts the game with current options
-            Stage stage = (Stage) btnStartGame.getScene().getWindow();
-            stage.close();
+    private void btnLeaveGame(Event e) {
+        if (host != null) {
+            try {
+                //goes to different view
+                //starts the game with current options
+                Stage stage = (Stage) btnStartGame.getScene().getWindow();
+                stage.close();
 
-            client.sendMessage("<L>quit</L>");
-            host.close();
+                mainClient.sendMessage("<L>quit</L>");
+                host.close();
 
-            previousStage.show();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+                previousStage.show();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -200,7 +210,17 @@ public class StartGameController implements Initializable, GameServerEvents {
 
     @Override
     public void onClientMessage(Socket client, String message) {
+        String clientDataString = getClientData(message);
+        if (clientDataString != null) {
+            players.put(client, new Player(clientDataString));
+            return;
+        }
 
+        String chatMessage = getChatMessage(message);
+        if (chatMessage != null) {
+            host.messageAll(message);
+            putChatMessage(chatMessage);
+        }
     }
 
     @Override
@@ -210,6 +230,38 @@ public class StartGameController implements Initializable, GameServerEvents {
 
     @Override
     public void onClientLeave(Socket client) {
+        players.remove(client);
+    }
 
+    @Override
+    public void onHostMessage(String message) {
+        String chatMessage = getChatMessage(message);
+        if (chatMessage != null) {
+            putChatMessage(chatMessage);
+        }
+    }
+
+    @Override
+    public void onJoin(SocketAddress address) {
+        lobbyClient.sendMessage("<D>" + lobbyClient.getPlayer().getName() + "</D>");
+    }
+
+    @Override
+    public void onServerClose() {
+
+    }
+
+    private String getClientData(String input) {
+        return StringUtils.substringBetween(input, "<D>", "</D>");
+    }
+
+    private String getChatMessage(String input) {
+        return StringUtils.substringBetween(input, "<C>", "</C>");
+    }
+
+    private void putChatMessage(String input) {
+        Platform.runLater(() -> {
+            lvChat.getItems().add(input);
+        });
     }
 }
