@@ -1,3 +1,4 @@
+import Business.Lobby;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,6 +59,8 @@ public class GameController {
     @FXML
     private Button btnLeaveGame;
 
+    private Lobby lobby;
+
     private List<String> chatList = new ArrayList<String>();
 
     public void click( Event e){
@@ -72,7 +75,8 @@ public class GameController {
 //        }
     }
 
-    public void choose(Event e){
+    //Zchar chooses a card and a new rounds starts
+    public void btnChoose(Event e){
         System.out.println("Kaart gekozen");
     }
 
@@ -93,6 +97,14 @@ public class GameController {
         Stage stage2 = new Stage();
         stage2.setScene(new Scene(root1)); stage2.show();
     }
+
+    //whenever a new round start a the cards need to be shuffled again
+    public void AddCardsToHand(Event e)
+    {
+        
+    }
+
+
 
 
 }

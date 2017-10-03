@@ -11,7 +11,7 @@ public class SqlMain {
     private ResultSet result;
 
     public SqlMain(){
-        setConnection();
+        connection = setConnection();
     }
 
     public Connection getConnection() {
