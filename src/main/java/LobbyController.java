@@ -100,7 +100,6 @@ public class LobbyController implements Initializable, GameClientEvents {
 
     @Override
     public void onHostMessage(String message) {
-
         String lobbyString = StringUtils.substringBetween(message, "<L>", "</L>");
         if (lobbyString != null) {
             String[] data = lobbyString.split(";");

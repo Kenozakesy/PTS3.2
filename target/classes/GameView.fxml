@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
+   <children>
+      <TextField fx:id="tbChat" layoutX="202.0" layoutY="695.0" prefHeight="25.0" prefWidth="976.0" promptText="bla" />
+      <TextArea fx:id="taChatHistory" layoutX="202.0" layoutY="520.0" prefHeight="174.0" prefWidth="1081.0" promptText="Iemand: Get rekt" />
+      <Group layoutX="15.0" layoutY="475.0" />
+      <HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="474.0" prefHeight="44.0" prefWidth="1198.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets right="5.0" />
+         </padding>
+         <children>
+            <RadioButton fx:id="rbtnCard1" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="150.0" text="Select">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+               <toggleGroup>
+                  <ToggleGroup fx:id="Group" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="rbtnCard2" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbtnCard3" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbtnCard4" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefHeight="17.0" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbtnCard5" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbtnCard6" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbtnCard7" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbtnCard8" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+         </children>
+      </HBox>
+      <Button fx:id="btnChat" layoutX="1176.0" layoutY="695.0" mnemonicParsing="false" onAction="#click" prefHeight="10.0" prefWidth="106.0" text="Chat" />
+      <Button fx:id="btnChoose" layoutX="14.0" layoutY="228.0" mnemonicParsing="false" onAction="#choose" prefHeight="25.0" prefWidth="150.0" text="Choose" />
+      <ListView fx:id="lvPlayers" layoutY="520.0" prefHeight="200.0" prefWidth="200.0" />
+      <TextArea fx:id="taBlackCard" layoutX="15.0" layoutY="20.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taCard1" layoutX="15.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taCard2" layoutX="165.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taCard3" layoutX="315.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taCard4" layoutX="465.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taCard5" layoutX="615.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taCard6" layoutX="765.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taCard7" layoutX="915.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taCard8" layoutX="1065.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>
