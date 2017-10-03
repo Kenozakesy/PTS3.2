@@ -37,7 +37,7 @@ public class SqlCardTest {
     @Test
     public void getCardById() throws Exception {
         Cards card = sqlCard.getCardById(3);
-        assertEquals("test", card.getText());
+        assertEquals("Powerful thighs.", card.getText());
     }
 
 }

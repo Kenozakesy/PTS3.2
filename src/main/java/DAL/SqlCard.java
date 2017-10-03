@@ -56,8 +56,8 @@ public class SqlCard {
             
             PreparedStatement ps = sqlMain.getConnection().prepareStatement(query);
             ps.setInt(1, cardset.getId());
-            
-            sqlMain.setResult(sqlMain.getStatement().executeQuery(query));
+
+            sqlMain.setResult(ps.executeQuery());
             
             ArrayList<Cards> cards = new ArrayList<Cards>();
             while(sqlMain.getResult().next()) {
@@ -83,12 +83,12 @@ public class SqlCard {
         try{
             sqlCardset = new SqlCardset();
             sqlMain.setStatement(sqlMain.getConnection().createStatement());
-            String query = "SELECT * FROM Card WHERE Id = ?;";
+            String query = "SELECT * FROM Card WHERE CardId = ?;";
             
             PreparedStatement ps = sqlMain.getConnection().prepareStatement(query);
             ps.setInt(1, cardId);
 
-            sqlMain.setResult(sqlMain.getStatement().executeQuery(query));
+            sqlMain.setResult(ps.executeQuery());
             
             Cards card = null;
             while(sqlMain.getResult().next()) {
