@@ -155,11 +155,6 @@ public class StartGameController implements Initializable, GameServerEvents {
         host.close();
 
         previousStage.show();
-
-<<<<<<< HEAD
-        //still needs to be deleted when clicked on
-=======
->>>>>>> origin/Sprint-1
     }
 
     @FXML
