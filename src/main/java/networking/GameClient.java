@@ -62,6 +62,7 @@ public class GameClient {
                 out = socket.getOutputStream();
 
                 sendMessage("<D>" + player.getName() + "</D>");
+                sendMessage("<LR>!</LR>");
 
                 this.readInput();
             } catch (IOException e) {

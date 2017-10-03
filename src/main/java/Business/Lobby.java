@@ -31,7 +31,7 @@ public class Lobby {
     private int maxSpectators;
     private int scoreLimit;
     private int blankCards;
-    private Time timeLimit;
+    private String timeLimit;
     private String password;
     private Status status;
 
@@ -39,22 +39,22 @@ public class Lobby {
     public String getLobbyID() { return lobbyID;}
 
     public int getMaxPlayers() {return maxPlayers;}
-    public void setMaxPlayers(int maxplayers) {this.maxPlayers = maxplayers;}
+    //public void setMaxPlayers(int maxplayers) {this.maxPlayers = maxplayers;}
 
     public int getMaxSpectators() {return maxSpectators;}
-    public void setMaxSpectators(int maxspectators) {this.maxSpectators = maxspectators;}
+    //public void setMaxSpectators(int maxspectators) {this.maxSpectators = maxspectators;}
 
     public int getScoreLimit() {return scoreLimit;}
-    public void setScoreLimit(int scoreLimit) {this.scoreLimit = scoreLimit;}
+    //public void setScoreLimit(int scoreLimit) {this.scoreLimit = scoreLimit;}
 
     public int getBlankCards() {return blankCards;}
-    public void setBlankCards(int blankCards) {this.blankCards = blankCards;}
+    //public void setBlankCards(int blankCards) {this.blankCards = blankCards;}
 
-    public Time getTimeLimit() {return timeLimit;}
-    public void setTimeLimit(Time timeLimit) {this.timeLimit = timeLimit;}
+    public String getTimeLimit() {return timeLimit;}
+    //public void setTimeLimit(String timeLimit) {this.timeLimit = timeLimit;}
 
     public String getPassword() {return password;}
-    public void setPassword(String password) {this.password = password;}
+    //public void setPassword(String password) {this.password = password;}
 
     public Status getStatus() {return status;}
     public void setStatus(Status status) {this.status = status;}
@@ -65,6 +65,12 @@ public class Lobby {
     {
         this.lobbyID = LobbyID;
         this.IP = IP;
+
+        this.maxPlayers = 5;
+        this.maxSpectators = 5;
+        this.scoreLimit = 5;
+        this.blankCards = 0;
+        this.timeLimit = "No limit";
     }
 
     //Operators

@@ -44,6 +44,7 @@ public class Controller {
             e1.printStackTrace();
         }
         Stage stage2 = new Stage();
-        stage2.setScene(new Scene(root1)); stage2.show();
+        stage2.setScene(new Scene(root1));
+        stage2.show();
     }
 }

@@ -9,11 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import networking.GameClient;
 import networking.GameClientEvents;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.net.URL;
@@ -25,24 +27,19 @@ import java.util.ResourceBundle;
  */
 public class LobbyController implements Initializable, GameClientEvents {
 
-    //private ArrayList lobbyList
-
-    private GameClient client;
-
     @FXML
     private Button btnCreateGame;
-
     @FXML
     private ListView<Lobby> lvLobby;
-
     @FXML
     private Button btnSend;
-
     @FXML
     private TextField tfSend;
-
     @FXML
     private ListView lvChat;
+
+
+    private GameClient client;
 
     private HashMap<String, Lobby> lobbies;
 
@@ -52,7 +49,6 @@ public class LobbyController implements Initializable, GameClientEvents {
         client.start();
 
         lobbies = new HashMap<>();
-        //get every lobby
     }
 
     @FXML
@@ -92,6 +88,16 @@ public class LobbyController implements Initializable, GameClientEvents {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void LisViewClick(MouseEvent click)
+    {
+        if (click.getClickCount() == 2) {
+            //Use ListView's getSelected Item
+            Lobby lobby = lvLobby.getSelectionModel().getSelectedItem();
+
         }
     }
 
