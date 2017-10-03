@@ -31,13 +31,15 @@ public class SqlCardTest {
     public void getAllCardsFromCardSet() throws Exception {
         Cardset cardSet = new Cardset(0, "Test");
         ArrayList<Cards> cards = sqlCard.getAllCardsFromCardSet(cardSet);
-        Assert.assertEquals(23, cards.size());
+        Assert.assertEquals(20, cards.size());
     }
 
     @Test
     public void getCardById() throws Exception {
         Cards card = sqlCard.getCardById(3);
+        Cards card2 = sqlCard.getCardById(24);
         assertEquals("Powerful thighs.", card.getText());
+        assertEquals(null, card2);
     }
 
 }
