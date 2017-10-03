@@ -36,6 +36,6 @@
       <ListView fx:id="lvChat" layoutX="281.0" layoutY="406.0" prefHeight="175.0" prefWidth="696.0" />
       <TextField fx:id="tfSend" layoutX="281.0" layoutY="581.0" prefHeight="31.0" prefWidth="596.0" />
       <Button fx:id="btnSend" layoutX="877.0" layoutY="581.0" mnemonicParsing="false" onAction="#btnSend" prefHeight="31.0" prefWidth="99.0" text="Send" />
-      <ListView fx:id="lvLobby" layoutY="71.0" prefHeight="334.0" prefWidth="746.0" />
+      <ListView fx:id="lvLobby" layoutX="-8.0" layoutY="71.0" onMouseClicked="#LisViewClick" prefHeight="334.0" prefWidth="746.0" />
    </children>
 </AnchorPane>
