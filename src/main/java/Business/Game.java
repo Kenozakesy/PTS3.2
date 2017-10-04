@@ -4,6 +4,7 @@ package Business;
  * Created by Jordi on 26-9-2017.
  */
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -29,7 +30,19 @@ public class Game
 
     }
 
+    public void getDecks(ArrayList<Cardset> rrr)
+    {
+//        for (Cardset c: )
+//        {
+//
+//            lijst = methode() play
+//                naamlijst.addall
+//            lijst = methode() Czar
+//        }
 
+
+
+    }
 
 }
 
