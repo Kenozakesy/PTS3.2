@@ -14,6 +14,10 @@ public class GameClient {
     private GameClientEvents eventHandler;
     private Player player;
 
+    public Player getPlayer() {
+        return player;
+    }
+
     public GameClient(String hostIP, int port, GameClientEvents eventHandler, Player player) {
         clientHandler = new ClientHandler(this, hostIP, port);
         this.eventHandler = eventHandler;
@@ -53,16 +57,13 @@ public class GameClient {
         @Override
         public void run() {
             try {
-                socket = new Socket();
-                socket.connect(new InetSocketAddress(hostIP, port));
+                this.socket = new Socket();
+                this.socket.connect(new InetSocketAddress(hostIP, port));
 
-                client.eventHandler.onJoin(socket.getRemoteSocketAddress());
+                this.in = socket.getInputStream();
+                this.out = socket.getOutputStream();
 
-                in = socket.getInputStream();
-                out = socket.getOutputStream();
-
-                sendMessage("<D>" + player.getName() + "</D>");
-                sendMessage("<LR>!</LR>");
+                this.client.eventHandler.onJoin(socket.getRemoteSocketAddress());
 
                 this.readInput();
             } catch (IOException e) {
@@ -78,9 +79,9 @@ public class GameClient {
                 try {
                     int len = in.read(buffer);
 
-                    byte[] resizedBuffer = Arrays.copyOfRange(buffer, 0, len);
-
                     if (len == -1) this.close();
+
+                    byte[] resizedBuffer = Arrays.copyOfRange(buffer, 0, len);
 
                     if (len != 0) {
                         client.eventHandler.onHostMessage(new String(resizedBuffer, "UTF-8"));
