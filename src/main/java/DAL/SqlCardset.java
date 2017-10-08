@@ -47,10 +47,6 @@ public class SqlCardset {
             sqlMain.closeAll();
         }
     }
-    public ArrayList<Cards> getAllCardsFromCardSet(int cardsetId){
-
-        return null;
-    }
 
     public Cardset getCardsetById(int cardsetId){
         try{

@@ -28,10 +28,17 @@ public class SqlCardTest {
     }
 
     @Test
-    public void getAllCardsFromCardSet() throws Exception {
+    public void getAllPlayCardsFromCardSet() throws Exception {
         Cardset cardSet = new Cardset(0, "Test");
-        ArrayList<Cards> cards = sqlCard.getAllCardsFromCardSet(cardSet);
-        Assert.assertEquals(20, cards.size());
+        ArrayList<Cards> cards = sqlCard.getAllPlayCardsFromCardSet(cardSet);
+        Assert.assertEquals(17, cards.size());
+    }
+
+    @Test
+    public void getAllCzarCardsFromCardSet() throws Exception {
+        Cardset cardSet = new Cardset(0, "Test");
+        ArrayList<Cards> cards = sqlCard.getAllCzarCardsFromCardSet(cardSet);
+        Assert.assertEquals(3, cards.size());
     }
 
     @Test

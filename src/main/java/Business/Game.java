@@ -4,8 +4,12 @@ package Business;
  * Created by Jordi on 26-9-2017.
  */
 
+import DAL.SqlCard;
+
 import java.util.ArrayList;
 import java.util.Random;
+
+import static Business.Enums.Role.Czar;
 
 /**
  * In Sprint 2 wordt deze klasse volledig uitgewerkt
@@ -13,6 +17,9 @@ import java.util.Random;
 public class Game
 {
     Random random = new Random();
+    ArrayList<Cards> czarCards;
+    ArrayList<Cards> playCards;
+    SqlCard sqlCard = new SqlCard();
     Game(){}
 
     public void endTurn()
@@ -30,20 +37,14 @@ public class Game
 
     }
 
-    public void getDecks(ArrayList<Cardset> rrr)
+    public void getDecks(ArrayList<Cardset> cardSets)
     {
-//        for (Cardset c: )
-//        {
-//
-//            lijst = methode() play
-//                naamlijst.addall
-//            lijst = methode() Czar
-//        }
-
-
-
+        for (Cardset c: cardSets )
+        {
+            czarCards.addAll(sqlCard.getAllCzarCardsFromCardSet(c));
+            playCards.addAll(sqlCard.getAllPlayCardsFromCardSet(c));
+        }
     }
-
 }
 
 
