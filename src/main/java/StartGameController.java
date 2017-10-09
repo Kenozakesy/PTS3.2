@@ -81,6 +81,7 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
         Cardsets = new ArrayList<>();
         CardsetsPicked = new ArrayList<>();
 
+
         //for loop is for testing
         for (int x = 0; x < 10; x++) {
             Cardsets.add(new Cardset(x, "Test" + x));
