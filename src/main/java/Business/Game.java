@@ -19,8 +19,9 @@ public class Game
     Random random = new Random();
     ArrayList<Cards> czarCards;
     ArrayList<Cards> playCards;
-    SqlCard sqlCard = new SqlCard();
-    Game(){}
+
+
+    public Game(){}
 
     public void endTurn()
     {
@@ -39,6 +40,7 @@ public class Game
 
     public void getDecks(ArrayList<Cardset> cardSets)
     {
+        SqlCard sqlCard = new SqlCard();
         for (Cardset c: cardSets )
         {
             czarCards.addAll(sqlCard.getAllCzarCardsFromCardSet(c));
