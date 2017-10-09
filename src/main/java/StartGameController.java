@@ -132,12 +132,17 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
 
     @FXML
     private void btnSend(Event e) {
+        if(tfChatBox.getText().equals(""))
+        {
+            return;
+        }
         if (host != null) {
             host.messageAll("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
             putChatMessage(StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
         } else {
             lobbyClient.sendMessage("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
         }
+
         tfChatBox.setText("");
     }
 
@@ -217,7 +222,7 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
         }
 
         String chatMessage = getChatMessage(message);
-        if (chatMessage != null) {
+        if (!chatMessage.equals("")) {
             host.messageAll(message);
             putChatMessage(chatMessage);
         }
@@ -236,7 +241,7 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
     @Override
     public void onHostMessage(String message) {
         String chatMessage = getChatMessage(message);
-        if (chatMessage != null) {
+        if (!chatMessage.equals("")) {
             putChatMessage(chatMessage);
         }
     }

@@ -44,7 +44,7 @@ public class LobbyController implements Initializable, GameClientEvents {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        client = new GameClient("145.93.132.244", 1336, this, StaticPlayer.getPlayer());
+        client = new GameClient("145.93.135.78", 1336, this, StaticPlayer.getPlayer());
         client.start();
 
         lobbies = new HashMap<>();
