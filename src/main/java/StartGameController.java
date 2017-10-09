@@ -61,6 +61,9 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
     @FXML
     private ListView lvChat;
 
+    @FXML
+    private ListView lvScore;
+
 
     private GameHost host;
     private GameClient mainClient;
@@ -132,8 +135,7 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
 
     @FXML
     private void btnSend(Event e) {
-        if(tfChatBox.getText().equals(""))
-        {
+        if (tfChatBox.getText().equals("")) {
             return;
         }
         if (host != null) {
@@ -218,6 +220,7 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
         String clientDataString = getClientData(message);
         if (clientDataString != null) {
             players.put(client, new Player(clientDataString));
+            updateScoreBoard();
             return;
         }
 
@@ -267,6 +270,16 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
     private void putChatMessage(String input) {
         Platform.runLater(() -> {
             lvChat.getItems().add(input);
+        });
+    }
+
+    private void updateScoreBoard() {
+        Platform.runLater(() -> {
+            lvScore.getItems().clear();
+
+            for (Player player : players.values()) {
+                lvScore.getItems().add(player.getName());
+            }
         });
     }
 }
