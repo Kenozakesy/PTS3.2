@@ -33,9 +33,11 @@ public class Player {
     {
         cardsInHand.add(card);
     }
-
-
-
-
-
+    public void removeFromHand(PlayCard card) {
+        for(PlayCard cardInHand : cardsInHand) {
+            if(cardInHand.getId() == card.getId()) {
+                cardsInHand.remove(card);
+            }
+        }
+    }
 }
