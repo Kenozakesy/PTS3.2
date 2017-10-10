@@ -1,5 +1,3 @@
-package GUI;
-
 import Business.Cardset;
 import Business.Player;
 import Business.staticClasses.StaticLobby;
