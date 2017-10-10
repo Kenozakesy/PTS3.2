@@ -6,25 +6,25 @@ import java.util.Collections;
 
 // FACADE
 public class God {
+
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
 
-    public God() {
-        // Is empty, voor de vorm ofzo
+    public God()
+    {
+
     }
 
     // Creeert een lobby zonder eigenschappen (i.e. maxPlayers, status etc.)
     public String createLobby(String id, String ip) {
         Lobby lobby = new Lobby(id, ip);
-        // Alle andere parameters moeten nog worden toegevoegd aan de gecreeerde lobby, op deze plek.
         lobbies.add(lobby);
         return id;
     }
 
     // Start de game, met de lobby van het meegegeven id
-    public void startGame(int id) {
-        String lobbyId = String.valueOf(id);
+    public void startGame(String id) {
         for(Lobby lobby : lobbies) {
-            if(lobby.getLobbyID().equals(lobbyId)) {
+            if(lobby.getLobbyID().equals(id)) {
                 lobby.startGame();
             }
         }
@@ -42,8 +42,8 @@ public class God {
     }
 
     // Returnt de spelers uit een bepaalde lobby
-    public ArrayList<Player> getPlayersFromLobby(int lobbyId) {
-        Lobby lobby = getLobbyFromId(lobbyId);
+    public ArrayList<Player> getPlayersFromLobby(String id) {
+        Lobby lobby = getLobbyFromId(id);
         ArrayList<Player> players = new ArrayList<>();
         if(lobby != null) {
             players.addAll(lobby.getPlayers());
@@ -53,14 +53,24 @@ public class God {
     }
 
     // Deze method is om een lobby uit de lijst met lobbies te vissen met een bepaald Id
-    private Lobby getLobbyFromId(int id) {
-        String lobbyId = String.valueOf(id);
+    private Lobby getLobbyFromId(String id) {
         for(Lobby lobby : lobbies) {
-            if(lobby.getLobbyID().equals(lobbyId)) {
+            if(lobby.getLobbyID().equals(id)) {
                 return lobby;
             }
         }
         return null;
+    }
+
+    // Deze method is om een lobby uit de lijst met lobbies te vissen met een bepaald Id
+    private boolean RemoveLobby(String id) {
+        for(Lobby lobby : lobbies) {
+            if(lobby.getLobbyID() == id) {
+                lobbies.remove(lobby);
+                return true;
+            }
+        }
+        return false;
     }
 
 }
