@@ -1,12 +1,13 @@
 package LogicTests;
 
-import Business.*;
+import business.*;
 import DAL.SqlCard;
 import DAL.SqlCardset;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.*;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +46,9 @@ public class CardsTest {
         Player playerkees = new Player("TestKees");
         Player playergroente = new Player("TestAardappel");
         Lobby lobby = new Lobby("Test","Placeholder");
-        lobby.addplayer(playerjan);
-        lobby.addplayer(playergroente);
-        lobby.addplayer(playerkees);
+        lobby.getPlayers().put(new Socket(), playerjan);
+        lobby.getPlayers().put(new Socket(), playerkees);
+        lobby.getPlayers().put(new Socket(), playergroente);
         Game game = new Game(lobby);
         game.getDecks(cardsets);
 

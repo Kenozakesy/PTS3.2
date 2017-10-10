@@ -16,8 +16,8 @@ public class Game
 {
     Lobby lobby;
     Random random = new Random();
-    ArrayList<Cards> czarCards;
-    ArrayList<Cards> playCards;
+    ArrayList<Cards> czarCards = new ArrayList<>();
+    ArrayList<Cards> playCards = new ArrayList<>();
     ArrayList<PlayCard> chosenCards;
 
     public Game(Lobby lobby) {this.lobby = lobby;}
@@ -36,18 +36,18 @@ public class Game
 
     }
 
-//    public void endTurn()
-//    {
-//        for(Player player:lobby.getPlayers())
-//        {
-//            while(player.getCardsInHand().size() < 8)
-//            {
-//                int index = random.nextInt(playCards.size());
-//                player.addToHand((PlayCard)playCards.get(index));
-//                playCards.remove(index);
-//            }
-//        }
-//    }
+    public void endTurn()
+   {
+        for(Player player:lobby.getPlayers().values())
+        {
+            while(player.getCardsInHand().size() < 8)
+            {
+                int index = random.nextInt(playCards.size());
+                player.addToHand((PlayCard)playCards.get(index));
+               playCards.remove(index);
+            }
+        }
+    }
 
     public void getDecks(ArrayList<Cardset> cardSets)
     {
