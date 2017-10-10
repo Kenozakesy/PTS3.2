@@ -1,10 +1,10 @@
-package business;
+package Business;
 
+import Business.exceptions.AlreadyHostingException;
+import Business.exceptions.NotClientException;
+import Business.exceptions.NotHostException;
+import Business.staticClasses.StaticPlayer;
 import DAL.SqlCardset;
-import business.exceptions.AlreadyHostingException;
-import business.exceptions.NotClientException;
-import business.exceptions.NotHostException;
-import business.staticClasses.StaticPlayer;
 import networking.ServerClient;
 import networking.ServerClientEvents;
 import networking.ServerHost;
