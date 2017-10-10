@@ -22,12 +22,6 @@ public class SqlCardTest {
     }
 
     @Test
-    public void getAllCards() throws Exception {
-        ArrayList<Cards> cards = sqlCard.getAllCards();
-        Assert.assertEquals(23, cards.size());
-    }
-
-    @Test
     public void getAllPlayCardsFromCardSet() throws Exception {
         Cardset cardSet = new Cardset(0, "Test");
         ArrayList<Cards> cards = sqlCard.getAllPlayCardsFromCardSet(cardSet);

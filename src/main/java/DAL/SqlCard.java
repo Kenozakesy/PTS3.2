@@ -19,34 +19,6 @@ public class SqlCard {
 
     SqlCardset sqlCardset;
 
-    public ArrayList<Cards> getAllCards(){
-        try{
-            sqlCardset = new SqlCardset();
-            sqlMain.setStatement(sqlMain.getConnection().createStatement());
-            String query = "SELECT * FROM Card;";
-            
-            sqlMain.setResult(sqlMain.getStatement().executeQuery(query));
-            
-            ArrayList<Cards> cards = new ArrayList<Cards>();
-            while(sqlMain.getResult().next()) {
-                int id = sqlMain.getResult().getInt(1);
-                String name = sqlMain.getResult().getString(2);
-                Boolean blanc = sqlMain.getResult().getBoolean(3);
-                Cardset cs = sqlCardset.getCardsetById(sqlMain.getResult().getInt(4));
-                
-                Cards card = new PlayCard(id, name, cs, blanc);
-                cards.add(card);
-            }
-            return cards;
-        } catch(Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        finally{
-            sqlMain.closeAll();
-        }
-    }
-
     public ArrayList<Cards> getAllPlayCardsFromCardSet(Cardset cardset) {
         try{
             sqlCardset = new SqlCardset();
