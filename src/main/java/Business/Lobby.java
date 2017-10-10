@@ -1,5 +1,6 @@
 package business;
 
+import DAL.SqlCardset;
 import business.exceptions.AlreadyHostingException;
 import business.exceptions.NotClientException;
 import business.exceptions.NotHostException;
@@ -11,6 +12,7 @@ import networking.ServerHostEvents;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,8 @@ public class Lobby {
     //Relations
     private List<CzarCard> czarDeck;
     private List<PlayCard> deck;
-    private List<Cardset> cardsets;
+    private ArrayList<Cardset> cardSetsNotUsing = null;
+    private ArrayList<Cardset> cardSetsUsing = null;
 
     private ServerClient mainClient;
 
@@ -48,35 +51,32 @@ public class Lobby {
     public int getMaxPlayers() {
         return maxPlayers;
     }
-
     public int getMaxSpectators() {
         return maxSpectators;
     }
-
     public int getScoreLimit() {
         return scoreLimit;
     }
-
     public int getBlankCards() {
         return blankCards;
     }
-
     public int getTimeLimit() {
         return timeLimit;
     }
-
     public String getPassword() {
         return password;
     }
+    public ArrayList<Cardset> getCardSetsNotUsing() {return cardSetsNotUsing;}
+    public void setCardSetsNotUsing(ArrayList<Cardset> n) {this.cardSetsNotUsing = n;}
+    public ArrayList<Cardset> getCardSetsUsing() {return cardSetsUsing;}
+    public void setCardSetsUsing(ArrayList<Cardset> n) {this.cardSetsUsing = n;}
 
     public Map<Socket, Player> getPlayers() {
         return players;
     }
-
     public Map<Socket, Player> getSpectators() {
         return spectators;
     }
-
     public String getIP() {
         return ip;
     }
@@ -89,6 +89,27 @@ public class Lobby {
     public Lobby(String lobbyId, String ip) {
         this.lobbyID = lobbyId;
         this.ip = ip;
+
+        cardSetsNotUsing = new ArrayList<>();
+        cardSetsUsing = new ArrayList<>();
+    }
+
+    public void getCardSetsDatabase()
+    {
+        SqlCardset SC = new SqlCardset();
+        this.cardSetsNotUsing = SC.getAllCardsets();
+    }
+
+    public void setToNotUsingSets(Cardset set)
+    {
+        this.cardSetsNotUsing.add(set);
+        this.cardSetsUsing.remove(set);
+    }
+
+    public void setToUsingSets(Cardset set)
+    {
+        this.cardSetsUsing.add(set);
+        this.cardSetsNotUsing.remove(set);
     }
 
     public void startHosting(ServerHostEvents eventHandler) throws AlreadyHostingException, IOException {
