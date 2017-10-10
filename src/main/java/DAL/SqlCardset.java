@@ -34,8 +34,6 @@ public class SqlCardset {
                 
                 Cardset set = new Cardset(id, name);
 
-                
-                System.out.println(set.getId() + " " + set.getName());
                 sets.add(set);
             }
             return sets;

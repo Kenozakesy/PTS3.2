@@ -1,6 +1,13 @@
+<<<<<<< HEAD:src/main/java/GUI/GameController.java
 package GUI;
 
 import business.Lobby;
+=======
+import Business.Cards;
+import Business.Cardset;
+import Business.Lobby;
+import Business.PlayCard;
+>>>>>>> 9768eeb3fbee56974f90db06fb682e0f4735f724:src/main/java/GameController.java
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import javax.smartcardio.Card;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +112,27 @@ public class GameController {
     public void AddCardsToHand(Event e)
     {
         
+    }
+
+    //TODO Turn this test code into actual code
+    public void loadPlayerHand()
+    {
+        Cardset cardset = new Cardset("Saas");
+        Cards card = new PlayCard( "Hello I am a card", cardset, false );
+        Cards card2 = new PlayCard( "Hello I am a card 2", cardset, false );
+        Cards card3 = new PlayCard( "Hello I am a card 3", cardset, false );
+        Cards card4 = new PlayCard( "Hello I am a card 4", cardset, false );
+        Cards card5 = new PlayCard( "Hello I am a card 5", cardset, false );
+        Cards card6 = new PlayCard( "Hello I am a card 6", cardset, false );
+
+        taCard1.setText(card.getText());
+        taCard2.setText(card2.getText());
+        taCard3.setText(card3.getText());
+        taCard4.setText(card4.getText());
+        taCard5.setText(card5.getText());
+        taCard6.setText(card6.getText());
+
+
     }
 
 

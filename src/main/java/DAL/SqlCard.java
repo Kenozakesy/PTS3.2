@@ -35,7 +35,6 @@ public class SqlCard {
                 Cardset cs = sqlCardset.getCardsetById(sqlMain.getResult().getInt(4));
                 
                 Cards card = new PlayCard(id, name, cs, blanc);
-                System.out.println(card.getId() + " " + card.getText() + " " + ((PlayCard)card).getBlank());
                 cards.add(card);
             }
             return cards;
@@ -66,7 +65,6 @@ public class SqlCard {
                 Boolean blanc = sqlMain.getResult().getBoolean(3);
                 
                 Cards card = new PlayCard(id, name, cardset, blanc);
-                System.out.println(card.getId() + " " + card.getText() + " " + ((PlayCard)card).getBlank());
                 cards.add(card);
             }
             return cards;
@@ -98,7 +96,6 @@ public class SqlCard {
 
                 //Blank spaces nog toevoegen aan Database
                 Cards card = new CzarCard(id, name, cardset, 1);
-                System.out.println(card.getId() + " " + card.getText());
                 cards.add(card);
             }
             return cards;

@@ -38,15 +38,15 @@ public class Game
 
     public void endTurn()
     {
-        // for(Player player : playerList)
-        // {
-        //    while(player.cardsInHand < 8)
-        //  {
-        //    int index = random.nextInt(playcardsList.size());
-        //    player.addCard(playcardsList.get(index));
-        // }
-        //
-        // }
+        for(Player player:lobby.getPlayers())
+        {
+            while(player.getCardsInHand().size() < 8)
+            {
+                int index = random.nextInt(playCards.size());
+                player.addToHand((PlayCard)playCards.get(index));
+                playCards.remove(index);
+            }
+        }
     }
 
     public void getDecks(ArrayList<Cardset> cardSets)
