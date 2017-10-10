@@ -1,4 +1,6 @@
+import business.App;
 import business.Cardset;
+import business.Lobby;
 import business.Player;
 import business.staticClasses.StaticLobby;
 import business.staticClasses.StaticPlayer;
@@ -64,6 +66,8 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     @FXML
     private ListView lvScore;
 
+    private App app = new App();
+    private String lobbyId;
 
     private ServerHost host;
     private ServerClient mainClient;
@@ -84,6 +88,8 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         Cardsets = new ArrayList<>();
         CardsetsPicked = new ArrayList<>();
 
+        Lobby lobby = app.getLobbyFromId(lobbyId);
+        lobby.getCardSetsDatabase();
 
         //for loop is for testing
         for (int x = 0; x < 10; x++) {
