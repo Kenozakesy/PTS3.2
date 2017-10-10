@@ -1,3 +1,5 @@
+package GUI;
+
 import Business.Player;
 import Business.staticClasses.StaticPlayer;
 import javafx.event.Event;

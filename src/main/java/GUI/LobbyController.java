@@ -1,3 +1,5 @@
+package GUI;
+
 import Business.Lobby;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
