@@ -53,7 +53,7 @@ public class App {
     }
 
     // Deze method is om een lobby uit de lijst met lobbies te vissen met een bepaald Id
-    private Lobby getLobbyFromId(String id) {
+    public Lobby getLobbyFromId(String id) {
         for(Lobby lobby : lobbies) {
             if(lobby.getLobbyID().equals(id)) {
                 return lobby;
