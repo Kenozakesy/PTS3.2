@@ -2,16 +2,16 @@ package Business;
 
 import Business.Enums.Status;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 // FACADE
-public class God {
+public class App {
 
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
 
-    public God()
+    public App()
     {
-
+        // Usefull comment, anders geeft ie een stomme melding.
     }
 
     // Creeert een lobby zonder eigenschappen (i.e. maxPlayers, status etc.)
@@ -31,8 +31,8 @@ public class God {
     }
 
     // Returnt alle bestaande lobbies, die niet gestart zijn
-    public ArrayList<Lobby> getLobbiesNotStarted() {
-        ArrayList<Lobby> lobbiesNotStarted = new ArrayList<>();
+    public List<Lobby> getLobbiesNotStarted() {
+        List<Lobby> lobbiesNotStarted = new ArrayList<>();
         for(Lobby lobby : lobbies) {
             if(lobby.getStatus() == Status.Not_started) {
                 lobbiesNotStarted.add(lobby);
@@ -42,9 +42,9 @@ public class God {
     }
 
     // Returnt de spelers uit een bepaalde lobby
-    public ArrayList<Player> getPlayersFromLobby(String id) {
+    public List<Player> getPlayersFromLobby(String id) {
         Lobby lobby = getLobbyFromId(id);
-        ArrayList<Player> players = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
         if(lobby != null) {
             players.addAll(lobby.getPlayers());
             return players;
@@ -63,7 +63,7 @@ public class God {
     }
 
     // Deze method is om een lobby uit de lijst met lobbies te vissen met een bepaald Id
-    private boolean RemoveLobby(String id) {
+    public boolean removeLobby(String id) {
         for(Lobby lobby : lobbies) {
             if(lobby.getLobbyID() == id) {
                 lobbies.remove(lobby);
