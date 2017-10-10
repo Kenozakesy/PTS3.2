@@ -1,12 +1,12 @@
 package LogicTests;
 
-import business.*;
 import DAL.SqlCard;
 import DAL.SqlCardset;
+import business.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import java.*;
+
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
