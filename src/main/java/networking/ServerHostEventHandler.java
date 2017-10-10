@@ -2,7 +2,7 @@ package networking;
 
 import java.net.Socket;
 
-public class GameServerEventHandler implements GameServerEvents {
+public class ServerHostEventHandler implements ServerHostEvents {
     @Override
     public void onClientMessage(Socket client, String message) {
         System.out.println(client.getRemoteSocketAddress() + " : " + message);

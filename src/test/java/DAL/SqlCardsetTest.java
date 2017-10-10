@@ -1,14 +1,11 @@
 package DAL;
 
-import Business.Cards;
-import Business.Cardset;
+import business.Cardset;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by user on 3-10-2017.

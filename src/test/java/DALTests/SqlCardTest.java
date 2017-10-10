@@ -1,7 +1,7 @@
 package DALTests;
 
-import Business.Cards;
-import Business.Cardset;
+import business.Cards;
+import business.Cardset;
 import DAL.SqlCard;
 import org.junit.Assert;
 import org.junit.Before;

@@ -1,7 +1,7 @@
 package GUI;
 
-import Business.Player;
-import Business.staticClasses.StaticPlayer;
+import business.Player;
+import business.staticClasses.StaticPlayer;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

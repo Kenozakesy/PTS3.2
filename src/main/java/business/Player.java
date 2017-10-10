@@ -1,6 +1,6 @@
-package Business;
+package business;
 
-import Business.Enums.Role;
+import business.Enums.Role;
 
 import java.util.ArrayList;
 import java.util.List;

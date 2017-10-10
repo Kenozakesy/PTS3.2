@@ -1,6 +1,6 @@
 package networking;
 
-import Business.Player;
+import business.Player;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,16 +9,16 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Arrays;
 
-public class GameClient {
+public class ServerClient {
     private ClientHandler clientHandler;
-    private GameClientEvents eventHandler;
+    private ServerClientEvents eventHandler;
     private Player player;
 
     public Player getPlayer() {
         return player;
     }
 
-    public GameClient(String hostIP, int port, GameClientEvents eventHandler, Player player) {
+    public ServerClient(String hostIP, int port, ServerClientEvents eventHandler, Player player) {
         clientHandler = new ClientHandler(this, hostIP, port);
         this.eventHandler = eventHandler;
         this.player = player;
@@ -37,7 +37,7 @@ public class GameClient {
     }
 
     private class ClientHandler extends Thread {
-        private GameClient client;
+        private ServerClient client;
         private Socket socket;
 
         private InputStream in;
@@ -48,7 +48,7 @@ public class GameClient {
 
         private boolean receiveMessages = true;
 
-        ClientHandler(GameClient client, String hostIP, int port) {
+        ClientHandler(ServerClient client, String hostIP, int port) {
             this.client = client;
             this.hostIP = hostIP;
             this.port = port;

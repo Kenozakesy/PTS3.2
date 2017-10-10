@@ -1,4 +1,4 @@
-package Business;
+package business;
 
 /**
  * Created by Jordi on 26-9-2017.
@@ -8,8 +8,6 @@ import DAL.SqlCard;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import static Business.Enums.Role.Czar;
 
 /**
  * In Sprint 2 wordt deze klasse volledig uitgewerkt

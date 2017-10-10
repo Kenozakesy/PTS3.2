@@ -1,7 +1,7 @@
 package GUI;
 
-import Business.Lobby;
-import Business.staticClasses.StaticPlayer;
+import business.Lobby;
+import business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +13,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import networking.GameClient;
-import networking.GameClientEvents;
+import networking.ServerClient;
+import networking.ServerClientEvents;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Gebruiker on 26-9-2017.
  */
-public class LobbyController implements Initializable, GameClientEvents {
+public class LobbyController implements Initializable, ServerClientEvents {
 
     @FXML
     private Button btnCreateGame;
@@ -40,13 +40,13 @@ public class LobbyController implements Initializable, GameClientEvents {
     private ListView lvChat;
 
 
-    private GameClient client;
+    private ServerClient client;
 
     private HashMap<String, Lobby> lobbies;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        client = new GameClient("145.93.135.78", 1336, this, StaticPlayer.getPlayer());
+        client = new ServerClient("145.93.135.78", 1336, this, StaticPlayer.getPlayer());
         client.start();
 
         lobbies = new HashMap<>();
@@ -130,12 +130,12 @@ public class LobbyController implements Initializable, GameClientEvents {
         Parent root1 = null;
         try {
 
-            StartGameController startController = new StartGameController();
+            StartControllerHost startController = new StartControllerHost();
             if (isHost) {
                 startController.setHost(client);
             } else {
                 String IP = lvLobby.getSelectionModel().getSelectedItem().getIP();
-                startController.setClient(new GameClient(IP, 1337, startController, StaticPlayer.getPlayer()));
+                startController.setClient(new ServerClient(IP, 1337, startController, StaticPlayer.getPlayer()));
             }
 
             startController.setPreviousStage(stage);

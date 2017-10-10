@@ -1,6 +1,6 @@
 package GUI;
 
-import Business.Lobby;
+import business.Lobby;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

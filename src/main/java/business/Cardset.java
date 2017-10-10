@@ -1,7 +1,6 @@
-package Business;
+package business;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Created by Gebruiker on 12-9-2017.
