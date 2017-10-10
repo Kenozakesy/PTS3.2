@@ -66,6 +66,11 @@ public class Lobby {
     public String getPassword() {
         return password;
     }
+    public ArrayList<Cardset> getCardSetsNotUsing() {return cardSetsNotUsing;}
+    public void setCardSetsNotUsing(ArrayList<Cardset> n) {this.cardSetsNotUsing = n;}
+    public ArrayList<Cardset> getCardSetsUsing() {return cardSetsUsing;}
+    public void setCardSetsUsing(ArrayList<Cardset> n) {this.cardSetsUsing = n;}
+
     public Map<Socket, Player> getPlayers() {
         return players;
     }
@@ -93,6 +98,18 @@ public class Lobby {
     {
         SqlCardset SC = new SqlCardset();
         this.cardSetsNotUsing = SC.getAllCardsets();
+    }
+
+    public void setToNotUsingSets(Cardset set)
+    {
+        this.cardSetsNotUsing.add(set);
+        this.cardSetsUsing.remove(set);
+    }
+
+    public void setToUsingSets(Cardset set)
+    {
+        this.cardSetsUsing.add(set);
+        this.cardSetsNotUsing.remove(set);
     }
 
     public void startHosting(ServerHostEvents eventHandler) throws AlreadyHostingException, IOException {

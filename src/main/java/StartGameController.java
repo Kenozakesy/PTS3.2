@@ -92,9 +92,9 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         lobby.getCardSetsDatabase();
 
         //for loop is for testing
-        for (int x = 0; x < 10; x++) {
-            Cardsets.add(new Cardset(x, "Test" + x));
-        }
+//        for (int x = 0; x < 10; x++) {
+//            Cardsets.add(new Cardset(x, "Test" + x));
+//        }
         Update();
     }
 
@@ -122,20 +122,22 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     @FXML
     private void btnRight(Event e) {
+        Lobby lobby = app.getLobbyFromId(lobbyId);
+
         if (lvCardsets.getSelectionModel().getSelectedItem() != null) {
             Cardset set = (Cardset) lvCardsets.getSelectionModel().getSelectedItem();
-            Cardsets.remove(set);
-            CardsetsPicked.add(set);
+            lobby.setToUsingSets(set);
             Update();
         }
     }
 
     @FXML
     private void btnLeft(Event e) {
+        Lobby lobby = app.getLobbyFromId(lobbyId);
+
         if (lvPickedCards.getSelectionModel().getSelectedItem() != null) {
             Cardset set = (Cardset) lvPickedCards.getSelectionModel().getSelectedItem();
-            CardsetsPicked.remove(set);
-            Cardsets.add(set);
+            lobby.setToNotUsingSets(set);
             Update();
         }
     }
@@ -210,13 +212,15 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     }
 
     public void Update() {
+        Lobby lobby = app.getLobbyFromId(lobbyId);
+
         lvPickedCards.getItems().clear();
         lvCardsets.getItems().clear();
 
-        for (Cardset C : Cardsets) {
+        for (Cardset C : lobby.getCardSetsNotUsing()) {
             lvCardsets.getItems().add(C);
         }
-        for (Cardset C : CardsetsPicked) {
+        for (Cardset C : lobby.getCardSetsUsing()) {
             lvPickedCards.getItems().add(C);
         }
     }
