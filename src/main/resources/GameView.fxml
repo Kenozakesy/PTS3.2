@@ -72,15 +72,15 @@
       <Button fx:id="btnChat" layoutX="1177.0" layoutY="689.0" mnemonicParsing="false" onAction="#click" prefHeight="10.0" prefWidth="106.0" text="Chat" />
       <Button fx:id="btnChoose" layoutX="14.0" layoutY="228.0" mnemonicParsing="false" onAction="#btnChoose" prefHeight="25.0" prefWidth="150.0" text="Choose" />
       <ListView fx:id="lvPlayers" layoutY="520.0" prefHeight="200.0" prefWidth="279.0" />
-      <TextArea fx:id="taBlackCard" layoutX="15.0" layoutY="20.0" prefHeight="200.0" prefWidth="150.0" />
-      <TextArea fx:id="taCard1" layoutX="15.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
-      <TextArea fx:id="taCard2" layoutX="165.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
-      <TextArea fx:id="taCard3" layoutX="315.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
-      <TextArea fx:id="taCard4" layoutX="465.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
-      <TextArea fx:id="taCard5" layoutX="615.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
-      <TextArea fx:id="taCard6" layoutX="765.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
-      <TextArea fx:id="taCard7" layoutX="915.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
-      <TextArea fx:id="taCard8" layoutX="1065.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" />
+      <TextArea fx:id="taBlackCard" editable="false" layoutX="15.0" layoutY="20.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
+      <TextArea fx:id="taCard1" editable="false" layoutX="15.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
+      <TextArea fx:id="taCard2" editable="false" layoutX="165.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
+      <TextArea fx:id="taCard3" editable="false" layoutX="315.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
+      <TextArea fx:id="taCard4" editable="false" layoutX="465.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
+      <TextArea fx:id="taCard5" editable="false" layoutX="615.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
+      <TextArea fx:id="taCard6" editable="false" layoutX="765.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
+      <TextArea fx:id="taCard7" editable="false" layoutX="915.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
+      <TextArea fx:id="taCard8" editable="false" layoutX="1065.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
       <Button fx:id="btnLeaveGame" layoutX="1165.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnLeaveGame" text="Leave Game" />
    </children>
 </AnchorPane>
