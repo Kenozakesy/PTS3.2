@@ -18,6 +18,7 @@ public class God {
         String lobbyId = String.valueOf(id);
         String hostIp = String.valueOf(ip);
         Lobby lobby = new Lobby(lobbyId, hostIp);
+        // Alle andere parameters moeten nog worden toegevoegd aan de gecreeerde lobby, op deze plek.
         lobbies.add(lobby);
     }
 
