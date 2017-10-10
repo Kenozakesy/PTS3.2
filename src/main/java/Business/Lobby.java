@@ -6,6 +6,7 @@ import networking.GameHost;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Created by Gebruiker on 12-9-2017.
@@ -57,6 +58,8 @@ public class Lobby {
 
     public Status getStatus() {return status;}
     public void setStatus(Status status) {this.status = status;}
+
+    public List<Player> getPlayers(){return players;}
 
     public String getIP() {
         return IP;
