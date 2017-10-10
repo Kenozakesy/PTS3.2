@@ -1,25 +1,23 @@
 package Business;
 
 import Business.Enums.Status;
-import com.sun.media.jfxmedia.events.PlayerStateEvent;
-
 import java.util.ArrayList;
+import java.util.Collections;
 
 // FACADE
 public class God {
-    private ArrayList<Lobby> lobbies;
+    private static ArrayList<Lobby> lobbies = new ArrayList<>();
 
     public God() {
-        lobbies = new ArrayList<>();
+        // Is empty, voor de vorm ofzo
     }
 
-    // Creeert een lobby
-    public void createLobby(int id, int ip, int maxPlayers, int maxSpectators, int scoreLimit, int blankCards, String timeLimit, String password, String status) {
-        String lobbyId = String.valueOf(id);
-        String hostIp = String.valueOf(ip);
-        Lobby lobby = new Lobby(lobbyId, hostIp);
+    // Creeert een lobby zonder eigenschappen (i.e. maxPlayers, status etc.)
+    public String createLobby(String id, String ip) {
+        Lobby lobby = new Lobby(id, ip);
         // Alle andere parameters moeten nog worden toegevoegd aan de gecreeerde lobby, op deze plek.
         lobbies.add(lobby);
+        return id;
     }
 
     // Start de game, met de lobby van het meegegeven id
@@ -47,8 +45,11 @@ public class God {
     public ArrayList<Player> getPlayersFromLobby(int lobbyId) {
         Lobby lobby = getLobbyFromId(lobbyId);
         ArrayList<Player> players = new ArrayList<>();
-        players.addAll(lobby.getPlayers());
-        return players;
+        if(lobby != null) {
+            players.addAll(lobby.getPlayers());
+            return players;
+        }
+        return null;
     }
 
     // Deze method is om een lobby uit de lijst met lobbies te vissen met een bepaald Id
