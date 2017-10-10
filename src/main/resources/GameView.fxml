@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.GameController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GameController">
    <children>
       <TextField fx:id="tbChat" layoutX="284.0" layoutY="688.0" prefHeight="31.0" prefWidth="894.0" promptText="bla" />
       <TextArea fx:id="taChatHistory" layoutX="284.0" layoutY="520.0" prefHeight="167.0" prefWidth="999.0" promptText="Iemand: Get rekt" />

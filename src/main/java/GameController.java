@@ -1,5 +1,3 @@
-package GUI;
-
 import Business.Cards;
 import Business.Cardset;
 import Business.Lobby;
