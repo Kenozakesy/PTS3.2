@@ -1,6 +1,6 @@
 package networking;
 
-import business.Player;
+import Business.Player;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

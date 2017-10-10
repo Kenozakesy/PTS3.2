@@ -1,9 +1,9 @@
-import business.App;
-import business.Cardset;
-import business.Lobby;
-import business.Player;
-import business.staticClasses.StaticLobby;
-import business.staticClasses.StaticPlayer;
+import Business.App;
+import Business.Cardset;
+import Business.Lobby;
+import Business.Player;
+import Business.staticClasses.StaticLobby;
+import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;

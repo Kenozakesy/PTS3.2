@@ -1,6 +1,6 @@
 
-import business.Lobby;
-import business.staticClasses.StaticPlayer;
+import Business.Lobby;
+import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

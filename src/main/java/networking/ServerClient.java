@@ -1,6 +1,6 @@
 package networking;
 
-import business.Player;
+import Business.Player;
 
 import java.io.IOException;
 import java.io.InputStream;

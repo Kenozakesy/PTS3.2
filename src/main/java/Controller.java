@@ -1,5 +1,5 @@
-import business.Player;
-import business.staticClasses.StaticPlayer;
+import Business.Player;
+import Business.staticClasses.StaticPlayer;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

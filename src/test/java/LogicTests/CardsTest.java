@@ -2,7 +2,7 @@ package LogicTests;
 
 import DAL.SqlCard;
 import DAL.SqlCardset;
-import business.*;
+import Business.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

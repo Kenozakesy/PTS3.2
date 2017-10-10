@@ -1,4 +1,4 @@
-import business.*;
+import Business.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

@@ -5,7 +5,7 @@
  */
 package DAL;
 
-import business.*;
+import Business.*;
 import java.sql.*;
 import java.util.*;
 
