@@ -1,4 +1,4 @@
-import GUI.StartControllerHost;
+
 import business.Lobby;
 import business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
@@ -126,7 +126,7 @@ public class LobbyController implements Initializable, ServerClientEvents {
         Parent root1 = null;
         try {
 
-            StartControllerHost startController = new StartControllerHost();
+            StartGameController startController = new StartGameController();
             if (isHost) {
                 startController.setHost(client);
             } else {

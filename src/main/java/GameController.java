@@ -1,20 +1,20 @@
-import business.Cards;
-import business.Cardset;
-import business.Lobby;
-import business.PlayCard;
+import business.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class GameController {
+public class GameController implements Initializable{
     @FXML
     private Button btnChat;
     @FXML
@@ -65,6 +65,10 @@ public class GameController {
     private Lobby lobby;
 
     private List<String> chatList = new ArrayList<String>();
+
+    public void initialize(URL location, ResourceBundle resources) {
+        loadPlayerHand();
+    }
 
     public void click( Event e){
         String chat;
@@ -117,6 +121,7 @@ public class GameController {
         Cards card4 = new PlayCard( "Hello I am a card 4", cardset, false );
         Cards card5 = new PlayCard( "Hello I am a card 5", cardset, false );
         Cards card6 = new PlayCard( "Hello I am a card 6", cardset, false );
+        Cards black = new CzarCard("I am black and addicted to __", cardset , 1);
 
         taCard1.setText(card.getText());
         taCard2.setText(card2.getText());
@@ -124,6 +129,7 @@ public class GameController {
         taCard4.setText(card4.getText());
         taCard5.setText(card5.getText());
         taCard6.setText(card6.getText());
+        taBlackCard.setText(black.getText());
 
 
     }
