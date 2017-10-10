@@ -1,12 +1,5 @@
-<<<<<<< HEAD:src/main/java/GUI/Controller.java
-package GUI;
-
 import business.Player;
 import business.staticClasses.StaticPlayer;
-=======
-import Business.Player;
-import Business.staticClasses.StaticPlayer;
->>>>>>> 9768eeb3fbee56974f90db06fb682e0f4735f724:src/main/java/Controller.java
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

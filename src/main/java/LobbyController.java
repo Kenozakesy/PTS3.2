@@ -1,12 +1,6 @@
-<<<<<<< HEAD:src/main/java/GUI/LobbyController.java
-package GUI;
-
+import GUI.StartControllerHost;
 import business.Lobby;
 import business.staticClasses.StaticPlayer;
-=======
-import Business.Lobby;
-import Business.staticClasses.StaticPlayer;
->>>>>>> 9768eeb3fbee56974f90db06fb682e0f4735f724:src/main/java/LobbyController.java
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,9 +22,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-/**
- * Created by Gebruiker on 26-9-2017.
- */
 public class LobbyController implements Initializable, ServerClientEvents {
 
     @FXML

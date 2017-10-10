@@ -1,8 +1,6 @@
-package Business;
+package business;
 
-import Business.Enums.Status;
 import java.util.ArrayList;
-import java.util.List;
 
 // FACADE
 public class App {
@@ -31,26 +29,26 @@ public class App {
     }
 
     // Returnt alle bestaande lobbies, die niet gestart zijn
-    public List<Lobby> getLobbiesNotStarted() {
-        List<Lobby> lobbiesNotStarted = new ArrayList<>();
-        for(Lobby lobby : lobbies) {
-            if(lobby.getStatus() == Status.Not_started) {
-                lobbiesNotStarted.add(lobby);
-            }
-        }
-        return lobbiesNotStarted;
-    }
+//    public List<Lobby> getLobbiesNotStarted() {
+//        List<Lobby> lobbiesNotStarted = new ArrayList<>();
+//        for(Lobby lobby : lobbies) {
+//            if(lobby.getStatus() == Status.Not_started) {
+//                lobbiesNotStarted.add(lobby);
+//            }
+//        }
+//        return lobbiesNotStarted;
+//    }
 
     // Returnt de spelers uit een bepaalde lobby
-    public List<Player> getPlayersFromLobby(String id) {
-        Lobby lobby = getLobbyFromId(id);
-        List<Player> players = new ArrayList<>();
-        if(lobby != null) {
-            players.addAll(lobby.getPlayers());
-            return players;
-        }
-        return null;
-    }
+//    public List<Player> getPlayersFromLobby(String id) {
+//        Lobby lobby = getLobbyFromId(id);
+//        List<Player> players = new ArrayList<>();
+//        if(lobby != null) {
+//            players.addAll(lobby.getPlayers());
+//            return players;
+//        }
+//        return null;
+//    }
 
     // Deze method is om een lobby uit de lijst met lobbies te vissen met een bepaald Id
     public Lobby getLobbyFromId(String id) {

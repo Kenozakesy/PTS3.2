@@ -1,7 +1,7 @@
-import Business.Cardset;
-import Business.Player;
-import Business.staticClasses.StaticLobby;
-import Business.staticClasses.StaticPlayer;
+import business.Cardset;
+import business.Player;
+import business.staticClasses.StaticLobby;
+import business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -11,10 +11,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import networking.GameClient;
-import networking.GameClientEvents;
-import networking.GameHost;
-import networking.GameServerEvents;
+import networking.ServerClient;
+import networking.ServerClientEvents;
+import networking.ServerHost;
+import networking.ServerHostEvents;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
  */
 
 
-public class StartGameController implements Initializable, GameServerEvents, GameClientEvents {
+public class StartGameController implements Initializable, ServerHostEvents, ServerClientEvents {
 
     @FXML
     public Button btnStartGame;
@@ -65,9 +65,9 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
     private ListView lvScore;
 
 
-    private GameHost host;
-    private GameClient mainClient;
-    private GameClient lobbyClient;
+    private ServerHost host;
+    private ServerClient mainClient;
+    private ServerClient lobbyClient;
 
     private Map<Socket, Player> players = new HashMap<>();
 
@@ -92,9 +92,9 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
         Update();
     }
 
-    public void setHost(GameClient mainClient) {
+    public void setHost(ServerClient mainClient) {
         try {
-            this.host = new GameHost(6, this);
+            this.host = new ServerHost(6, this);
             host.start();
 
             this.mainClient = mainClient;
@@ -109,7 +109,7 @@ public class StartGameController implements Initializable, GameServerEvents, Gam
         }
     }
 
-    public void setClient(GameClient client) {
+    public void setClient(ServerClient client) {
         this.lobbyClient = client;
         lobbyClient.start();
     }

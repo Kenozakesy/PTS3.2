@@ -1,13 +1,7 @@
-<<<<<<< HEAD:src/main/java/GUI/GameController.java
-package GUI;
-
+import business.Cards;
+import business.Cardset;
 import business.Lobby;
-=======
-import Business.Cards;
-import Business.Cardset;
-import Business.Lobby;
-import Business.PlayCard;
->>>>>>> 9768eeb3fbee56974f90db06fb682e0f4735f724:src/main/java/GameController.java
+import business.PlayCard;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import javax.smartcardio.Card;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
