@@ -1,8 +1,8 @@
-package business.staticClasses;
+package Business.staticClasses;
 
 
-import business.Enums.*;
-import business.Player;
+import Business.Enums.*;
+import Business.Player;
 
 /**
  * Created by Gebruiker on 19-9-2017.

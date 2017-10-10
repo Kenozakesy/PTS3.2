@@ -1,4 +1,4 @@
-package business.Enums;
+package Business.Enums;
 
 /**
  * Created by Gebruiker on 12-9-2017.

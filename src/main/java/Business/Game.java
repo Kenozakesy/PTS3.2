@@ -1,4 +1,4 @@
-package business;
+package Business;
 
 /**
  * Created by Jordi on 26-9-2017.

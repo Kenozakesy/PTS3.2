@@ -1,10 +1,10 @@
-package business.staticClasses;
+package Business.staticClasses;
 
-import business.Cardset;
-import business.CzarCard;
-import business.Enums.Status;
-import business.PlayCard;
-import business.Player;
+import Business.Cardset;
+import Business.CzarCard;
+import Business.Enums.Status;
+import Business.PlayCard;
+import Business.Player;
 
 import java.util.ArrayList;
 
