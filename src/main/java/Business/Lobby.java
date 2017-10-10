@@ -79,7 +79,7 @@ public class Lobby {
     }
 
     //Operators
-    public void StartGame()
+    public void startGame()
     {
         //starts the game
     }
