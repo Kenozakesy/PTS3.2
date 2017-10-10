@@ -14,13 +14,15 @@ import java.util.*;
  * @author JelleSchrader
  */
 public class SqlCard {
-    private SqlMain sqlMain = new SqlMain();
+
             //"Server=mssql.fhict.local;Database=dbi299244;User Id=dbi299244;Password=PTS3Groep1;";
 
     SqlCardset sqlCardset;
 
     public ArrayList<Cards> getAllPlayCardsFromCardSet(Cardset cardset) {
+        SqlMain sqlMain = new SqlMain();
         try{
+
             sqlCardset = new SqlCardset();
             sqlMain.setStatement(sqlMain.getConnection().createStatement());
             String query = "SELECT * FROM Card WHERE DeckId = ? AND CardIsBlack = 0;";
@@ -50,6 +52,7 @@ public class SqlCard {
     }
 
     public ArrayList<Cards> getAllCzarCardsFromCardSet(Cardset cardset) {
+        SqlMain sqlMain = new SqlMain();
         try{
             sqlCardset = new SqlCardset();
             sqlMain.setStatement(sqlMain.getConnection().createStatement());
@@ -81,6 +84,7 @@ public class SqlCard {
     }
 
     public Cards getCardById(int cardId){
+        SqlMain sqlMain = new SqlMain();
         try{
             sqlCardset = new SqlCardset();
             sqlMain.setStatement(sqlMain.getConnection().createStatement());
