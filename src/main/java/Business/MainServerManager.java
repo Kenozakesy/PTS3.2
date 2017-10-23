@@ -12,7 +12,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class MainServerManager extends Observable implements ServerClientEvents {
-    private static MainServerManager INSTANCE = null;
+    private static MainServerManager instance = null;
 
     private List<Lobby> lobbies;
     private ServerClient client;
@@ -30,19 +30,19 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     }
 
     public static MainServerManager getInstance(Observer observer) {
-        if (INSTANCE == null) {
-            INSTANCE = new MainServerManager(observer);
+        if (instance == null) {
+            instance = new MainServerManager(observer);
         }
 
-        return INSTANCE;
+        return instance;
     }
 
     public static MainServerManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new MainServerManager(null);
+        if (instance == null) {
+            instance = new MainServerManager(null);
         }
 
-        return INSTANCE;
+        return instance;
     }
 
     public void sendMessage(String message) {
