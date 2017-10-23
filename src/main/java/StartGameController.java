@@ -1,7 +1,4 @@
-import Business.App;
-import Business.Cardset;
-import Business.Lobby;
-import Business.Player;
+import Business.*;
 import Business.staticClasses.StaticLobby;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
@@ -24,10 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Created by Gebruiker on 12-9-2017.
@@ -72,8 +66,9 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     private App app = new App();
     private String lobbyId;
 
+    private MainServerManager mainServerManager;
+
     private ServerHost host;
-    private ServerClient mainClient;
     private ServerClient lobbyClient;
 
     private Map<Socket, Player> players = new HashMap<>();
@@ -84,8 +79,8 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         this.previousStage = previousStage;
     }
 
-    private ArrayList<Cardset> Cardsets = null;
-    private ArrayList<Cardset> CardsetsPicked = null;
+    private List<Cardset> Cardsets = null;
+    private List<Cardset> CardsetsPicked = null;
 
     public void initialize(URL location, ResourceBundle resources) {
         Cardsets = new ArrayList<>();
@@ -94,25 +89,21 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         Lobby lobby = app.getLobbyFromId(lobbyId);
         lobby.getCardSetsDatabase();
 
-        //for loop is for testing
-//        for (int x = 0; x < 10; x++) {
-//            Cardsets.add(new Cardset(x, "Test" + x));
-//        }
         Update();
     }
 
-    public void setHost(ServerClient mainClient) {
+    public void setHost() {
         try {
             this.host = new ServerHost(6, this);
             host.start();
 
-            this.mainClient = mainClient;
+            this.mainServerManager = MainServerManager.getInstance();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            mainClient.sendMessage("<L>" + StaticPlayer.getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
+            this.mainServerManager.sendMessage("<L>" + StaticPlayer.getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -174,7 +165,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
                 Stage stage = (Stage) btnStartGame.getScene().getWindow();
                 stage.close();
 
-                mainClient.sendMessage("<L>quit</L>");
+                mainServerManager.sendMessage("<L>quit</L>");
                 host.close();
 
                 previousStage.show();
@@ -205,13 +196,6 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         StaticLobby.setMaxspectators(Integer.parseInt((String) ddSpectatorLimit.getSelectionModel().getSelectedItem()));
         StaticLobby.setTimelimit((String) ddIdleTimer.getSelectionModel().getSelectedItem());
         StaticLobby.setBlankcards(Integer.parseInt((String) ddBlankCards.getSelectionModel().getSelectedItem()));
-
-        // only used for testing
-//        taChat.setText(String.valueOf(StaticLobby.getScorelimit()) + "\n" +
-//                        String.valueOf(StaticLobby.getMaxplayers()) + "\n" +
-//                        String.valueOf(StaticLobby.getMaxspectators()) + "\n" +
-//                        String.valueOf(StaticLobby.getTimelimit()) + "\n" +
-//                        String.valueOf(StaticLobby.getBlankcards()));
     }
 
     public void Update() {
@@ -223,6 +207,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         for (Cardset C : lobby.getCardSetsNotUsing()) {
             lvCardsets.getItems().add(C);
         }
+
         for (Cardset C : lobby.getCardSetsUsing()) {
             lvPickedCards.getItems().add(C);
         }
