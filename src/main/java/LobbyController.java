@@ -1,6 +1,7 @@
 
 import Business.Lobby;
 import Business.MainServerManager;
+import Business.exceptions.AlreadyHostingException;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -89,10 +90,20 @@ public class LobbyController implements Initializable, Observer {
             startController.setLobby(lobby);
 
             if (isHost) {
-                startController.setHost();
+                try
+                {
+                    lobby.startHosting(startController);
+                }
+                catch(AlreadyHostingException e) {e.printStackTrace();}
+
+              //  startController.setHost();
             } else {
                 String IP = lvLobby.getSelectionModel().getSelectedItem().getIP();
-                startController.setClient(new ServerClient(IP, 1337, startController, StaticPlayer.getPlayer()));
+                try
+                {lobby.joinLobby(IP,1337,startController);}
+
+                catch(AlreadyHostingException e){ e.printStackTrace();}
+               // startController.setClient(new ServerClient(IP, 1337, startController, StaticPlayer.getPlayer()));
             }
 
             startController.setPreviousStage(stage);

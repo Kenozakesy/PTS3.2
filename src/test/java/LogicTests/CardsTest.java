@@ -20,7 +20,7 @@ public class CardsTest {
     private SqlCard sqlCard;
     private SqlCardset sqlCardset;
     List<Cards> cards;
-    ArrayList<Cardset> cardsets;
+    List<Cardset> cardsets;
 
     @Before
     public void setUp() throws Exception {
@@ -50,7 +50,7 @@ public class CardsTest {
         lobby.getPlayers().put(new Socket(), playerkees);
         lobby.getPlayers().put(new Socket(), playergroente);
         Game game = new Game(lobby);
-        game.getDecks(cardsets);
+        game.getDecks();
 
         game.newTurn();
 

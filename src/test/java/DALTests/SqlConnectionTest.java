@@ -18,12 +18,12 @@ public class SqlConnectionTest {
     private SqlConnection sqlConnection;
     @Before
     public void setUp() throws Exception {
-        userId = "dbi299244";
-        password = "PTS3Groep1";
-        url = "Server=mssql.fhict.local;Database=dbi299244;";
-        properties = new Properties();
-        properties.setProperty(userId, password);
-        connectie = DriverManager.getConnection(url, properties);
+//        userId = "dbi299244";
+//        password = "PTS3Groep1";
+//        url = "Server=mssql.fhict.local;Database=dbi299244;";
+//        properties = new Properties();
+//        properties.setProperty(userId, password);
+//        connectie = DriverManager.getConnection(url, properties);
         sqlConnection = new SqlConnection();
     }
 

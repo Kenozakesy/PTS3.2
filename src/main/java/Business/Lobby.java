@@ -11,6 +11,7 @@ import networking.ServerHost;
 import networking.ServerHostEvents;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class Lobby {
 
     //Relations
-    private ArrayList<Cardset> cardSetsNotUsing = null;
+    private ArrayList<Cardset> cardSetsNotUsing = new ArrayList<>();
     private ArrayList<Cardset> cardSetsUsing = null;
 
     private ServerHost lobbyHost;
@@ -110,8 +111,8 @@ public class Lobby {
     }
 
     public void getCardSetsFromDatabase() {
-        SqlCardset SC = new SqlCardset();
-        this.cardSetsNotUsing = SC.getAllCardsets();
+        SqlCardset sqlCardset = new SqlCardset();
+        this.cardSetsNotUsing = sqlCardset.getAllCardsets();
     }
 
     // Voor op de UI
@@ -134,6 +135,7 @@ public class Lobby {
 
         lobbyHost = new ServerHost(maxPlayers, eventHandler);
         lobbyHost.start();
+        MainServerManager.getInstance().sendMessage("<L>" + StaticPlayer.getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
     }
 
     public void joinLobby(String ip, int port, ServerClientEvents eventHandler) throws AlreadyHostingException {
