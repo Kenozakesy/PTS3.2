@@ -84,6 +84,15 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         this.notifyObservers(message);
     }
 
+    public Lobby getLobbyByIP(String ip) {
+        for(Lobby lobby : lobbies) {
+            if(lobby.getIP().equals(ip)) {
+                return lobby;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onJoin(SocketAddress address) {
         client.sendMessage("<D>" + StaticPlayer.getName() + "</D>");
