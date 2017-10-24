@@ -20,8 +20,6 @@ import java.util.Map;
 public class Lobby {
 
     //Relations
-    private List<CzarCard> czarDeck;
-    private List<PlayCard> deck;
     private ArrayList<Cardset> cardSetsNotUsing = null;
     private ArrayList<Cardset> cardSetsUsing = null;
 
@@ -143,7 +141,8 @@ public class Lobby {
     }
 
     public void startGame() {
-
+        Game game = new Game(this);
+        game.getDecks(cardSetsUsing);
     }
 
     @Override
