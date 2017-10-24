@@ -1,4 +1,5 @@
 import Business.*;
+import Business.Enums.Role;
 import Business.staticClasses.StaticPlayer;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -86,11 +87,22 @@ public class GameController implements Initializable{
     @FXML   //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
 
-        
+        if(StaticPlayer.getRole().equals(Role.Pleb)) {
 
-        System.out.println("Kaart gekozen");
+            //hier moet een betere manier voor zijn
+            if (rbtnCard1.isSelected())
+            {
+                System.out.println(taCard1.getText());
+            }
+        }
+        else if(StaticPlayer.getRole().equals(Role.Czar))
+        {
 
-
+        }
+        else
+        {
+            //Do nothing
+        }
     }
 
     public void btnLeaveGame()
