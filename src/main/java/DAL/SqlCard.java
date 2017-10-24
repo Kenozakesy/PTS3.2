@@ -18,7 +18,7 @@ public class SqlCard {
 
     SqlCardset sqlCardset;
 
-    public ArrayList<Cards> getAllPlayCardsFromCardSet(Cardset cardset) {
+    public List<PlayCard> getAllPlayCardsFromCardSet(Cardset cardset) {
         SqlConnection sqlConnection = new SqlConnection();
         try{
             sqlCardset = new SqlCardset();
@@ -30,13 +30,13 @@ public class SqlCard {
 
             sqlConnection.setResult(ps.executeQuery());
             
-            ArrayList<Cards> cards = new ArrayList<Cards>();
+            List<PlayCard> cards = new ArrayList<>();
             while(sqlConnection.getResult().next()) {
                 int id = sqlConnection.getResult().getInt(1);
                 String name = sqlConnection.getResult().getString(2);
                 Boolean blanc = sqlConnection.getResult().getBoolean(3);
-                
-                Cards card = new PlayCard(id, name, cardset, blanc);
+
+                PlayCard card = new PlayCard(id, name, cardset, blanc);
                 cards.add(card);
             }
             return cards;
@@ -49,7 +49,7 @@ public class SqlCard {
         }
     }
 
-    public ArrayList<Cards> getAllCzarCardsFromCardSet(Cardset cardset) {
+    public List<CzarCard> getAllCzarCardsFromCardSet(Cardset cardset) {
         SqlConnection sqlConnection = new SqlConnection();
         try{
             sqlCardset = new SqlCardset();
@@ -61,14 +61,14 @@ public class SqlCard {
 
             sqlConnection.setResult(ps.executeQuery());
 
-            ArrayList<Cards> cards = new ArrayList<Cards>();
+            List<CzarCard> cards = new ArrayList<>();
             while(sqlConnection.getResult().next()) {
                 int id = sqlConnection.getResult().getInt(1);
                 String name = sqlConnection.getResult().getString(2);
                 Boolean blanc = sqlConnection.getResult().getBoolean(3);
 
                 //Blank spaces nog toevoegen aan Database
-                Cards card = new CzarCard(id, name, cardset, 1);
+                CzarCard card = new CzarCard(id, name, cardset, 1);
                 cards.add(card);
             }
             return cards;

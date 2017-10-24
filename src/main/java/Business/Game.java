@@ -5,29 +5,27 @@ package Business;
  */
 
 import DAL.SqlCard;
-import DAL.SqlCardset;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * In Sprint 2 wordt deze klasse volledig uitgewerkt
  */
-public class Game
-{
+public class Game {
     Lobby lobby;
     Random random = new Random();
-    ArrayList<Cards> czarCards;
-    ArrayList<Cards> playCards;
-    ArrayList<PlayCard> chosenCards;
-    int playerIsCzar;
+    List<CzarCard> czarCards;
+    List<PlayCard> playCards;
+    // Gekozen kaarten door de spelers in de HUIDIGE ronde.
+    List<PlayCard> chosenCards;
 
-
-    public ArrayList<Cards> getCzarCards() {
+    public List<CzarCard> getCzarCards() {
         return czarCards;
     }
 
-    public ArrayList<Cards> getPlayCards() {
+    public List<PlayCard> getPlayCards() {
         return playCards;
     }
 
@@ -35,53 +33,45 @@ public class Game
         this.lobby = lobby;
         czarCards = new ArrayList<>();
         playCards = new ArrayList<>();
-        playerIsCzar = 0;
-        endTurn();
-
-
+        getDecks();
+        newTurn();
     }
 
-    public void playerPicksCard(Cards card)
-    {
-
-        if (chosenCards.size() >= lobby.getPlayers().size())
-        {
-            
+    // Methode wordt aangeroepen nadat een speler een kaart speelt.
+    public void playerPicksCard(Cards card) {
+        // Check of alle spelers hun kaart gespeeld hebben.
+        if (chosenCards.size() >= lobby.getPlayers().size()) {
+            // Czar moet hier nog kiezen.
         }
+        // Wachten tot alle spelers gespeeld hebben. (niets dus)
     }
 
-    public void czarPicksCards(Cards card)
-    {
-
+    public void czarPicksCards(Cards card) {
+        // Einde van de beurt, nieuwe ronde start etc.
+        newTurn();
     }
 
-    public CzarCard pickBlackCard(){
-        random = new Random();
-
-        return (CzarCard)czarCards.get(random.nextInt(czarCards.size()));
+    // Een zwarte kaart wordt gekozen om te lezen en wordt meteen uit de te kiezen kaarten gehaald.
+    public CzarCard pickBlackCard() {
+        CzarCard card = czarCards.get(random.nextInt(czarCards.size()));
+        czarCards.remove(card);
+        return card;
     }
 
-    public void endTurn()
-   {
-        for(Player player:lobby.getPlayers().values())
-        {
-            while(player.getCardsInHand().size() < 8)
-            {
+    // Opnieuw kaarten delen.
+    public void newTurn() {
+        for (Player player : lobby.getPlayers().values()) {
+            while (player.getCardsInHand().size() < 8) {
                 int index = random.nextInt(playCards.size());
-                player.addToHand((PlayCard)playCards.get(index));
-               playCards.remove(index);
+                player.addToHand(playCards.get(index));
+                playCards.remove(index);
             }
         }
     }
 
-    public void getDecks(ArrayList<Cardset> cardSets)
-    {
-
-        SqlCardset sqlCardset = new SqlCardset();
-        cardSets = sqlCardset.getAllCardsets();
+    public void getDecks() {
         SqlCard sqlCard = new SqlCard();
-        for (Cardset c: cardSets )
-        {
+        for (Cardset c : lobby.getCardSetsUsing()) {
             czarCards.addAll(sqlCard.getAllCzarCardsFromCardSet(c));
             playCards.addAll(sqlCard.getAllPlayCardsFromCardSet(c));
         }

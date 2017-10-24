@@ -26,13 +26,14 @@ public class Player {
     public Player(String name)
     {
         this.name = name;
-        cardsInHand = new ArrayList<PlayCard>();
+        cardsInHand = new ArrayList<>();
     }
 
     public void addToHand(PlayCard card)
     {
         cardsInHand.add(card);
     }
+
     public void removeFromHand(PlayCard card) {
         for(PlayCard cardInHand : cardsInHand) {
             if(cardInHand.getId() == card.getId()) {

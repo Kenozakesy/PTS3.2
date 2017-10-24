@@ -23,8 +23,6 @@ public class Lobby {
     private ArrayList<Cardset> cardSetsNotUsing = null;
     private ArrayList<Cardset> cardSetsUsing = null;
 
-    private ServerClient mainClient;
-
     private ServerHost lobbyHost;
     private ServerClient lobbyClient;
 
@@ -71,7 +69,6 @@ public class Lobby {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String pw) { password = pw; }
 
     public Game getGame() { return game; }
@@ -79,7 +76,6 @@ public class Lobby {
     public ArrayList<Cardset> getCardSetsNotUsing() {
         return cardSetsNotUsing;
     }
-
     public void setCardSetsNotUsing(ArrayList<Cardset> n) {
         this.cardSetsNotUsing = n;
     }
@@ -87,7 +83,6 @@ public class Lobby {
     public ArrayList<Cardset> getCardSetsUsing() {
         return cardSetsUsing;
     }
-
     public void setCardSetsUsing(ArrayList<Cardset> n) {
         this.cardSetsUsing = n;
     }
@@ -104,10 +99,6 @@ public class Lobby {
         return ip;
     }
 
-    public void setMainClient(ServerClient mainClient) {
-        this.mainClient = mainClient;
-    }
-
     //Constructor
     public Lobby(String lobbyId, String ip) {
         this.lobbyID = lobbyId;
@@ -115,23 +106,27 @@ public class Lobby {
 
         cardSetsNotUsing = new ArrayList<>();
         cardSetsUsing = new ArrayList<>();
+        getCardSetsFromDatabase();
     }
 
-    public void getCardSetsDatabase() {
+    public void getCardSetsFromDatabase() {
         SqlCardset SC = new SqlCardset();
         this.cardSetsNotUsing = SC.getAllCardsets();
     }
 
+    // Voor op de UI
     public void setToNotUsingSets(Cardset set) {
         this.cardSetsNotUsing.add(set);
         this.cardSetsUsing.remove(set);
     }
 
+    // Voor op de UI
     public void setToUsingSets(Cardset set) {
         this.cardSetsUsing.add(set);
         this.cardSetsNotUsing.remove(set);
     }
 
+    // Als er nog geen host is, dan wordt deze gemaakt, anders exceptie.
     public void startHosting(ServerHostEvents eventHandler) throws AlreadyHostingException, IOException {
         if (lobbyHost != null) {
             throw new AlreadyHostingException();
@@ -142,6 +137,7 @@ public class Lobby {
     }
 
     public void joinLobby(String ip, int port, ServerClientEvents eventHandler) throws AlreadyHostingException {
+        // Als je al een lobby host, kun je niet client zijn bij een andere lobby
         if (lobbyHost != null) {
             throw new AlreadyHostingException();
         }
@@ -166,13 +162,22 @@ public class Lobby {
         lobbyClient.sendMessage(message);
     }
 
+    public void messageClient(Player player, String message) throws NotHostException {
+        if(lobbyHost == null) {
+            throw new NotHostException();
+        }
+
+        //smt like this, dit doet Peer
+        //players.get(player);
+    }
+
     public void messageMainServer(String message) {
-        mainClient.sendMessage(message);
+        MainServerManager.getInstance().sendMessage(message);
     }
 
     public void startGame() {
         game = new Game(this);
-        game.getDecks(cardSetsUsing);
+        game.getDecks();
     }
 
     @Override
@@ -182,8 +187,8 @@ public class Lobby {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
 
         Lobby lobby = (Lobby) o;
 
@@ -208,6 +213,7 @@ public class Lobby {
         return password != null ? password.equals(lobby.password) : lobby.password == null;
     }
 
+    // Hoeven we niet naar te kijken, Peer: "Het werkt".
     @Override
     public int hashCode() {
         int result = ip != null ? ip.hashCode() : 0;

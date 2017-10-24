@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+// Singleton
 public class MainServerManager extends Observable implements ServerClientEvents {
     private static MainServerManager instance = null;
 
@@ -33,18 +34,18 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         if (instance == null) {
             instance = new MainServerManager(observer);
         }
-
         return instance;
     }
 
+    // het is dus gewoon raar.
     public static MainServerManager getInstance() {
         if (instance == null) {
             instance = new MainServerManager(null);
         }
-
         return instance;
     }
 
+    // Stuurt een message naar de mainserver
     public void sendMessage(String message) {
         client.sendMessage(message);
     }
@@ -101,7 +102,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
 
     @Override
     public void onServerClose() {
-
+        //TODO als de server dichtgaat? oid Peer weet dit wel
     }
 
     public void refreshLobbies() {

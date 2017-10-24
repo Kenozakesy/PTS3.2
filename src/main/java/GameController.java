@@ -78,29 +78,22 @@ public class GameController implements Initializable{
 
         chat = tbChat.getText();
         chatList.add(chat);
-
-//        for (String line : chatList){
-//
-//            taChatHistory.setText(taChatHistory.getText() + line);
-//        }
     }
 
-    //Zchar chooses a card and a new rounds starts
+    //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
         System.out.println("Kaart gekozen");
     }
 
     public void btnLeaveGame()
     {
-        //goes to different view
-        //starts the game with current options
         Stage stage = (Stage) btnLeaveGame.getScene().getWindow();
         stage.close();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyView.fxml"));
         Parent root1 = null;
         try {
-            root1 = (Parent) fxmlLoader.load();
+            root1 = fxmlLoader.load();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -120,14 +113,14 @@ public class GameController implements Initializable{
         List<PlayCard> list = StaticPlayer.getPlayer().getCardsInHand();
         CzarCard czarCard = lobby.getGame().pickBlackCard();
 
-        Cardset cardset = new Cardset("Saas");
-        Cards card = new PlayCard( "Hello I am a card", cardset, false );
-        Cards card2 = new PlayCard( "Hello I am a card 2", cardset, false );
-        Cards card3 = new PlayCard( "Hello I am a card 3", cardset, false );
-        Cards card4 = new PlayCard( "Hello I am a card 4", cardset, false );
-        Cards card5 = new PlayCard( "Hello I am a card 5", cardset, false );
-        Cards card6 = new PlayCard( "Hello I am a card 6", cardset, false );
-        Cards black = new CzarCard("I am black and addicted to __", cardset , 1);
+        Cardset cardset = new Cardset(0, "Saas");
+        Cards card = new PlayCard(0, "Hello I am a card", cardset, false );
+        Cards card2 = new PlayCard(1, "Hello I am a card 2", cardset, false );
+        Cards card3 = new PlayCard(2, "Hello I am a card 3", cardset, false );
+        Cards card4 = new PlayCard(3, "Hello I am a card 4", cardset, false );
+        Cards card5 = new PlayCard(4, "Hello I am a card 5", cardset, false );
+        Cards card6 = new PlayCard(5, "Hello I am a card 6", cardset, false );
+        Cards black = new CzarCard(6, "I am black and addicted to __", cardset , 1);
 
         taCard1.setText(list.get(0).getText());
         taCard2.setText(list.get(1).getText());

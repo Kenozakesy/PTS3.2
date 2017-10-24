@@ -27,6 +27,4 @@ public class StaticPlayer {
         Player player = new Player(name);
         return player;
     }
-
-
 }

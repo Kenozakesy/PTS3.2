@@ -1,5 +1,4 @@
 import Business.*;
-import Business.staticClasses.StaticLobby;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -186,15 +185,6 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         Stage stage2 = new Stage();
         stage2.setScene(new Scene(root1));
         stage2.show();
-    }
-
-    @FXML
-    private void UpdateGameOptions(Event e) {
-        StaticLobby.setScorelimit(Integer.parseInt((String) ddScorelimit.getSelectionModel().getSelectedItem()));
-        StaticLobby.setMaxplayers(Integer.parseInt((String) ddPlayerLimit.getSelectionModel().getSelectedItem()));
-        StaticLobby.setMaxspectators(Integer.parseInt((String) ddSpectatorLimit.getSelectionModel().getSelectedItem()));
-        StaticLobby.setTimelimit((String) ddIdleTimer.getSelectionModel().getSelectedItem());
-        StaticLobby.setBlankcards(Integer.parseInt((String) ddBlankCards.getSelectionModel().getSelectedItem()));
     }
 
     public void Update() {

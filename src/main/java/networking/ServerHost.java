@@ -29,7 +29,7 @@ public class ServerHost {
         this.eventHandler = eventHandler;
         this.maxPlayers = maxPlayers;
         server = new ServerSocket(1337);
-        clients = new HashSet();
+        clients = new HashSet<>();
         acceptor = new ClientAcceptor(this);
     }
 
@@ -165,8 +165,12 @@ public class ServerHost {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             ClientHandler that = (ClientHandler) o;
 

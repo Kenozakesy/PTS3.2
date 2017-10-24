@@ -52,7 +52,7 @@ public class CardsTest {
         Game game = new Game(lobby);
         game.getDecks(cardsets);
 
-        game.endTurn();
+        game.newTurn();
 
         Assert.assertTrue(playerjan.getCardsInHand().size() == 8);
     }
