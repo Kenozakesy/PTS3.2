@@ -5,12 +5,12 @@ import java.sql.*;
 /**
  * Created by user on 26-9-2017.
  */
-public class SqlMain {
+public class SqlConnection {
     private Connection connection;
     private Statement statement;
     private ResultSet result;
 
-    public SqlMain(){
+    public SqlConnection(){
         connection = setConnection();
     }
 
