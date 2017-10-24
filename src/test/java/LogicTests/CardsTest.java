@@ -50,7 +50,7 @@ public class CardsTest {
         lobby.getPlayers().put(new Socket(), playerkees);
         lobby.getPlayers().put(new Socket(), playergroente);
         Game game = new Game(lobby);
-        game.getDecks(cardsets);
+        game.getDecks();
 
         game.newTurn();
 
