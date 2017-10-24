@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 public class GameController implements Initializable{
     @FXML
-    private Button btnChat;
+    private Button btnSend;
     @FXML
     private Button btnChoose;
     @FXML
@@ -72,19 +72,25 @@ public class GameController implements Initializable{
     private List<String> chatList = new ArrayList<String>();
 
     public void initialize(URL location, ResourceBundle resources) {
-        loadPlayerHand();
+       // loadPlayerHand();
     }
 
-    public void click( Event e){
+    @FXML
+    public void btnSend( Event e){
         String chat;
 
         chat = tbChat.getText();
         chatList.add(chat);
     }
 
-    //Czar chooses a card and a new rounds starts
+    @FXML   //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
+
+        
+
         System.out.println("Kaart gekozen");
+
+
     }
 
     public void btnLeaveGame()

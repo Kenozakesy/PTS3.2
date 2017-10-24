@@ -47,6 +47,11 @@
                   <Insets left="30.0" right="30.0" />
                </padding>
             </RadioButton>
+            <RadioButton fx:id="rbtnCard5" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
             <RadioButton fx:id="rbtnCard6" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
                <padding>
                   <Insets left="30.0" right="30.0" />
@@ -57,14 +62,17 @@
                   <Insets left="30.0" right="30.0" />
                </padding>
             </RadioButton>
-            <RadioButton fx:id="rbtnCard8" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
+            <RadioButton fx:id="rbtnCard8" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select">
+               <toggleGroup>
+                  <ToggleGroup fx:id="Group1" />
+               </toggleGroup>
                <padding>
                   <Insets left="30.0" right="30.0" />
                </padding>
             </RadioButton>
          </children>
       </HBox>
-      <Button fx:id="btnChat" layoutX="1177.0" layoutY="689.0" mnemonicParsing="false" onAction="#click" prefHeight="10.0" prefWidth="106.0" text="Chat" />
+      <Button fx:id="btnSend" layoutX="1177.0" layoutY="689.0" mnemonicParsing="false" onAction="#btnSend" prefHeight="10.0" prefWidth="106.0" text="Send" />
       <Button fx:id="btnChoose" layoutX="14.0" layoutY="228.0" mnemonicParsing="false" onAction="#btnChoose" prefHeight="25.0" prefWidth="150.0" text="Choose" />
       <ListView fx:id="lvPlayers" layoutY="520.0" prefHeight="200.0" prefWidth="279.0" />
       <TextArea fx:id="taBlackCard" editable="false" layoutX="15.0" layoutY="20.0" prefHeight="200.0" prefWidth="150.0" style="-fx-control-inner-background: black; -fx-text-fill: white;" wrapText="true" />
