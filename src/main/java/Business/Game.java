@@ -6,9 +6,7 @@ package Business;
 
 import DAL.SqlCard;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * In Sprint 2 wordt deze klasse volledig uitgewerkt
@@ -19,7 +17,7 @@ public class Game {
     List<CzarCard> czarCards;
     List<PlayCard> playCards;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
-    List<PlayCard> chosenCards;
+    Map<Player, PlayCard> chosenCards;
 
     public List<CzarCard> getCzarCards() {
         return czarCards;
@@ -33,21 +31,34 @@ public class Game {
         this.lobby = lobby;
         czarCards = new ArrayList<>();
         playCards = new ArrayList<>();
+        chosenCards = new HashMap<>();
         getDecks();
         newTurn();
     }
 
     // Methode wordt aangeroepen nadat een speler een kaart speelt.
-    public void playerPicksCard(Cards card) {
+    public boolean playerPicksCard(PlayCard card, Player player) {
+
+        chosenCards.put(player, card);
+
         // Check of alle spelers hun kaart gespeeld hebben.
         if (chosenCards.size() >= lobby.getPlayers().size()) {
-            // Czar moet hier nog kiezen.
+            // Wanneer alle kaarten gekozen zijn moeten te zien zijn voor iedereen
+            return true;
         }
-        // Wachten tot alle spelers gespeeld hebben. (niets dus)
+        // Wachten tot alle spelers gespeeld hebben.
+        return false;
     }
 
-    public void czarPicksCards(Cards card) {
+    public void czarPicksCards(PlayCard card) {
         // Einde van de beurt, nieuwe ronde start etc.
+        for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet())
+        {
+            if(entry.getValue().equals(card))
+            {
+                entry.getKey().increasePoints();
+            }
+        }
         newTurn();
     }
 
