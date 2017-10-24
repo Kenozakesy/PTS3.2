@@ -26,6 +26,7 @@ public class Lobby {
     private ServerClient mainClient;
 
     private ServerHost lobbyHost;
+    private ServerClient lobbyClient;
 
     private Game game;
 
