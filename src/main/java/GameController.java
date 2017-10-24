@@ -1,4 +1,5 @@
 import Business.*;
+import Business.staticClasses.StaticPlayer;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static Business.staticClasses.StaticPlayer.getPlayer;
 
 public class GameController implements Initializable{
     @FXML
@@ -114,6 +117,9 @@ public class GameController implements Initializable{
     //TODO Turn this test code into actual code
     public void loadPlayerHand()
     {
+        List<PlayCard> list = StaticPlayer.getPlayer().getCardsInHand();
+        CzarCard czarCard = lobby.getGame().pickBlackCard();
+
         Cardset cardset = new Cardset("Saas");
         Cards card = new PlayCard( "Hello I am a card", cardset, false );
         Cards card2 = new PlayCard( "Hello I am a card 2", cardset, false );
@@ -123,13 +129,13 @@ public class GameController implements Initializable{
         Cards card6 = new PlayCard( "Hello I am a card 6", cardset, false );
         Cards black = new CzarCard("I am black and addicted to __", cardset , 1);
 
-        taCard1.setText(card.getText());
-        taCard2.setText(card2.getText());
-        taCard3.setText(card3.getText());
-        taCard4.setText(card4.getText());
-        taCard5.setText(card5.getText());
-        taCard6.setText(card6.getText());
-        taBlackCard.setText(black.getText());
+        taCard1.setText(list.get(0).getText());
+        taCard2.setText(list.get(1).getText());
+        taCard3.setText(list.get(2).getText());
+        taCard4.setText(list.get(3).getText());
+        taCard5.setText(list.get(4).getText());
+        taCard6.setText(list.get(5).getText());
+        taBlackCard.setText(czarCard.getText());
 
 
     }

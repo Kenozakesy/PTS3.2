@@ -5,6 +5,7 @@ package Business;
  */
 
 import DAL.SqlCard;
+import DAL.SqlCardset;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -16,11 +17,29 @@ public class Game
 {
     Lobby lobby;
     Random random = new Random();
-    ArrayList<Cards> czarCards = new ArrayList<>();
-    ArrayList<Cards> playCards = new ArrayList<>();
+    ArrayList<Cards> czarCards;
+    ArrayList<Cards> playCards;
     ArrayList<PlayCard> chosenCards;
+    int playerIsCzar;
 
-    public Game(Lobby lobby) {this.lobby = lobby;}
+
+    public ArrayList<Cards> getCzarCards() {
+        return czarCards;
+    }
+
+    public ArrayList<Cards> getPlayCards() {
+        return playCards;
+    }
+
+    public Game(Lobby lobby) {
+        this.lobby = lobby;
+        czarCards = new ArrayList<>();
+        playCards = new ArrayList<>();
+        playerIsCzar = 0;
+        endTurn();
+
+
+    }
 
     public void playerPicksCard(Cards card)
     {
@@ -34,6 +53,12 @@ public class Game
     public void czarPicksCards(Cards card)
     {
 
+    }
+
+    public CzarCard pickBlackCard(){
+        random = new Random();
+
+        return (CzarCard)czarCards.get(random.nextInt(czarCards.size()));
     }
 
     public void endTurn()
@@ -51,6 +76,9 @@ public class Game
 
     public void getDecks(ArrayList<Cardset> cardSets)
     {
+
+        SqlCardset sqlCardset = new SqlCardset();
+        cardSets = sqlCardset.getAllCardsets();
         SqlCard sqlCard = new SqlCard();
         for (Cardset c: cardSets )
         {
