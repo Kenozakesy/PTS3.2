@@ -72,6 +72,8 @@ public class Lobby {
         return password;
     }
 
+    public void setPassword(String pw) { password = pw; }
+
     public Game getGame() { return game; }
 
     public ArrayList<Cardset> getCardSetsNotUsing() {
