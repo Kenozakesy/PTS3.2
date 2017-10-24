@@ -26,7 +26,8 @@ public class Lobby {
     private ServerClient mainClient;
 
     private ServerHost lobbyHost;
-    private ServerClient lobbyClient;
+
+    private Game game;
 
     //Fields
     private String ip;
@@ -49,32 +50,53 @@ public class Lobby {
     public int getMaxPlayers() {
         return maxPlayers;
     }
+
     public int getMaxSpectators() {
         return maxSpectators;
     }
+
     public int getScoreLimit() {
         return scoreLimit;
     }
+
     public int getBlankCards() {
         return blankCards;
     }
+
     public int getTimeLimit() {
         return timeLimit;
     }
+
     public String getPassword() {
         return password;
     }
-    public ArrayList<Cardset> getCardSetsNotUsing() {return cardSetsNotUsing;}
-    public void setCardSetsNotUsing(ArrayList<Cardset> n) {this.cardSetsNotUsing = n;}
-    public ArrayList<Cardset> getCardSetsUsing() {return cardSetsUsing;}
-    public void setCardSetsUsing(ArrayList<Cardset> n) {this.cardSetsUsing = n;}
+
+    public Game getGame() { return game; }
+
+    public ArrayList<Cardset> getCardSetsNotUsing() {
+        return cardSetsNotUsing;
+    }
+
+    public void setCardSetsNotUsing(ArrayList<Cardset> n) {
+        this.cardSetsNotUsing = n;
+    }
+
+    public ArrayList<Cardset> getCardSetsUsing() {
+        return cardSetsUsing;
+    }
+
+    public void setCardSetsUsing(ArrayList<Cardset> n) {
+        this.cardSetsUsing = n;
+    }
 
     public Map<Socket, Player> getPlayers() {
         return players;
     }
+
     public Map<Socket, Player> getSpectators() {
         return spectators;
     }
+
     public String getIP() {
         return ip;
     }
@@ -92,46 +114,51 @@ public class Lobby {
         cardSetsUsing = new ArrayList<>();
     }
 
-    public void getCardSetsDatabase()
-    {
+    public void getCardSetsDatabase() {
         SqlCardset SC = new SqlCardset();
         this.cardSetsNotUsing = SC.getAllCardsets();
     }
 
-    public void setToNotUsingSets(Cardset set)
-    {
+    public void setToNotUsingSets(Cardset set) {
         this.cardSetsNotUsing.add(set);
         this.cardSetsUsing.remove(set);
     }
 
-    public void setToUsingSets(Cardset set)
-    {
+    public void setToUsingSets(Cardset set) {
         this.cardSetsUsing.add(set);
         this.cardSetsNotUsing.remove(set);
     }
 
     public void startHosting(ServerHostEvents eventHandler) throws AlreadyHostingException, IOException {
-        if (lobbyHost != null) throw new AlreadyHostingException();
+        if (lobbyHost != null) {
+            throw new AlreadyHostingException();
+        }
 
         lobbyHost = new ServerHost(maxPlayers, eventHandler);
         lobbyHost.start();
     }
 
     public void joinLobby(String ip, int port, ServerClientEvents eventHandler) throws AlreadyHostingException {
-        if (lobbyHost != null) throw new AlreadyHostingException();
+        if (lobbyHost != null) {
+            throw new AlreadyHostingException();
+        }
 
         lobbyClient = new ServerClient(ip, port, eventHandler, StaticPlayer.getPlayer());
         lobbyClient.start();
     }
 
     public void messageClients(String message) throws NotHostException {
-        if (lobbyHost == null) throw new NotHostException();
+        if (lobbyHost == null) {
+            throw new NotHostException();
+        }
 
         lobbyHost.messageAll(message);
     }
 
     public void messageServer(String message) throws NotClientException {
-        if (lobbyClient == null) throw new NotClientException();
+        if (lobbyClient == null) {
+            throw new NotClientException();
+        }
 
         lobbyClient.sendMessage(message);
     }
@@ -141,7 +168,7 @@ public class Lobby {
     }
 
     public void startGame() {
-        Game game = new Game(this);
+        game = new Game(this);
         game.getDecks(cardSetsUsing);
     }
 
@@ -157,12 +184,24 @@ public class Lobby {
 
         Lobby lobby = (Lobby) o;
 
-        if (maxPlayers != lobby.maxPlayers) return false;
-        if (maxSpectators != lobby.maxSpectators) return false;
-        if (scoreLimit != lobby.scoreLimit) return false;
-        if (blankCards != lobby.blankCards) return false;
-        if (ip != null ? !ip.equals(lobby.ip) : lobby.ip != null) return false;
-        if (lobbyID != null ? !lobbyID.equals(lobby.lobbyID) : lobby.lobbyID != null) return false;
+        if (maxPlayers != lobby.maxPlayers) {
+            return false;
+        }
+        if (maxSpectators != lobby.maxSpectators) {
+            return false;
+        }
+        if (scoreLimit != lobby.scoreLimit) {
+            return false;
+        }
+        if (blankCards != lobby.blankCards) {
+            return false;
+        }
+        if (ip != null ? !ip.equals(lobby.ip) : lobby.ip != null) {
+            return false;
+        }
+        if (lobbyID != null ? !lobbyID.equals(lobby.lobbyID) : lobby.lobbyID != null) {
+            return false;
+        }
         return password != null ? password.equals(lobby.password) : lobby.password == null;
     }
 
