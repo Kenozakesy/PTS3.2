@@ -34,6 +34,16 @@ public class Player {
         cardsInHand.add(card);
     }
 
+    public void increasePoints()
+    {
+        this.points++;
+    }
+
+    public void resetPoints()
+    {
+        this.points = 0;
+    }
+
     public void removeFromHand(PlayCard card) {
         for(PlayCard cardInHand : cardsInHand) {
             if(cardInHand.getId() == card.getId()) {

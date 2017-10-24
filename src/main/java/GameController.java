@@ -1,4 +1,5 @@
 import Business.*;
+import Business.Enums.Role;
 import Business.staticClasses.StaticPlayer;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class GameController implements Initializable{
     @FXML
-    private Button btnChat;
+    private Button btnSend;
     @FXML
     private Button btnChoose;
     @FXML
@@ -72,19 +73,36 @@ public class GameController implements Initializable{
     private List<String> chatList = new ArrayList<String>();
 
     public void initialize(URL location, ResourceBundle resources) {
-        loadPlayerHand();
+       // loadPlayerHand();
     }
 
-    public void click( Event e){
+    @FXML
+    public void btnSend( Event e){
         String chat;
 
         chat = tbChat.getText();
         chatList.add(chat);
     }
 
-    //Czar chooses a card and a new rounds starts
+    @FXML   //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
-        System.out.println("Kaart gekozen");
+
+        if(StaticPlayer.getRole().equals(Role.Pleb)) {
+
+            //hier moet een betere manier voor zijn
+            if (rbtnCard1.isSelected())
+            {
+                System.out.println(taCard1.getText());
+            }
+        }
+        else if(StaticPlayer.getRole().equals(Role.Czar))
+        {
+
+        }
+        else
+        {
+            //Do nothing
+        }
     }
 
     public void btnLeaveGame()
@@ -101,12 +119,6 @@ public class GameController implements Initializable{
         }
         Stage stage2 = new Stage();
         stage2.setScene(new Scene(root1)); stage2.show();
-    }
-
-    //whenever a new round start a the cards need to be shuffled again
-    public void AddCardsToHand(Event e)
-    {
-        
     }
 
     //TODO Turn this test code into actual code
