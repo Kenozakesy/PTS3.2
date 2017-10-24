@@ -103,12 +103,6 @@ public class GameController implements Initializable{
         stage2.setScene(new Scene(root1)); stage2.show();
     }
 
-    //whenever a new round start a the cards need to be shuffled again
-    public void AddCardsToHand(Event e)
-    {
-        
-    }
-
     //TODO Turn this test code into actual code
     public void loadPlayerHand()
     {
