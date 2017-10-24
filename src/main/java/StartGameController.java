@@ -77,6 +77,12 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         this.previousStage = previousStage;
     }
 
+    private Lobby lobby;
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+    }
+
     private List<Cardset> Cardsets = null;
     private List<Cardset> CardsetsPicked = null;
 
@@ -181,7 +187,13 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         stage.close();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GameView.fxml"));
-        Parent root1 = (Parent) fxmlLoader.load();
+
+        GameController gameController = new GameController();
+        gameController.setLobby(lobby);
+
+        fxmlLoader.setController(gameController);
+
+        Parent root1 = fxmlLoader.load();
         Stage stage2 = new Stage();
         stage2.setScene(new Scene(root1));
         stage2.show();
