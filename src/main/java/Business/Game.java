@@ -14,12 +14,12 @@ import java.util.Random;
  * In Sprint 2 wordt deze klasse volledig uitgewerkt
  */
 public class Game {
-    Lobby lobby;
-    Random random = new Random();
-    List<CzarCard> czarCards;
-    List<PlayCard> playCards;
+    private Lobby lobby;
+    private Random random = new Random();
+    private List<CzarCard> czarCards;
+    private List<PlayCard> playCards;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
-    List<PlayCard> chosenCards;
+    private List<PlayCard> chosenCards;
 
     public List<CzarCard> getCzarCards() {
         return czarCards;
