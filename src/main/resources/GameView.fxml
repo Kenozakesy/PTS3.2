@@ -47,11 +47,6 @@
                   <Insets left="30.0" right="30.0" />
                </padding>
             </RadioButton>
-            <RadioButton fx:id="rbtnCard5" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
-               <padding>
-                  <Insets left="30.0" right="30.0" />
-               </padding>
-            </RadioButton>
             <RadioButton fx:id="rbtnCard6" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
                <padding>
                   <Insets left="30.0" right="30.0" />
@@ -82,5 +77,46 @@
       <TextArea fx:id="taCard7" editable="false" layoutX="915.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
       <TextArea fx:id="taCard8" editable="false" layoutX="1065.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
       <Button fx:id="btnLeaveGame" layoutX="1165.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnLeaveGame" text="Leave Game" />
+      <HBox fx:id="hboxCzarCards" layoutX="351.0" layoutY="14.0" prefHeight="200.0" prefWidth="706.0" spacing="20.0" visible="false">
+         <children>
+            <TextArea fx:id="taCzar1" editable="false" prefHeight="184.0" prefWidth="158.0" wrapText="true" />
+            <TextArea fx:id="taCzar2" editable="false" prefHeight="184.0" prefWidth="158.0" wrapText="true" />
+            <TextArea fx:id="taCzar3" editable="false" prefHeight="184.0" prefWidth="158.0" wrapText="true" />
+            <TextArea fx:id="taCzar4" editable="false" prefHeight="184.0" prefWidth="158.0" wrapText="true" />
+         </children>
+      </HBox>
+      <HBox fx:id="hboxCzarSelect" layoutX="351.0" layoutY="220.0" prefHeight="44.0" prefWidth="693.0" spacing="35.0" visible="false">
+         <children>
+            <RadioButton fx:id="rbCzarPick1" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbCzarPick2" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select">
+               <toggleGroup>
+                  <ToggleGroup fx:id="Group2" />
+               </toggleGroup>
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbCzarPick3" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select">
+               <toggleGroup>
+                  <ToggleGroup fx:id="Group3" />
+               </toggleGroup>
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="rbCzarPick4" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select">
+               <toggleGroup>
+                  <ToggleGroup fx:id="Group21" />
+               </toggleGroup>
+               <padding>
+                  <Insets left="30.0" right="30.0" />
+               </padding>
+            </RadioButton>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
