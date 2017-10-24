@@ -55,7 +55,7 @@ public class LobbyController implements Initializable, Observer {
 
     @FXML
     public void btnCreateGame() {
-        createLobbyScreen(true);
+        createLobbyScreen(true, new Lobby(StaticPlayer.getName(), "localhost"));
     }
 
     @FXML
@@ -63,7 +63,7 @@ public class LobbyController implements Initializable, Observer {
         if (click.getClickCount() == 2) {
             //Use ListView's getSelected Item
             Lobby lobby = lvLobby.getSelectionModel().getSelectedItem();
-            createLobbyScreen(false);
+            createLobbyScreen(false, lobby);
         }
     }
 
@@ -77,7 +77,7 @@ public class LobbyController implements Initializable, Observer {
         });
     }
 
-    private void createLobbyScreen(boolean isHost) {
+    private void createLobbyScreen(boolean isHost, Lobby lobby) {
         Stage stage = (Stage) btnCreateGame.getScene().getWindow();
         stage.hide();
 
@@ -86,6 +86,8 @@ public class LobbyController implements Initializable, Observer {
 
         try {
             StartGameController startController = new StartGameController();
+            startController.setLobby(lobby);
+
             if (isHost) {
                 startController.setHost();
             } else {

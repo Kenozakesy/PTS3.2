@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static Business.staticClasses.StaticPlayer.getPlayer;
-
 public class GameController implements Initializable{
     @FXML
     private Button btnChat;
@@ -66,6 +64,10 @@ public class GameController implements Initializable{
     private Button btnLeaveGame;
 
     private Lobby lobby;
+
+    public void setLobby(Lobby lobby) {
+        this.lobby = lobby;
+    }
 
     private List<String> chatList = new ArrayList<String>();
 
@@ -129,11 +131,5 @@ public class GameController implements Initializable{
         taCard5.setText(list.get(4).getText());
         taCard6.setText(list.get(5).getText());
         taBlackCard.setText(czarCard.getText());
-
-
     }
-
-
-
-
 }
