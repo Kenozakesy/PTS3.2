@@ -17,6 +17,10 @@ public class ServerHost {
     private final ServerHostEvents eventHandler;
     private final Object playerLockObj = new Object();
 
+    public ServerHostEvents getEventHandler() {
+        return eventHandler;
+    }
+
     public void removeClient(ClientHandler handler) {
         clients.remove(handler);
 

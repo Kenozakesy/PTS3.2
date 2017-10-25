@@ -1,5 +1,6 @@
 package Business;
 
+import Business.Enums.Role;
 import Business.exceptions.AlreadyHostingException;
 import Business.exceptions.NotClientException;
 import Business.exceptions.NotHostException;
@@ -16,6 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Lobby {
 
@@ -178,6 +180,21 @@ public class Lobby {
 
     public void startGame() {
         game = new Game(this);
+
+        Random ran = new Random();
+        int pos = ran.nextInt(players.size() + 1);
+        int tel = 1;
+        for (Player p: players.values()) {
+            if(tel == pos)
+            {
+                p.setRole(Role.Czar);
+            }
+            else
+            {
+                p.setRole(Role.Pleb);
+            }
+            tel++;
+        }
     }
 
     @Override

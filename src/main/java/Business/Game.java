@@ -100,6 +100,7 @@ public class Game {
                 playCards.remove(index);
             }
         }
+        //rollen verwisselen;
     }
 
     public void getDecks() {

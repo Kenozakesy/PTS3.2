@@ -14,6 +14,14 @@ public class ServerClient {
     private ServerClientEvents eventHandler;
     private Player player;
 
+    public ServerClientEvents getEventHandler() {
+        return eventHandler;
+    }
+
+    public void setEventHandler(ServerClientEvents eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
     public Player getPlayer() {
         return player;
     }
