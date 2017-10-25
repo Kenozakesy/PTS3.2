@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -82,6 +83,8 @@ public class GameController implements Initializable{
     private TextField tbChat;
     @FXML
     private Button btnLeaveGame;
+    @FXML
+    private HBox hboxPlayerSelect;
 
     private Lobby lobby;
 
@@ -142,7 +145,10 @@ public class GameController implements Initializable{
             {
                 lobby.getGame().playerPicksCard(7, new Player(StaticPlayer.getPlayer().getName()));
             }
-            //methode om UI te disabelen
+            if (lobby.getGame().playedCard(StaticPlayer.getPlayer()))
+            {
+                hboxPlayerSelect.setVisible(false);
+            }
         }
         else if(StaticPlayer.getPlayer().getRole().equals(Role.Czar))
         {

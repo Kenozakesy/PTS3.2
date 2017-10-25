@@ -33,6 +33,7 @@ public class Game {
     public List<PlayCard> getPlayCards() {
         return playCards;
     }
+    public Map<Player, PlayCard> getChosenCards(){ return chosenCards; }
 
     public Game(Lobby lobby) {
         this.lobby = lobby;
@@ -109,6 +110,17 @@ public class Game {
             czarCards.addAll(sqlCard.getAllCzarCardsFromCardSet(c));
             playCards.addAll(sqlCard.getAllPlayCardsFromCardSet(c));
         }
+    }
+
+    public boolean playedCard(Player player){
+        for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet())
+        {
+            if(entry.getKey().getName().equals(player.getName()))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
