@@ -19,6 +19,7 @@ public class Game {
     private Random random = new Random();
     private List<CzarCard> czarCards;
     private List<PlayCard> playCards;
+    private CzarCard currentCzar;
 
     private boolean czarTurn;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
@@ -87,10 +88,10 @@ public class Game {
     }
 
     // Een zwarte kaart wordt gekozen om te lezen en wordt meteen uit de te kiezen kaarten gehaald.
-    public CzarCard pickBlackCard() {
+    public void pickBlackCard() {
         CzarCard card = czarCards.get(random.nextInt(czarCards.size()));
+        this.currentCzar = card;
         czarCards.remove(card);
-        return card;
     }
 
     // Opnieuw kaarten delen.
