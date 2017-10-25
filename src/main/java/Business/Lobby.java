@@ -187,7 +187,7 @@ public class Lobby {
 
         Random ran = new Random();
         int pos = ran.nextInt(players.size());
-        int tel = 1;
+        int tel = 0;
         for (Player p: players.values()) {
             if(tel == pos)
             {
