@@ -20,16 +20,17 @@ public class Game {
     private List<CzarCard> czarCards;
     private List<PlayCard> playCards;
     private CzarCard currentCzar;
-
     private boolean czarTurn;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
 
     Map<Player, PlayCard> chosenCards;
 
+    public CzarCard getCurrentCzar() {
+        return currentCzar;
+    }
     public boolean getIsCzarTurn() {
         return czarTurn;
     }
-    
     public List<CzarCard> getCzarCards() {
         return czarCards;
     }

@@ -79,8 +79,13 @@ public class GameTest {
 
         int handsize = pleb.getCardsInHand().size();
         Assert.assertEquals(handsize, 4);
+        Assert.assertEquals(lobby.getGame().getChosenCards().size(), 1);
 
-        //lobby.getGame().czarPicksCards("", pleb);
+        String cardText = lobby.getGame().getCurrentCzar().getText();
+        lobby.getGame().czarPicksCards(cardText);
+
+        pleb = lobby.getPlayers().get(socket);
+        Assert.assertEquals(1, pleb.getPoints());
     }
 
 
