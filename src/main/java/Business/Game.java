@@ -4,6 +4,7 @@ package Business;
  * Created by Jordi on 26-9-2017.
  */
 
+import Business.staticClasses.StaticPlayer;
 import DAL.SqlCard;
 
 import java.util.*;
@@ -16,14 +17,19 @@ public class Game {
     private Random random = new Random();
     private List<CzarCard> czarCards;
     private List<PlayCard> playCards;
+
+    private boolean czarTurn;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
 
     Map<Player, PlayCard> chosenCards;
+
+    public boolean getIsCzarTurn() {
+        return czarTurn;
+    }
     
     public List<CzarCard> getCzarCards() {
         return czarCards;
     }
-
     public List<PlayCard> getPlayCards() {
         return playCards;
     }
@@ -38,28 +44,42 @@ public class Game {
     }
 
     // Methode wordt aangeroepen nadat een speler een kaart speelt.
-    public boolean playerPicksCard(PlayCard card, Player player) {
+    public void playerPicksCard(int cardPosition, Player player) {
 
+        //gets player
+        Player pleb = null;
+        for (Player p: lobby.getPlayers().values())
+        {
+            if(p.getName().equals(player.getName()))
+            {
+                 pleb = p;
+            }
+        }
+        PlayCard card = pleb.getCardsInHand().get(cardPosition);
+        //kiest kaart om in te zenden
         chosenCards.put(player, card);
+        //verwijderd de kaart uit de hand van de speler
+        pleb.getCardsInHand().remove(card);
 
         // Check of alle spelers hun kaart gespeeld hebben.
         if (chosenCards.size() >= lobby.getPlayers().size()) {
-            // Wanneer alle kaarten gekozen zijn moeten te zien zijn voor iedereen
-            return true;
+
+            //bericht sturen server bijhouden wie heeft gekozen (peter fix this)
+            czarTurn = true;
         }
-        // Wachten tot alle spelers gespeeld hebben.
-        return false;
     }
 
-    public void czarPicksCards(PlayCard card) {
+    public void czarPicksCards(String cardText) {
         // Einde van de beurt, nieuwe ronde start etc.
         for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet())
         {
-            if(entry.getValue().equals(card))
+            if(entry.getValue().getText().equals(cardText))
             {
                 entry.getKey().increasePoints();
             }
         }
+        //verwijder kaarten uit geheugen
+        chosenCards.clear();
         newTurn();
     }
 
@@ -72,6 +92,7 @@ public class Game {
 
     // Opnieuw kaarten delen.
     public void newTurn() {
+        czarTurn = false;
         for (Player player : lobby.getPlayers().values()) {
             while (player.getCardsInHand().size() < 8) {
                 int index = random.nextInt(playCards.size());
