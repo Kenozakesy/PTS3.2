@@ -18,9 +18,12 @@ import java.util.Map;
 public class GameTest {
 
     Lobby lobby;
+    Socket socket;
 
     @Before
     public void setUp() throws Exception {
+        socket = new Socket();
+
         lobby = new Lobby("1", "127.0.0.1");
         lobby.getCardSetsFromDatabase();
 
@@ -33,18 +36,18 @@ public class GameTest {
             lobby.setToUsingSets(cs);
         }
 
-        lobby.getPlayers().put(new Socket(), new Player("test1"));
+        lobby.getPlayers().put(socket, new Player("test1"));
         lobby.startGame();
 
         lobby.getGame().pickBlackCard();
     }
 
     @Test
-    public void cardsShowtest()
+    public void startGameTest()
     {
         int totalCards = lobby.getGame().getCzarCards().size() + lobby.getGame().getPlayCards().size();
         Assert.assertEquals(23, totalCards + 9);
-        
+
         for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet())
         {
             if(entry.getValue().getName().equals("test1"))
@@ -52,6 +55,32 @@ public class GameTest {
                 Assert.assertEquals(entry.getValue().getRole(), Role.Czar);
             }
         }
+    }
+
+    @Test
+    public void pickPlayCardTest()
+    {
+        Player pleb = lobby.getPlayers().get(socket);
+        lobby.getGame().playerPicksCard(2, pleb);
+        lobby.getGame().playerPicksCard(2, pleb);
+
+        int handsize = pleb.getCardsInHand().size();
+        Assert.assertEquals(handsize, 6);
+    }
+
+    @Test
+    public void pickCzarCardTest()
+    {
+        Player pleb = lobby.getPlayers().get(socket);
+        lobby.getGame().playerPicksCard(2, pleb);
+        lobby.getGame().playerPicksCard(2, pleb);
+        lobby.getGame().playerPicksCard(2, pleb);
+        lobby.getGame().playerPicksCard(2, pleb);
+
+        int handsize = pleb.getCardsInHand().size();
+        Assert.assertEquals(handsize, 4);
+
+        //lobby.getGame().czarPicksCards("", pleb);
     }
 
 
