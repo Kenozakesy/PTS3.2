@@ -44,6 +44,10 @@ public class Lobby {
     private Map<Socket, Player> players = new HashMap<>(maxPlayers);
 
     //Properties
+    public boolean isHost() {
+        return lobbyHost != null;
+    }
+
     public String getLobbyID() {
         return lobbyID;
     }
@@ -182,7 +186,7 @@ public class Lobby {
         game = new Game(this);
 
         Random ran = new Random();
-        int pos = ran.nextInt(players.size() + 1);
+        int pos = ran.nextInt(players.size());
         int tel = 1;
         for (Player p: players.values()) {
             if(tel == pos)
@@ -194,6 +198,18 @@ public class Lobby {
                 p.setRole(Role.Pleb);
             }
             tel++;
+        }
+    }
+
+    public void close() throws NotHostException {
+        if (!isHost()) {
+            throw new NotHostException();
+        }
+
+        try {
+            lobbyHost.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

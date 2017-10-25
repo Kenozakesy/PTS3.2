@@ -14,7 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import networking.ServerClient;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,7 +51,7 @@ public class LobbyController implements Initializable, Observer {
     public void btnSend() {
         String text = tfSend.getText();
         tfSend.setText("");
-        mainServerManager.sendMessage(text);
+        mainServerManager.sendMessage("<C>" + text + "</C>");
     }
 
     @FXML
@@ -90,26 +90,24 @@ public class LobbyController implements Initializable, Observer {
             startController.setLobby(lobby);
 
             if (isHost) {
-                try
-                {
+                try {
                     lobby.startHosting(startController);
+                } catch (AlreadyHostingException e) {
+                    e.printStackTrace();
                 }
-                catch(AlreadyHostingException e) {e.printStackTrace();}
-
-              //  startController.setHost();
             } else {
                 String IP = lvLobby.getSelectionModel().getSelectedItem().getIP();
-                try
-                {lobby.joinLobby(IP,1337,startController);}
-
-                catch(AlreadyHostingException e){ e.printStackTrace();}
-               // startController.setClient(new ServerClient(IP, 1337, startController, StaticPlayer.initializePlayer()));
+                try {
+                    lobby.joinLobby(IP, 1337, startController);
+                } catch (AlreadyHostingException e) {
+                    e.printStackTrace();
+                }
             }
 
             startController.setPreviousStage(stage);
 
             fxmlLoader.setController(startController);
-            root1 = (Parent) fxmlLoader.load();
+            root1 = fxmlLoader.load();
 
             Stage stage2 = new Stage();
             stage2.setScene(new Scene(root1));
@@ -122,10 +120,17 @@ public class LobbyController implements Initializable, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof String) {
-            Platform.runLater(() -> lvChat.getItems().add(arg));
-            return;
+            String chatMessage = getChatMessage((String) arg);
+            if (chatMessage != null) {
+                Platform.runLater(() -> lvChat.getItems().add(chatMessage));
+                return;
+            }
         }
 
         this.refreshLobbyListView();
+    }
+
+    private String getChatMessage(String message) {
+        return StringUtils.substringBetween(message, "<C>", "</C>");
     }
 }
