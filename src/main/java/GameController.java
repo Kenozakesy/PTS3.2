@@ -199,7 +199,8 @@ public class GameController implements Initializable{
     public void loadPlayerHand()
     {
         List<PlayCard> list = StaticPlayer.getPlayer().getCardsInHand();
-        CzarCard czarCard = lobby.getGame().pickBlackCard();
+        lobby.getGame().pickBlackCard();
+        CzarCard czarCard = lobby.getGame().getCurrentCzar();
 
         taCard1.setText(list.get(0).getText());
         taCard2.setText(list.get(1).getText());

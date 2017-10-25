@@ -4,9 +4,11 @@ package Business;
  * Created by Jordi on 26-9-2017.
  */
 
+import Business.Enums.Role;
 import Business.staticClasses.StaticPlayer;
 import DAL.SqlCard;
 
+import java.net.Socket;
 import java.util.*;
 
 /**
@@ -17,16 +19,18 @@ public class Game {
     private Random random = new Random();
     private List<CzarCard> czarCards;
     private List<PlayCard> playCards;
-
+    private CzarCard currentCzar;
     private boolean czarTurn;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
 
     Map<Player, PlayCard> chosenCards;
 
+    public CzarCard getCurrentCzar() {
+        return currentCzar;
+    }
     public boolean getIsCzarTurn() {
         return czarTurn;
     }
-    
     public List<CzarCard> getCzarCards() {
         return czarCards;
     }
@@ -85,10 +89,10 @@ public class Game {
     }
 
     // Een zwarte kaart wordt gekozen om te lezen en wordt meteen uit de te kiezen kaarten gehaald.
-    public CzarCard pickBlackCard() {
+    public void pickBlackCard() {
         CzarCard card = czarCards.get(random.nextInt(czarCards.size()));
+        this.currentCzar = card;
         czarCards.remove(card);
-        return card;
     }
 
     // Opnieuw kaarten delen.
@@ -101,7 +105,22 @@ public class Game {
                 playCards.remove(index);
             }
         }
-        //rollen verwisselen;
+        //Volgende speler wordt willekeurig gekozen. Moet nog aangepast worden.
+        for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet())
+        {
+            Random ran = new Random();
+            int pos = ran.nextInt(lobby.getPlayers().size() + 1);
+            int tel = 1;
+            for (Map.Entry<Socket, Player> p : lobby.getPlayers().entrySet()) {
+                if (tel == pos){
+                    p.getValue().setRole(Role.Czar);
+                }
+                else{
+                    p.getValue().setRole(Role.Pleb);
+                }
+                tel++;
+            }
+        }
     }
 
     public void getDecks() {
