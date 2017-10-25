@@ -107,44 +107,44 @@ public class GameController implements Initializable{
     public void btnChoose(Event e){
 
         boolean check = false;
-        if(StaticPlayer.getRole().equals(Role.Pleb)) {
+        if(StaticPlayer.getPlayer().getRole().equals(Role.Pleb)) {
 
             //hier moet een betere manier voor zijn
             if (rbtnCard1.isSelected())
             {
-                lobby.getGame().playerPicksCard(0, new Player(StaticPlayer.getName()));
+                lobby.getGame().playerPicksCard(0, new Player(StaticPlayer.getPlayer().getName()));
             }
             else if (rbtnCard2.isSelected())
             {
-                lobby.getGame().playerPicksCard(1, new Player(StaticPlayer.getName()));
+                lobby.getGame().playerPicksCard(1, new Player(StaticPlayer.getPlayer().getName()));
             }
             else if (rbtnCard3.isSelected())
             {
-                lobby.getGame().playerPicksCard(2, new Player(StaticPlayer.getName()));
+                lobby.getGame().playerPicksCard(2, new Player(StaticPlayer.getPlayer().getName()));
             }
             else if (rbtnCard4.isSelected())
             {
-                lobby.getGame().playerPicksCard(3, new Player(StaticPlayer.getName()));
+                lobby.getGame().playerPicksCard(3, new Player(StaticPlayer.getPlayer().getName()));
             }
             else if (rbtnCard5.isSelected())
             {
-                lobby.getGame().playerPicksCard(4, new Player(StaticPlayer.getName()));
+                lobby.getGame().playerPicksCard(4, new Player(StaticPlayer.getPlayer().getName()));
             }
             else if (rbtnCard6.isSelected())
             {
-                lobby.getGame().playerPicksCard(5, new Player(StaticPlayer.getName()));
+                lobby.getGame().playerPicksCard(5, new Player(StaticPlayer.getPlayer().getName()));
             }
             else if (rbtnCard7.isSelected())
             {
-                lobby.getGame().playerPicksCard(6, new Player(StaticPlayer.getName()));
+                lobby.getGame().playerPicksCard(6, new Player(StaticPlayer.getPlayer().getName()));
             }
             else if (rbtnCard8.isSelected())
             {
-                lobby.getGame().playerPicksCard(7, new Player(StaticPlayer.getName()));
+                lobby.getGame().playerPicksCard(7, new Player(StaticPlayer.getPlayer().getName()));
             }
             //methode om UI te disabelen
         }
-        else if(StaticPlayer.getRole().equals(Role.Czar))
+        else if(StaticPlayer.getPlayer().getRole().equals(Role.Czar))
         {
             if(rbCzarPick1.isSelected())
             {
@@ -195,21 +195,14 @@ public class GameController implements Initializable{
         List<PlayCard> list = StaticPlayer.getPlayer().getCardsInHand();
         CzarCard czarCard = lobby.getGame().pickBlackCard();
 
-        Cardset cardset = new Cardset(0, "Saas");
-        Cards card = new PlayCard(0, "Hello I am a card", cardset, false );
-        Cards card2 = new PlayCard(1, "Hello I am a card 2", cardset, false );
-        Cards card3 = new PlayCard(2, "Hello I am a card 3", cardset, false );
-        Cards card4 = new PlayCard(3, "Hello I am a card 4", cardset, false );
-        Cards card5 = new PlayCard(4, "Hello I am a card 5", cardset, false );
-        Cards card6 = new PlayCard(5, "Hello I am a card 6", cardset, false );
-        Cards black = new CzarCard(6, "I am black and addicted to __", cardset , 1);
-
         taCard1.setText(list.get(0).getText());
         taCard2.setText(list.get(1).getText());
         taCard3.setText(list.get(2).getText());
         taCard4.setText(list.get(3).getText());
         taCard5.setText(list.get(4).getText());
         taCard6.setText(list.get(5).getText());
+        taCard5.setText(list.get(6).getText());
+        taCard6.setText(list.get(7).getText());
         taBlackCard.setText(czarCard.getText());
     }
 
