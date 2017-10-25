@@ -39,6 +39,25 @@ public class GameController implements Initializable{
     private RadioButton rbtnCard7;
     @FXML
     private RadioButton rbtnCard8;
+
+    @FXML
+    private RadioButton rbCzarPick1;
+    @FXML
+    private RadioButton rbCzarPick2;
+    @FXML
+    private RadioButton rbCzarPick3;
+    @FXML
+    private RadioButton rbCzarPick4;
+
+    @FXML
+    private TextArea taCzar1;
+    @FXML
+    private TextArea taCzar2;
+    @FXML
+    private TextArea taCzar3;
+    @FXML
+    private TextArea taCzar4;
+
     @FXML
     private TextArea taCard1;
     @FXML
@@ -87,17 +106,66 @@ public class GameController implements Initializable{
     @FXML   //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
 
+        boolean check = false;
         if(StaticPlayer.getRole().equals(Role.Pleb)) {
 
             //hier moet een betere manier voor zijn
             if (rbtnCard1.isSelected())
             {
-                System.out.println(taCard1.getText());
+                lobby.getGame().playerPicksCard(0, new Player(StaticPlayer.getName()));
             }
+            else if (rbtnCard2.isSelected())
+            {
+                lobby.getGame().playerPicksCard(1, new Player(StaticPlayer.getName()));
+            }
+            else if (rbtnCard3.isSelected())
+            {
+                lobby.getGame().playerPicksCard(2, new Player(StaticPlayer.getName()));
+            }
+            else if (rbtnCard4.isSelected())
+            {
+                lobby.getGame().playerPicksCard(3, new Player(StaticPlayer.getName()));
+            }
+            else if (rbtnCard5.isSelected())
+            {
+                lobby.getGame().playerPicksCard(4, new Player(StaticPlayer.getName()));
+            }
+            else if (rbtnCard6.isSelected())
+            {
+                lobby.getGame().playerPicksCard(5, new Player(StaticPlayer.getName()));
+            }
+            else if (rbtnCard7.isSelected())
+            {
+                lobby.getGame().playerPicksCard(6, new Player(StaticPlayer.getName()));
+            }
+            else if (rbtnCard8.isSelected())
+            {
+                lobby.getGame().playerPicksCard(7, new Player(StaticPlayer.getName()));
+            }
+            //methode om UI te disabelen
         }
         else if(StaticPlayer.getRole().equals(Role.Czar))
         {
-
+            if(rbCzarPick1.isSelected())
+            {
+                String cardtext = taCzar1.getText();
+                lobby.getGame().czarPicksCards(cardtext);
+            }
+            else if(rbCzarPick2.isSelected())
+            {
+                String cardtext = taCzar2.getText();
+                lobby.getGame().czarPicksCards(cardtext);
+            }
+            else if(rbCzarPick3.isSelected())
+            {
+                String cardtext = taCzar3.getText();
+                lobby.getGame().czarPicksCards(cardtext);
+            }
+            else if(rbCzarPick4.isSelected())
+            {
+                String cardtext = taCzar4.getText();
+                lobby.getGame().czarPicksCards(cardtext);
+            }
         }
         else
         {
@@ -143,5 +211,19 @@ public class GameController implements Initializable{
         taCard5.setText(list.get(4).getText());
         taCard6.setText(list.get(5).getText());
         taBlackCard.setText(czarCard.getText());
+    }
+
+    //moet aangeroepen worden wanneer het de turn is van de czar en wanneer een nieuwe beurt begint
+    public void updateTurn()
+    {
+        Player player = new Player("test");
+        if(player.getRole() == Role.Czar)
+        {
+
+        }
+        else if(player.getRole() == Role.Pleb)
+        {
+
+        }
     }
 }
