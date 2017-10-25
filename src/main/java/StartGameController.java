@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
-import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -69,7 +69,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     private String lobbyId;
 
-    private MainServerManager mainServerManager;
+    private MainServerManager mainServerManager = MainServerManager.getInstance();
 
     private Stage previousStage;
 
@@ -83,16 +83,11 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         this.lobby = lobby;
     }
 
-    private List<Cardset> cardSets = null;
-    private List<Cardset> cardSetsPicked = null;
-
     public void initialize(URL location, ResourceBundle resources) {
         lobby.getPlayers().put(new Socket(), StaticPlayer.getPlayer());
-        //  cardSets = new ArrayList<>();
-        //   cardSetsPicked = new ArrayList<>();
 
-
-        Update();
+        updateScoreBoard();
+        updateCardSets();
     }
 
     @FXML
@@ -100,7 +95,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         if (lvCardsets.getSelectionModel().getSelectedItem() != null) {
             Cardset set = (Cardset) lvCardsets.getSelectionModel().getSelectedItem();
             lobby.setToUsingSets(set);
-            Update();
+            updateCardSets();
         }
     }
 
@@ -109,7 +104,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         if (lvPickedCards.getSelectionModel().getSelectedItem() != null) {
             Cardset set = (Cardset) lvPickedCards.getSelectionModel().getSelectedItem();
             lobby.setToNotUsingSets(set);
-            Update();
+            updateCardSets();
         }
     }
 
@@ -162,7 +157,6 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         }
     }
 
-
     @FXML
     private void btnStartGame(Event e) throws Exception {
         //goes to different view
@@ -184,8 +178,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         stage2.show();
     }
 
-    public void Update() {
-
+    public void updateCardSets() {
         lvPickedCards.getItems().clear();
         lvCardsets.getItems().clear();
 
@@ -198,12 +191,28 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         }
     }
 
-
     @Override
     public void onClientMessage(Socket client, String message) {
         String clientDataString = getClientData(message);
         if (clientDataString != null) {
             lobby.getPlayers().put(client, new Player(clientDataString));
+
+            try {
+                for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
+                    if (entry.getKey() == client) {
+                        for (Player player : lobby.getPlayers().values()) {
+                            if (entry.getValue() == player) continue;
+
+                            lobby.messageClient(entry.getValue(), "<D>" + player.getName() + "</D>");
+                        }
+                    } else {
+                        lobby.messageClient(entry.getValue(), message);
+                    }
+                }
+            } catch (NotHostException e) {
+                e.printStackTrace();
+            }
+
             updateScoreBoard();
         }
 
@@ -231,6 +240,12 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     @Override
     public void onHostMessage(String message) {
+        String clientData = getClientData(message);
+        if (clientData != null) {
+            lobby.getPlayers().put(new Socket(), new Player(clientData));
+            updateScoreBoard();
+        }
+
         String chatMessage = getChatMessage(message);
         if (chatMessage != null) {
             putChatMessage(chatMessage);
@@ -270,7 +285,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
             lvScore.getItems().clear();
 
             for (Player player : lobby.getPlayers().values()) {
-                lvScore.getItems().add(player.getName());
+                lvScore.getItems().add(player.getName() + ": " + player.getPoints());
             }
         });
     }

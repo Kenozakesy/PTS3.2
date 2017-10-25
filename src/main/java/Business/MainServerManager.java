@@ -72,7 +72,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
 
         String lobbyQuitString = StringUtils.substringBetween(message, "<LQ>", "</LQ>");
         if (lobbyQuitString != null) {
-            for (Lobby lobby : lobbies) {
+            for (Lobby lobby : this.getLobbies()) {
                 if (lobby.getIP().equals(lobbyQuitString)) {
                     this.removeLobby(lobby);
                 }
@@ -87,11 +87,12 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     }
 
     public Lobby getLobbyByIP(String ip) {
-        for(Lobby lobby : lobbies) {
+        for(Lobby lobby : this.getLobbies()) {
             if(lobby.getIP().equals(ip)) {
                 return lobby;
             }
         }
+
         return null;
     }
 
