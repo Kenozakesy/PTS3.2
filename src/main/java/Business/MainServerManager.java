@@ -18,7 +18,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     private List<Lobby> lobbies;
     private ServerClient client;
 
-    public List<Lobby> getLobbies() {
+    public synchronized List<Lobby> getLobbies() {
         return lobbies;
     }
 
@@ -51,13 +51,13 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     }
 
     public void addLobby(Lobby lobby) {
-        lobbies.add(lobby);
+        this.getLobbies().add(lobby);
         this.setChanged();
         this.notifyObservers(lobby);
     }
 
     public void removeLobby(Lobby lobby) {
-        lobbies.remove(lobby);
+        this.getLobbies().remove(lobby);
         this.setChanged();
         this.notifyObservers(lobby);
     }
@@ -68,7 +68,6 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         if (lobbyString != null) {
             String[] data = lobbyString.split(";");
             this.addLobby(new Lobby(data[0], data[1]));
-            return;
         }
 
         String lobbyQuitString = StringUtils.substringBetween(message, "<LQ>", "</LQ>");
@@ -76,13 +75,15 @@ public class MainServerManager extends Observable implements ServerClientEvents 
             for (Lobby lobby : lobbies) {
                 if (lobby.getIP().equals(lobbyQuitString)) {
                     this.removeLobby(lobby);
-                    return;
                 }
             }
         }
 
-        this.setChanged();
-        this.notifyObservers(message);
+        String chatMessage = StringUtils.substringBetween(message, "<C>", "</C>");
+        if (chatMessage != null) {
+            this.setChanged();
+            this.notifyObservers(message);
+        }
     }
 
     public Lobby getLobbyByIP(String ip) {

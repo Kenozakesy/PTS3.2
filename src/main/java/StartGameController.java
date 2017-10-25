@@ -1,4 +1,9 @@
-import Business.*;
+import Business.Cardset;
+import Business.Lobby;
+import Business.MainServerManager;
+import Business.Player;
+import Business.exceptions.NotClientException;
+import Business.exceptions.NotHostException;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -12,15 +17,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import networking.ServerClient;
 import networking.ServerClientEvents;
-import networking.ServerHost;
 import networking.ServerHostEvents;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.URL;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by Gebruiker on 12-9-2017.
@@ -66,11 +71,6 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     private MainServerManager mainServerManager;
 
-    private ServerHost host;
-    private ServerClient lobbyClient;
-
-  //  private Map<Socket, Player> players = new HashMap<>();
-
     private Stage previousStage;
 
     public void setPreviousStage(Stage previousStage) {
@@ -88,33 +88,11 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     public void initialize(URL location, ResourceBundle resources) {
         lobby.getPlayers().put(new Socket(), StaticPlayer.getPlayer());
-      //  cardSets = new ArrayList<>();
-     //   cardSetsPicked = new ArrayList<>();
+        //  cardSets = new ArrayList<>();
+        //   cardSetsPicked = new ArrayList<>();
 
 
         Update();
-    }
-
-    public void setHost() {
-        try {
-            this.host = new ServerHost(6, this);
-            host.start();
-
-            this.mainServerManager = MainServerManager.getInstance();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            this.mainServerManager.sendMessage("<L>" + StaticPlayer.getPlayer().getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setClient(ServerClient client) {
-        this.lobbyClient = client;
-        lobbyClient.start();
     }
 
     @FXML
@@ -131,7 +109,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         if (lvPickedCards.getSelectionModel().getSelectedItem() != null) {
             Cardset set = (Cardset) lvPickedCards.getSelectionModel().getSelectedItem();
             lobby.setToNotUsingSets(set);
-           Update();
+            Update();
         }
     }
 
@@ -140,11 +118,20 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         if (tfChatBox.getText().equals("")) {
             return;
         }
-        if (host != null) {
-            host.messageAll("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
+        if (lobby.isHost()) {
+            try {
+                lobby.messageClients("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
+            } catch (NotHostException e1) {
+                e1.printStackTrace();
+            }
+
             putChatMessage(StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
         } else {
-            lobbyClient.sendMessage("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
+            try {
+                lobby.messageServer("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
+            } catch (NotClientException e1) {
+                e1.printStackTrace();
+            }
         }
 
         tfChatBox.setText("");
@@ -157,22 +144,24 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     @FXML
     private void btnLeaveGame(Event e) {
-        if (host != null) {
+        if (lobby.isHost()) {
+            //goes to different view
+            //starts the game with current options
+            Stage stage = (Stage) btnStartGame.getScene().getWindow();
+            stage.close();
+
+            mainServerManager.sendMessage("<L>quit</L>");
+
             try {
-                //goes to different view
-                //starts the game with current options
-                Stage stage = (Stage) btnStartGame.getScene().getWindow();
-                stage.close();
-
-                mainServerManager.sendMessage("<L>quit</L>");
-                host.close();
-
-                previousStage.show();
-            } catch (IOException e1) {
+                lobby.close();
+            } catch (NotHostException e1) {
                 e1.printStackTrace();
             }
+
+            previousStage.show();
         }
     }
+
 
     @FXML
     private void btnStartGame(Event e) throws Exception {
@@ -197,10 +186,10 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     public void Update() {
 
-          lvPickedCards.getItems().clear();
-          lvCardsets.getItems().clear();
+        lvPickedCards.getItems().clear();
+        lvCardsets.getItems().clear();
 
-         for (Cardset C : lobby.getCardSetsNotUsing()) {
+        for (Cardset C : lobby.getCardSetsNotUsing()) {
             lvCardsets.getItems().add(C);
         }
 
@@ -216,12 +205,16 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         if (clientDataString != null) {
             lobby.getPlayers().put(client, new Player(clientDataString));
             updateScoreBoard();
-            return;
         }
 
         String chatMessage = getChatMessage(message);
-        if (!chatMessage.equals("")) {
-            host.messageAll(message);
+        if (chatMessage != null) {
+            try {
+                lobby.messageClients(message);
+            } catch (NotHostException e) {
+                e.printStackTrace();
+            }
+
             putChatMessage(chatMessage);
         }
     }
@@ -239,14 +232,18 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     @Override
     public void onHostMessage(String message) {
         String chatMessage = getChatMessage(message);
-        if (!chatMessage.equals("")) {
+        if (chatMessage != null) {
             putChatMessage(chatMessage);
         }
     }
 
     @Override
     public void onJoin(SocketAddress address) {
-        lobbyClient.sendMessage("<D>" + lobbyClient.getPlayer().getName() + "</D>");
+        try {
+            lobby.messageServer("<D>" + StaticPlayer.getPlayer().getName() + "</D>");
+        } catch (NotClientException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

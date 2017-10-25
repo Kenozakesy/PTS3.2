@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -82,6 +83,8 @@ public class GameController implements Initializable{
     private TextField tbChat;
     @FXML
     private Button btnLeaveGame;
+    @FXML
+    private HBox hboxPlayerSelect;
 
     private Lobby lobby;
 
@@ -92,7 +95,7 @@ public class GameController implements Initializable{
     private List<String> chatList = new ArrayList<String>();
 
     public void initialize(URL location, ResourceBundle resources) {
-       // loadPlayerHand();
+        loadPlayerHand();
     }
 
     @FXML
@@ -142,7 +145,10 @@ public class GameController implements Initializable{
             {
                 lobby.getGame().playerPicksCard(7, new Player(StaticPlayer.getPlayer().getName()));
             }
-            //methode om UI te disabelen
+            if (lobby.getGame().playedCard(StaticPlayer.getPlayer()))
+            {
+                hboxPlayerSelect.setVisible(false);
+            }
         }
         else if(StaticPlayer.getPlayer().getRole().equals(Role.Czar))
         {
@@ -201,8 +207,8 @@ public class GameController implements Initializable{
         taCard4.setText(list.get(3).getText());
         taCard5.setText(list.get(4).getText());
         taCard6.setText(list.get(5).getText());
-        taCard5.setText(list.get(6).getText());
-        taCard6.setText(list.get(7).getText());
+        taCard7.setText(list.get(6).getText());
+        taCard8.setText(list.get(7).getText());
         taBlackCard.setText(czarCard.getText());
     }
 
