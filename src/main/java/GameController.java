@@ -92,7 +92,7 @@ public class GameController implements Initializable{
     private List<String> chatList = new ArrayList<String>();
 
     public void initialize(URL location, ResourceBundle resources) {
-       // loadPlayerHand();
+        loadPlayerHand();
     }
 
     @FXML
@@ -201,8 +201,8 @@ public class GameController implements Initializable{
         taCard4.setText(list.get(3).getText());
         taCard5.setText(list.get(4).getText());
         taCard6.setText(list.get(5).getText());
-        taCard5.setText(list.get(6).getText());
-        taCard6.setText(list.get(7).getText());
+        taCard7.setText(list.get(6).getText());
+        taCard8.setText(list.get(7).getText());
         taBlackCard.setText(czarCard.getText());
     }
 
