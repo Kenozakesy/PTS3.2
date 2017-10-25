@@ -69,7 +69,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     private ServerHost host;
     private ServerClient lobbyClient;
 
-    private Map<Socket, Player> players = new HashMap<>();
+  //  private Map<Socket, Player> players = new HashMap<>();
 
     private Stage previousStage;
 
@@ -83,15 +83,14 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         this.lobby = lobby;
     }
 
-    private List<Cardset> Cardsets = null;
-    private List<Cardset> CardsetsPicked = null;
+    private List<Cardset> cardSets = null;
+    private List<Cardset> cardSetsPicked = null;
 
     public void initialize(URL location, ResourceBundle resources) {
-        Cardsets = new ArrayList<>();
-        CardsetsPicked = new ArrayList<>();
+        lobby.getPlayers().put(new Socket(), StaticPlayer.getPlayer());
+      //  cardSets = new ArrayList<>();
+     //   cardSetsPicked = new ArrayList<>();
 
-//        Lobby lobby = app.getLobbyFromId(lobbyId);
-//        lobby.getCardSetsDatabase();
 
         Update();
     }
@@ -107,7 +106,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         }
 
         try {
-            this.mainServerManager.sendMessage("<L>" + StaticPlayer.getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
+            this.mainServerManager.sendMessage("<L>" + StaticPlayer.getPlayer().getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -120,24 +119,20 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     @FXML
     private void btnRight(Event e) {
-//        Lobby lobby = app.getLobbyFromId(lobbyId);
-//
-//        if (lvCardsets.getSelectionModel().getSelectedItem() != null) {
-//            Cardset set = (Cardset) lvCardsets.getSelectionModel().getSelectedItem();
-//            lobby.setToUsingSets(set);
-//            Update();
-//        }
+        if (lvCardsets.getSelectionModel().getSelectedItem() != null) {
+            Cardset set = (Cardset) lvCardsets.getSelectionModel().getSelectedItem();
+            lobby.setToUsingSets(set);
+            Update();
+        }
     }
 
     @FXML
     private void btnLeft(Event e) {
-//        Lobby lobby = app.getLobbyFromId(lobbyId);
-//
-//        if (lvPickedCards.getSelectionModel().getSelectedItem() != null) {
-//            Cardset set = (Cardset) lvPickedCards.getSelectionModel().getSelectedItem();
-//            lobby.setToNotUsingSets(set);
-//            Update();
-//        }
+        if (lvPickedCards.getSelectionModel().getSelectedItem() != null) {
+            Cardset set = (Cardset) lvPickedCards.getSelectionModel().getSelectedItem();
+            lobby.setToNotUsingSets(set);
+           Update();
+        }
     }
 
     @FXML
@@ -189,6 +184,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GameView.fxml"));
 
         GameController gameController = new GameController();
+        lobby.startGame();
         gameController.setLobby(lobby);
 
         fxmlLoader.setController(gameController);
@@ -200,18 +196,17 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     }
 
     public void Update() {
-//        Lobby lobby = app.getLobbyFromId(lobbyId);
-//
-//        lvPickedCards.getItems().clear();
-//        lvCardsets.getItems().clear();
-//
-//        for (Cardset C : lobby.getCardSetsNotUsing()) {
-//            lvCardsets.getItems().add(C);
-//        }
-//
-//        for (Cardset C : lobby.getCardSetsUsing()) {
-//            lvPickedCards.getItems().add(C);
-//        }
+
+          lvPickedCards.getItems().clear();
+          lvCardsets.getItems().clear();
+
+         for (Cardset C : lobby.getCardSetsNotUsing()) {
+            lvCardsets.getItems().add(C);
+        }
+
+        for (Cardset C : lobby.getCardSetsUsing()) {
+            lvPickedCards.getItems().add(C);
+        }
     }
 
 
@@ -219,7 +214,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     public void onClientMessage(Socket client, String message) {
         String clientDataString = getClientData(message);
         if (clientDataString != null) {
-            players.put(client, new Player(clientDataString));
+            lobby.getPlayers().put(client, new Player(clientDataString));
             updateScoreBoard();
             return;
         }
@@ -238,7 +233,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
     @Override
     public void onClientLeave(Socket client) {
-        players.remove(client);
+        lobby.getPlayers().remove(client);
     }
 
     @Override
@@ -277,7 +272,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         Platform.runLater(() -> {
             lvScore.getItems().clear();
 
-            for (Player player : players.values()) {
+            for (Player player : lobby.getPlayers().values()) {
                 lvScore.getItems().add(player.getName());
             }
         });

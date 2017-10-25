@@ -26,7 +26,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         lobbies = new ArrayList<>();
         if (observer != null) this.addObserver(observer);
 
-        client = new ServerClient("145.93.132.154", 1336, this, StaticPlayer.getPlayer());
+        client = new ServerClient("145.93.134.149", 1336, this, StaticPlayer.getPlayer());
         client.start();
     }
 
@@ -96,7 +96,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
 
     @Override
     public void onJoin(SocketAddress address) {
-        client.sendMessage("<D>" + StaticPlayer.getName() + "</D>");
+        client.sendMessage("<D>" + StaticPlayer.getPlayer().getName() + "</D>");
         this.refreshLobbies();
     }
 

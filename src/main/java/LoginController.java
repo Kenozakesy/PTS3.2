@@ -23,11 +23,11 @@ public class LoginController {
     public void logIn(Event e) {
 
         String name = textField.getText();
-        Player player = new Player(name);
 
-        StaticPlayer.setName(name);
+        StaticPlayer.initializePlayer();
+        StaticPlayer.getPlayer().setName(name);
 
-        System.out.println("Playername: " + name);
+        System.out.println("Playername: " + StaticPlayer.getPlayer().getName());
 
         Stage stage = (Stage) button.getScene().getWindow();
         stage.close();

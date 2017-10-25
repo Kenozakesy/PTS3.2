@@ -56,7 +56,7 @@ public class LobbyController implements Initializable, Observer {
 
     @FXML
     public void btnCreateGame() {
-        createLobbyScreen(true, new Lobby(StaticPlayer.getName(), "localhost"));
+        createLobbyScreen(true, new Lobby(StaticPlayer.getPlayer().getName(), "localhost"));
     }
 
     @FXML
@@ -103,7 +103,7 @@ public class LobbyController implements Initializable, Observer {
                 {lobby.joinLobby(IP,1337,startController);}
 
                 catch(AlreadyHostingException e){ e.printStackTrace();}
-               // startController.setClient(new ServerClient(IP, 1337, startController, StaticPlayer.getPlayer()));
+               // startController.setClient(new ServerClient(IP, 1337, startController, StaticPlayer.initializePlayer()));
             }
 
             startController.setPreviousStage(stage);

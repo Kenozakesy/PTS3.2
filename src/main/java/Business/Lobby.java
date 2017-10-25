@@ -15,7 +15,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Lobby {
@@ -135,7 +134,7 @@ public class Lobby {
 
         lobbyHost = new ServerHost(maxPlayers, eventHandler);
         lobbyHost.start();
-        MainServerManager.getInstance().sendMessage("<L>" + StaticPlayer.getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
+        MainServerManager.getInstance().sendMessage("<L>" + StaticPlayer.getPlayer().getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
     }
 
     public void joinLobby(String ip, int port, ServerClientEvents eventHandler) throws AlreadyHostingException {
@@ -179,7 +178,6 @@ public class Lobby {
 
     public void startGame() {
         game = new Game(this);
-        game.getDecks();
     }
 
     @Override
