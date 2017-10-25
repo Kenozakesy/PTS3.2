@@ -81,7 +81,7 @@ public class GameTest {
         Assert.assertEquals(handsize, 4);
         Assert.assertEquals(lobby.getGame().getChosenCards().size(), 1);
 
-        String cardText = lobby.getGame().getCurrentCzar().getText();
+        String cardText = lobby.getGame().getChosenCards().get(pleb).getText();
         lobby.getGame().czarPicksCards(cardText);
 
         pleb = lobby.getPlayers().get(socket);

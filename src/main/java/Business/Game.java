@@ -23,7 +23,8 @@ public class Game {
     private boolean czarTurn;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
 
-    Map<Player, PlayCard> chosenCards;
+    private Map<Player, PlayCard> chosenCards;
+
 
     public CzarCard getCurrentCzar() {
         return currentCzar;
