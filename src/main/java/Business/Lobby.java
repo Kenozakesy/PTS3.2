@@ -182,7 +182,7 @@ public class Lobby {
         game = new Game(this);
 
         Random ran = new Random();
-        int pos = ran.nextInt(4);
+        int pos = ran.nextInt(players.size() + 1);
         int tel = 1;
         for (Player p: players.values()) {
             if(tel == pos)
@@ -193,6 +193,7 @@ public class Lobby {
             {
                 p.setRole(Role.Pleb);
             }
+            tel++;
         }
     }
 
