@@ -4,9 +4,11 @@ package Business;
  * Created by Jordi on 26-9-2017.
  */
 
+import Business.Enums.Role;
 import Business.staticClasses.StaticPlayer;
 import DAL.SqlCard;
 
+import java.net.Socket;
 import java.util.*;
 
 /**
@@ -101,7 +103,22 @@ public class Game {
                 playCards.remove(index);
             }
         }
-        //rollen verwisselen;
+        //Volgende speler wordt willekeurig gekozen. Moet nog aangepast worden.
+        for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet())
+        {
+            Random ran = new Random();
+            int pos = ran.nextInt(lobby.getPlayers().size() + 1);
+            int tel = 1;
+            for (Map.Entry<Socket, Player> p : lobby.getPlayers().entrySet()) {
+                if (tel == pos){
+                    p.getValue().setRole(Role.Czar);
+                }
+                else{
+                    p.getValue().setRole(Role.Pleb);
+                }
+                tel++;
+            }
+        }
     }
 
     public void getDecks() {
