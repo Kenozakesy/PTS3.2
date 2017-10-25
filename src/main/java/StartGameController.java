@@ -24,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -195,22 +194,23 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     public void onClientMessage(Socket client, String message) {
         String clientDataString = getClientData(message);
         if (clientDataString != null) {
-            lobby.getPlayers().put(client, new Player(clientDataString));
+            Player player = new Player(clientDataString);
+            lobby.getPlayers().put(client, player);
 
             try {
-                for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
-                    if (entry.getKey() == client) {
-                        for (Player player : lobby.getPlayers().values()) {
-                            if (entry.getValue() == player) continue;
+                for (Player p : lobby.getPlayers().values()) {
+                    if (p == player) {
+                        for (Player p2 : lobby.getPlayers().values()) {
+                            if (p2 == p) continue;
 
-                            lobby.messageClient(entry.getValue(), "<D>" + player.getName() + "</D>");
+                            lobby.messageClient(p2, "<D>" + p2.getName() + "</D>");
                         }
-                    } else {
-                        lobby.messageClient(entry.getValue(), message);
+                    } else if (p != StaticPlayer.getPlayer()){
+                        lobby.messageClient(p, message);
                     }
                 }
-            } catch (NotHostException e) {
-                e.printStackTrace();
+            } catch (NotHostException ex) {
+                ex.printStackTrace();
             }
 
             updateScoreBoard();

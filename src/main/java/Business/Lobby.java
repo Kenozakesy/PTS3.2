@@ -75,13 +75,19 @@ public class Lobby {
     public String getPassword() {
         return password;
     }
-    public void setPassword(String pw) { password = pw; }
 
-    public Game getGame() { return game; }
+    public void setPassword(String pw) {
+        password = pw;
+    }
+
+    public Game getGame() {
+        return game;
+    }
 
     public ArrayList<Cardset> getCardSetsNotUsing() {
         return cardSetsNotUsing;
     }
+
     public void setCardSetsNotUsing(ArrayList<Cardset> n) {
         this.cardSetsNotUsing = n;
     }
@@ -89,6 +95,7 @@ public class Lobby {
     public ArrayList<Cardset> getCardSetsUsing() {
         return cardSetsUsing;
     }
+
     public void setCardSetsUsing(ArrayList<Cardset> n) {
         this.cardSetsUsing = n;
     }
@@ -170,12 +177,15 @@ public class Lobby {
     }
 
     public void messageClient(Player player, String message) throws NotHostException {
-        if(lobbyHost == null) {
+        if (lobbyHost == null) {
             throw new NotHostException();
         }
 
-        //smt like this, dit doet Peer
-        //players.get(player);
+        for (Map.Entry<Socket, Player> entry : players.entrySet()) {
+            if (entry.getValue() == player) {
+                lobbyHost.messageClient(entry.getKey(), message);
+            }
+        }
     }
 
     public void messageMainServer(String message) {
@@ -188,13 +198,10 @@ public class Lobby {
         Random ran = new Random();
         int pos = ran.nextInt(players.size());
         int tel = 0;
-        for (Player p: players.values()) {
-            if(tel == pos)
-            {
+        for (Player p : players.values()) {
+            if (tel == pos) {
                 p.setRole(Role.Czar);
-            }
-            else
-            {
+            } else {
                 p.setRole(Role.Pleb);
             }
             tel++;
@@ -220,8 +227,12 @@ public class Lobby {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Lobby lobby = (Lobby) o;
 
