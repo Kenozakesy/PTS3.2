@@ -26,10 +26,11 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         lobbies = new ArrayList<>();
         if (observer != null) this.addObserver(observer);
 
-        client = new ServerClient("145.93.134.149", 1336, this, StaticPlayer.getPlayer());
+        client = new ServerClient("145.93.172.237", 1336, this, StaticPlayer.getPlayer());
         client.start();
     }
 
+    // Waarom is lobbycontroller observer, en niet lobby?
     public static MainServerManager getInstance(Observer observer) {
         if (instance == null) {
             instance = new MainServerManager(observer);
