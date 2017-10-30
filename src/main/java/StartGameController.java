@@ -226,6 +226,17 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
             putChatMessage(chatMessage);
         }
+
+        // Activiteiten op het form
+
+        // Start van het spel
+        if(message.equals("Start game")) {
+
+        }
+
+        //TODO veranderen van cardsets
+        //TODO verlaten van spelers
+        //TODO veranderen van gamesettings
     }
 
     @Override
