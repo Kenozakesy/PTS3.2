@@ -14,11 +14,15 @@ public class ServerHost {
     private final Set<ClientHandler> clients;
     private final ClientAcceptor acceptor;
     private final int maxPlayers;
-    private final ServerHostEvents eventHandler;
+    private ServerHostEvents eventHandler;
     private final Object playerLockObj = new Object();
 
     public ServerHostEvents getEventHandler() {
         return eventHandler;
+    }
+
+    public void setEventHandler(ServerHostEvents eventHandler) {
+        this.eventHandler = eventHandler;
     }
 
     public void removeClient(ClientHandler handler) {

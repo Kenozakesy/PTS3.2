@@ -139,6 +139,22 @@ public class Lobby {
         this.cardSetsNotUsing.remove(set);
     }
 
+    public void setHostEventHandler(ServerHostEvents eventHandler) throws NotHostException {
+        if (lobbyHost == null) {
+            throw new NotHostException();
+        }
+
+        lobbyHost.setEventHandler(eventHandler);
+    }
+
+    public void setClientEventHandler(ServerClientEvents eventHandler) throws NotClientException {
+        if (lobbyClient == null) {
+            throw new NotClientException();
+        }
+
+        lobbyClient.setEventHandler(eventHandler);
+    }
+
     // Als er nog geen host is, dan wordt deze gemaakt, anders exceptie.
     public void startHosting(ServerHostEvents eventHandler) throws AlreadyHostingException, IOException {
         if (lobbyHost != null) {
