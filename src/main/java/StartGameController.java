@@ -21,6 +21,7 @@ import networking.ServerClientEvents;
 import networking.ServerHostEvents;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
@@ -166,15 +167,9 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GameView.fxml"));
 
         GameController gameController = new GameController();
-        lobby.startGame();
-        gameController.setLobby(lobby);
-
-        fxmlLoader.setController(gameController);
-
-        Parent root1 = fxmlLoader.load();
-        Stage stage2 = new Stage();
-        stage2.setScene(new Scene(root1));
-        stage2.show();
+        // lobby.startGame();
+        lobby.messageClients("Start game");
+        startGameScreen(lobby);
     }
 
     public void updateCardSets() {
@@ -205,7 +200,7 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
                             lobby.messageClient(p2, "<D>" + p2.getName() + "</D>");
                         }
-                    } else if (p != StaticPlayer.getPlayer()){
+                    } else if (p != StaticPlayer.getPlayer()) {
                         lobby.messageClient(p, message);
                     }
                 }
@@ -226,17 +221,6 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
 
             putChatMessage(chatMessage);
         }
-
-        // Activiteiten op het form
-
-        // Start van het spel
-        if(message.equals("Start game")) {
-
-        }
-
-        //TODO veranderen van cardsets
-        //TODO verlaten van spelers
-        //TODO veranderen van gamesettings
     }
 
     @Override
@@ -261,6 +245,24 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
         if (chatMessage != null) {
             putChatMessage(chatMessage);
         }
+
+        //TODO start spel
+        // Start van het spel
+        if (message.equals("Start game")) {
+            try {
+                startGameScreen(lobby);
+                //startGameScreen(lobby);
+            } catch (IOException ex) {
+                // k
+            }
+        }
+
+        //TODO veranderen van cardsets
+        if (message.equals("Change cardsets")) {
+
+        }
+        //TODO verlaten van spelers
+        //TODO veranderen van gamesettings
     }
 
     @Override
@@ -299,5 +301,27 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
                 lvScore.getItems().add(player.getName() + ": " + player.getPoints());
             }
         });
+    }
+
+    private void startGameScreen(Lobby lobby) throws IOException {
+        try {
+            //starts the game with current options
+            //Stage stage = (Stage) btnStartGame.getScene().getWindow();
+            //stage.close();
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GameView.fxml"));
+
+            GameController gameController = new GameController();
+            gameController.setLobby(lobby);
+
+            fxmlLoader.setController(gameController);
+
+            Parent root1 = fxmlLoader.load();
+            Stage stage2 = new Stage();
+            stage2.setScene(new Scene(root1));
+            stage2.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 }

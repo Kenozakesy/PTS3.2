@@ -26,7 +26,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         lobbies = new ArrayList<>();
         if (observer != null) this.addObserver(observer);
 
-        client = new ServerClient("145.93.172.237", 1336, this, StaticPlayer.getPlayer());
+        client = new ServerClient("145.93.128.208", 1336, this, StaticPlayer.getPlayer());
         client.start();
     }
 
