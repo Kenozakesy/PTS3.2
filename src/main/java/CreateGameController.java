@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
  */
 
 
-public class StartGameController implements Initializable, ServerHostEvents, ServerClientEvents {
+public class CreateGameController implements Initializable, ServerHostEvents, ServerClientEvents {
 
     @FXML
     public Button btnStartGame;
