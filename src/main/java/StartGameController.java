@@ -26,7 +26,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -200,24 +200,26 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     public void onClientMessage(Socket client, String message) {
         String clientDataString = getClientData(message);
         if (clientDataString != null) {
+            try {
+                for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
+                    lobby.messageClient(client, "<D>" + entry.getValue().getName() + "</D>");
+                    Thread.sleep(1);
+                }
+
+                for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
+                    if (entry.getValue() == StaticPlayer.getPlayer()) {
+                        continue;
+                    }
+
+                    lobby.messageClient(entry.getKey(), message);
+                    Thread.sleep(1);
+                }
+            } catch (NotHostException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
             Player player = new Player(clientDataString);
             lobby.getPlayers().put(client, player);
-
-            try {
-                for (Player p : lobby.getPlayers().values()) {
-                    if (p == player) {
-                        for (Player p2 : lobby.getPlayers().values()) {
-                            if (p2 == p) continue;
-
-                            lobby.messageClient(p2, "<D>" + p2.getName() + "</D>");
-                        }
-                    } else if (p != StaticPlayer.getPlayer()) {
-                        lobby.messageClient(p, message);
-                    }
-                }
-            } catch (NotHostException ex) {
-                ex.printStackTrace();
-            }
 
             updateScoreBoard();
         }

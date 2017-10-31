@@ -163,7 +163,7 @@ public class Lobby {
 
         lobbyHost = new ServerHost(maxPlayers, eventHandler);
         lobbyHost.start();
-        players.put(null, new Player(eventHandler.toString()));
+
         MainServerManager.getInstance().sendMessage("<L>" + StaticPlayer.getPlayer().getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
     }
 
@@ -172,13 +172,9 @@ public class Lobby {
         if (lobbyHost != null) {
             throw new AlreadyHostingException();
         }
-        try {
+
             lobbyClient = new ServerClient(ip, port, eventHandler, StaticPlayer.getPlayer());
             lobbyClient.start();
-            players.put(new Socket(ip, port), StaticPlayer.getPlayer());
-        } catch(IOException ioexception) {
-            ioexception.printStackTrace();
-        }
     }
 
     public void messageClients(String message) throws NotHostException {
@@ -197,6 +193,14 @@ public class Lobby {
         lobbyClient.sendMessage(message);
     }
 
+    public void messageClient(Socket socket, String message) throws NotHostException {
+        if (lobbyHost == null) {
+            throw new NotHostException();
+        }
+
+        lobbyHost.messageClient(socket, message);
+    }
+
     public void messageClient(Player player, String message) throws NotHostException {
         if (lobbyHost == null) {
             throw new NotHostException();
@@ -204,7 +208,7 @@ public class Lobby {
 
         for (Map.Entry<Socket, Player> entry : players.entrySet()) {
             if (entry.getValue() == player) {
-                lobbyHost.messageClient(entry.getKey(), message);
+                this.messageClient(entry.getKey(), message);
             }
         }
     }
