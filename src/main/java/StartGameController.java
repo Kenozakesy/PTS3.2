@@ -161,15 +161,20 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     private void btnStartGame(Event e) throws Exception {
         //goes to different view
         //starts the game with current options
-        Stage stage = (Stage) btnStartGame.getScene().getWindow();
-        stage.close();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GameView.fxml"));
-
-        GameController gameController = new GameController();
-        // lobby.startGame();
-        lobby.messageClients("Start game");
-        startGameScreen(lobby);
+        try {
+            if (lvPickedCards.getItems().size() < 1) {
+                throw new Exception("Errormessage: Geen cardsets geslecteerd.");
+            }
+            Stage stage = (Stage) btnStartGame.getScene().getWindow();
+            stage.close();
+            
+            lobby.startGame();
+            lobby.messageClients("Start game");
+            startGameScreen(lobby);
+        } catch(Exception exception) {
+            exception.printStackTrace();
+            System.out.println(exception.getMessage());
+        }
     }
 
     public void updateCardSets() {
