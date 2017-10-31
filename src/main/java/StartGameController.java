@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -165,13 +167,17 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
             if (lvPickedCards.getItems().size() < 1) {
                 throw new Exception("Errormessage: Geen cardsets geslecteerd.");
             }
-            Stage stage = (Stage) btnStartGame.getScene().getWindow();
-            stage.close();
-            
-            lobby.startGame();
-            lobby.messageClients("Start game");
+            // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
+            StringBuilder builder = new StringBuilder();
+            builder.append("Start game,");
+            for (Object o : lvPickedCards.getItems()) {
+                Cardset cardset = (Cardset) o;
+                builder.append(cardset.getId() + ",");
+            }
+            lobby.messageClients(builder.toString());
             startGameScreen(lobby);
-        } catch(Exception exception) {
+
+        } catch (Exception exception) {
             exception.printStackTrace();
             System.out.println(exception.getMessage());
         }
@@ -251,15 +257,23 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
             putChatMessage(chatMessage);
         }
 
+        String[] splitMessage = message.split(",");
         //TODO start spel
         // Start van het spel
-        if (message.equals("Start game")) {
-            try {
-                startGameScreen(lobby);
-                //startGameScreen(lobby);
-            } catch (IOException ex) {
-                // k
+        if (splitMessage[0].equals("Start game")) {
+            ArrayList<Cardset> sets = new ArrayList<>();
+            for (int i = 1; i < splitMessage.length; i++) {
+                sets.add(StaticPlayer.getPlayer().getCardsetList().get(Integer.valueOf(splitMessage[i])));
             }
+            lobby.setCardSetsUsing(sets);
+
+            Platform.runLater(() -> {
+                try {
+                    startGameScreen(lobby);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
 
         //TODO veranderen van cardsets
@@ -311,13 +325,14 @@ public class StartGameController implements Initializable, ServerHostEvents, Ser
     private void startGameScreen(Lobby lobby) throws IOException {
         try {
             //starts the game with current options
-            //Stage stage = (Stage) btnStartGame.getScene().getWindow();
-            //stage.close();
-
+            Stage stage = (Stage) btnStartGame.getScene().getWindow();
+            stage.close();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GameView.fxml"));
 
             GameController gameController = new GameController();
             gameController.setLobby(lobby);
+
+            lobby.startGame();
 
             fxmlLoader.setController(gameController);
 
