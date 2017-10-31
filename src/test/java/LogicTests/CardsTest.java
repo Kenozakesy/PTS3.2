@@ -20,21 +20,12 @@ public class CardsTest {
     private SqlCard sqlCard;
     private SqlCardset sqlCardset;
     List<Cards> cards;
-    List<Cardset> cardsets;
+    ArrayList<Cardset> cardsets;
 
     @Before
     public void setUp() throws Exception {
         sqlCard = new SqlCard();
         sqlCardset = new SqlCardset();
-    }
-
-    @Test
-    public void cardsShowtest()
-    {
-        for (Cards card: cards ) {
-            System.out.println( card.getText());
-        }
-
     }
 
     @Test
@@ -49,12 +40,12 @@ public class CardsTest {
         lobby.getPlayers().put(new Socket(), playerjan);
         lobby.getPlayers().put(new Socket(), playerkees);
         lobby.getPlayers().put(new Socket(), playergroente);
-        Game game = new Game(lobby);
-        game.getDecks();
 
-        game.newTurn();
+        lobby.getCardSetsUsing().addAll(cardsets);
+        lobby.startGame();
 
-        Assert.assertTrue(playerjan.getCardsInHand().size() == 8);
+        System.out.println("Hand size: " + playergroente.getCardsInHand().size());
+        Assert.assertEquals(8, playerjan.getCardsInHand().size());
     }
 
 
