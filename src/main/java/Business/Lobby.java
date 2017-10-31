@@ -163,6 +163,7 @@ public class Lobby {
 
         lobbyHost = new ServerHost(maxPlayers, eventHandler);
         lobbyHost.start();
+        players.put(null, new Player(eventHandler.toString()));
         MainServerManager.getInstance().sendMessage("<L>" + StaticPlayer.getPlayer().getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
     }
 
@@ -171,9 +172,13 @@ public class Lobby {
         if (lobbyHost != null) {
             throw new AlreadyHostingException();
         }
-
-        lobbyClient = new ServerClient(ip, port, eventHandler, StaticPlayer.getPlayer());
-        lobbyClient.start();
+        try {
+            lobbyClient = new ServerClient(ip, port, eventHandler, StaticPlayer.getPlayer());
+            lobbyClient.start();
+            players.put(new Socket(ip, port), StaticPlayer.getPlayer());
+        } catch(IOException ioexception) {
+            ioexception.printStackTrace();
+        }
     }
 
     public void messageClients(String message) throws NotHostException {
