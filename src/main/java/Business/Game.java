@@ -68,7 +68,7 @@ public class Game {
         pleb.getCardsInHand().remove(card);
 
         // Check of alle spelers hun kaart gespeeld hebben.
-        if (chosenCards.size() >= lobby.getPlayers().size()) {
+        if (chosenCards.size() >= lobby.getPlayers().size() -1) {
 
             //bericht sturen server bijhouden wie heeft gekozen (peter fix this)
             czarTurn = true;
