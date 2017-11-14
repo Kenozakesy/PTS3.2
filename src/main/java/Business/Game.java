@@ -99,19 +99,10 @@ public class Game {
     // Opnieuw kaarten delen.
     public void newTurn() {
         czarTurn = false;
-        try {
-            for (Player player : lobby.getPlayers().values()) {
-                while (player.getCardsInHand().size() < 8) {
-                    int index = random.nextInt(playCards.size());
-                    player.addToHand(playCards.get(index));
-                    playCards.remove(index);
-                }
-            }
-        }
-        catch(Exception ex){
-            //Do nothing
-        }
-        //Volgende speler wordt willekeurig gekozen. Moet nog aangepast worden.
+
+        cardSharing();
+
+        //Volgende Czar wordt willekeurig gekozen. Moet nog aangepast worden.
         for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet())
         {
             Random ran = new Random();
@@ -126,6 +117,27 @@ public class Game {
                 }
                 tel++;
             }
+        }
+    }
+
+    //deelt nieuwe kaarten uit
+    private void cardSharing()
+    {
+        try {
+            for (int i = 0; i < 8; i++) {
+                //voegd een kaart toe aan speler hand en verwijderd die uit de stapel
+                for (Player player : lobby.getPlayers().values()) {
+                    if (player.getCardsInHand().size() < 8) {
+                        int index = random.nextInt(playCards.size());
+                        player.addToHand(playCards.get(index));
+                        playCards.remove(index);
+                    }
+                }
+            }
+
+        }
+        catch(Exception ex){
+            //Do nothing
         }
     }
 
