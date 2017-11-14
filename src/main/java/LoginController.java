@@ -27,8 +27,6 @@ public class LoginController {
         StaticPlayer.initializePlayer();
         StaticPlayer.getPlayer().setName(name);
 
-        System.out.println("Playername: " + StaticPlayer.getPlayer().getName());
-
         Stage stage = (Stage) button.getScene().getWindow();
         stage.close();
 
