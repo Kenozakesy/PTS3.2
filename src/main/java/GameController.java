@@ -110,49 +110,50 @@ public class GameController implements Initializable{
 
     @FXML   //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
+        Player player = StaticPlayer.getPlayerFromGame(lobby);
 
         boolean check = false;
-        if(StaticPlayer.getPlayer().getRole().equals(Role.Pleb)) {
-
+        if(player.getRole().equals(Role.Pleb)) {
             //hier moet een betere manier voor zijn
+
             if (rbtnCard1.isSelected())
             {
-                lobby.getGame().playerPicksCard(0, new Player(StaticPlayer.getPlayer().getName()));
+                lobby.getGame().playerPicksCard(0, player);
             }
             else if (rbtnCard2.isSelected())
             {
-                lobby.getGame().playerPicksCard(1, new Player(StaticPlayer.getPlayer().getName()));
+                lobby.getGame().playerPicksCard(1, player);
             }
             else if (rbtnCard3.isSelected())
             {
-                lobby.getGame().playerPicksCard(2, new Player(StaticPlayer.getPlayer().getName()));
+                lobby.getGame().playerPicksCard(2, player);
             }
             else if (rbtnCard4.isSelected())
             {
-                lobby.getGame().playerPicksCard(3, new Player(StaticPlayer.getPlayer().getName()));
+                lobby.getGame().playerPicksCard(3, player);
             }
             else if (rbtnCard5.isSelected())
             {
-                lobby.getGame().playerPicksCard(4, new Player(StaticPlayer.getPlayer().getName()));
+                lobby.getGame().playerPicksCard(4, player);
             }
             else if (rbtnCard6.isSelected())
             {
-                lobby.getGame().playerPicksCard(5, new Player(StaticPlayer.getPlayer().getName()));
+                lobby.getGame().playerPicksCard(5, player);
             }
             else if (rbtnCard7.isSelected())
             {
-                lobby.getGame().playerPicksCard(6, new Player(StaticPlayer.getPlayer().getName()));
+                lobby.getGame().playerPicksCard(6, player);
             }
             else if (rbtnCard8.isSelected())
             {
-                lobby.getGame().playerPicksCard(7, new Player(StaticPlayer.getPlayer().getName()));
+                lobby.getGame().playerPicksCard(7, player);
             }
-            if (lobby.getGame().playedCard(StaticPlayer.getPlayer()))
+            if (lobby.getGame().playedCard(player))
             {
                 hboxPlayerSelect.setVisible(false);
             }
         }
-        else if(StaticPlayer.getPlayer().getRole().equals(Role.Czar))
+        else if(player.getRole().equals(Role.Czar))
         {
             if(rbCzarPick1.isSelected())
             {

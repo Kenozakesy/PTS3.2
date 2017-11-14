@@ -53,19 +53,11 @@ public class Game {
     public void playerPicksCard(int cardPosition, Player player) {
 
         //gets player
-        Player pleb = null;
-        for (Player p: lobby.getPlayers().values())
-        {
-            if(p.getName().equals(player.getName()))
-            {
-                 pleb = p;
-            }
-        }
-        PlayCard card = pleb.getCardsInHand().get(cardPosition);
+        PlayCard card = player.getCardsInHand().get(cardPosition);
         //kiest kaart om in te zenden
         chosenCards.put(player, card);
         //verwijderd de kaart uit de hand van de speler
-        pleb.getCardsInHand().remove(card);
+        player.getCardsInHand().remove(card);
 
         // Check of alle spelers hun kaart gespeeld hebben.
         if (chosenCards.size() >= lobby.getPlayers().size() -1) {
