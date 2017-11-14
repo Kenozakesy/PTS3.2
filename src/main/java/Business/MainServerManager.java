@@ -18,7 +18,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     private List<Lobby> lobbies;
     private ServerClient client;
 
-    public synchronized List<Lobby> getLobbies() {
+    public List<Lobby> getLobbies() {
         return lobbies;
     }
 
@@ -80,6 +80,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
                 for (Lobby lobby : this.getLobbies()) {
                     if (lobby.getIP().equals(message)) {
                         this.removeLobby(lobby);
+                        return;
                     }
                 }
                 break;
