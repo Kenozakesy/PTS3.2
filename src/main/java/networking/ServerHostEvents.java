@@ -2,7 +2,7 @@ package networking;
 
 import java.net.Socket;
 
-public interface GameServerEvents {
+public interface ServerHostEvents {
 
     void onClientMessage(Socket client, String message);
     void onClientJoin(Socket client);

@@ -7,7 +7,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -16,7 +15,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="726.0" prefWidth="1157.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextArea fx:id="taChat" editable="false" layoutX="334.0" layoutY="451.0" prefHeight="230.0" prefWidth="809.0" />
       <Button fx:id="btnSend" layoutX="1043.0" layoutY="681.0" mnemonicParsing="false" onAction="#btnSend" prefHeight="31.0" prefWidth="100.0" text="Send" />
       <TextField fx:id="tfChatBox" layoutX="335.0" layoutY="681.0" prefHeight="31.0" prefWidth="708.0" />
       <Label layoutX="14.0" layoutY="55.0" prefHeight="62.0" prefWidth="163.0" text="Game options:">
@@ -35,7 +33,7 @@
       </VBox>
       <VBox layoutX="259.0" layoutY="157.0" prefHeight="200.0" prefWidth="125.0" spacing="10.0">
          <children>
-            <ComboBox fx:id="ddScorelimit" onAction="#UpdateGameOptions" onInputMethodTextChanged="#UpdateGameOptions" prefHeight="31.0" prefWidth="130.0">
+            <ComboBox fx:id="ddScorelimit" prefHeight="31.0" prefWidth="130.0">
              <items>
                  <FXCollections fx:factory="observableArrayList">
                      <String fx:value="3" />
@@ -52,11 +50,11 @@
                  </FXCollections>
              </items>
                <value>
-                  <String fx:value="3" />
+                  <String fx:value="5" />
                </value>
          </ComboBox>
 
-            <ComboBox fx:id="ddPlayerLimit" onAction="#UpdateGameOptions" onInputMethodTextChanged="#UpdateGameOptions" prefWidth="150.0">
+            <ComboBox fx:id="ddPlayerLimit" prefWidth="150.0">
             <items>
                <FXCollections fx:factory="observableArrayList">
                   <String fx:value="3" />
@@ -68,11 +66,11 @@
                </FXCollections>
             </items>
             <value>
-               <String fx:value="3" />
+               <String fx:value="5" />
             </value>
          </ComboBox>
 
-            <ComboBox fx:id="ddSpectatorLimit" onAction="#UpdateGameOptions" onInputMethodTextChanged="#UpdateGameOptions" prefWidth="150.0">
+            <ComboBox fx:id="ddSpectatorLimit" prefWidth="150.0">
             <items>
                <FXCollections fx:factory="observableArrayList">
                   <String fx:value="3" />
@@ -84,11 +82,11 @@
                </FXCollections>
             </items>
             <value>
-               <String fx:value="3" />
+               <String fx:value="5" />
             </value>
          </ComboBox>
 
-            <ComboBox fx:id="ddIdleTimer" onAction="#UpdateGameOptions" onInputMethodTextChanged="#UpdateGameOptions" prefHeight="31.0" prefWidth="130.0">
+            <ComboBox fx:id="ddIdleTimer" prefHeight="31.0" prefWidth="130.0">
             <items>
                <FXCollections fx:factory="observableArrayList">
                   <String fx:value="1" />
@@ -104,7 +102,7 @@
             </value>
          </ComboBox>
 
-            <ComboBox fx:id="ddBlankCards" onAction="#UpdateGameOptions" onInputMethodTextChanged="#UpdateGameOptions" prefWidth="150.0">
+            <ComboBox fx:id="ddBlankCards" prefWidth="150.0">
             <items>
                <FXCollections fx:factory="observableArrayList">
                   <String fx:value="0" />
@@ -156,5 +154,6 @@
       <ListView fx:id="lvPickedCards" layoutX="850.0" layoutY="157.0" prefHeight="200.0" prefWidth="270.0" />
       <Button fx:id="btnRight" layoutX="746.0" layoutY="209.0" mnemonicParsing="false" onAction="#btnRight" text="---&gt;" />
       <Button fx:id="btnLeft" layoutX="746.0" layoutY="252.0" mnemonicParsing="false" onAction="#btnLeft" text="&lt;---" />
+      <ListView fx:id="lvChat" layoutX="334.0" layoutY="451.0" prefHeight="220.0" prefWidth="708.0" />
    </children>
 </AnchorPane>

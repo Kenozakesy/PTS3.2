@@ -1,15 +1,0 @@
-
-›squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ŽÔúÇÿÿÿÿÿ
-nsquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ü»Ê÷
-dsquid:S00100"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(×êÑë
-asquid:S00112"FDefine and throw a dedicated exception instead of using a generic one.(€¼’òøÿÿÿÿ
-1squid:S1220""Move this file to a named package.
-=squid:S1148"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ
-fsquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ôå–
-tsquid:S00116"YRename this field "CardsetsPicked" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ì‰Ö¥øÿÿÿÿ
-=squid:S1148"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ
-›squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Çÿè£ûÿÿÿÿ
-nsquid:S00116"SRename this field "Cardsets" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¯øµŒúÿÿÿÿ
-›squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(å™£‰úÿÿÿÿ
-ssquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(©ö“ìûÿÿÿÿ
-esquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(›î™¤øÿÿÿÿ

@@ -14,48 +14,26 @@ import java.util.*;
  * @author JelleSchrader
  */
 public class SqlCardset {
-    private SqlMain sqlMain = new SqlMain();
-    private Properties properties;
-    private String user = "dbi299244";
-    private String pass = "PTS3Groep1";
-            //"Server=mssql.fhict.local;Database=dbi299244;User Id=dbi299244;Password=PTS3Groep1;";
+    private SqlConnection sqlConnection = new SqlConnection();
 
     private SqlCard sqlcard;
-    
-    private Properties getProperties() {
-        try {
-            if (properties == null) {
-                properties = new Properties();
-                properties.setProperty("user", user);
-                properties.setProperty("password", pass);
-            }
-            return properties;
-        }
-        catch(Exception exception){
-            exception.printStackTrace();
-            return null;
-        }
-    }
 
     public ArrayList<Cardset> getAllCardsets(){
         try{
             sqlcard = new SqlCard();
-            sqlMain.setStatement(sqlMain.getConnection().createStatement());
+            sqlConnection.setStatement(sqlConnection.getConnection().createStatement());
             String query = "SELECT * FROM Deck;";
-            sqlMain.setResult(sqlMain.getStatement().executeQuery(query));
+
+            sqlConnection.setResult(sqlConnection.getStatement().executeQuery(query));
             
             ArrayList<Cardset> sets = new ArrayList<Cardset>();
             
-            while(sqlMain.getResult().next()){
-                int id = sqlMain.getResult().getInt(1);
-                String name = sqlMain.getResult().getString(2);
+            while(sqlConnection.getResult().next()){
+                int id = sqlConnection.getResult().getInt(1);
+                String name = sqlConnection.getResult().getString(2);
                 
                 Cardset set = new Cardset(id, name);
-                
-                ArrayList<Cards> cards = sqlcard.getAllCardsFromCardSet(set);
-                set.setCardsInCardset(cards);
-                
-                System.out.println(set.getId() + " " + set.getName());
+
                 sets.add(set);
             }
             return sets;
@@ -64,27 +42,25 @@ public class SqlCardset {
             return null;
         }
         finally{
-            sqlMain.closeAll();
+            sqlConnection.closeAll();
         }
     }
-    public ArrayList<Cards> getAllCardsFromCardSet(int cardsetId){
-        return null;
-    }
+
     public Cardset getCardsetById(int cardsetId){
         try{
             sqlcard = new SqlCard();
-            sqlMain.setStatement(sqlMain.getConnection().createStatement());
-            String query = "SELECT * FROM Deck WHERE Id = ?;";
+            sqlConnection.setStatement(sqlConnection.getConnection().createStatement());
+            String query = "SELECT * FROM Deck WHERE DeckId = ?;";
             
-            PreparedStatement ps = sqlMain.getConnection().prepareStatement(query);
+            PreparedStatement ps = sqlConnection.getConnection().prepareStatement(query);
             ps.setInt(1, cardsetId);
             
-            sqlMain.setResult(sqlMain.getStatement().executeQuery(query));
+            sqlConnection.setResult(ps.executeQuery());
             
             Cardset cardset = null;
-            while(sqlMain.getResult().next()) {
-                int id = sqlMain.getResult().getInt(1);
-                String name = sqlMain.getResult().getString(2);
+            while(sqlConnection.getResult().next()) {
+                int id = sqlConnection.getResult().getInt(1);
+                String name = sqlConnection.getResult().getString(2);
                 
                 cardset = new Cardset(id, name);
             }
@@ -94,7 +70,7 @@ public class SqlCardset {
             return null;
         }
         finally{
-            sqlMain.closeAll();
+            sqlConnection.closeAll();
         }
     }
 }

@@ -31,7 +31,6 @@
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <version>6.2.1.jre8</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>

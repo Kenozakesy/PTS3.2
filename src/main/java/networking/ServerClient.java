@@ -9,12 +9,24 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Arrays;
 
-public class GameClient {
+public class ServerClient {
     private ClientHandler clientHandler;
-    private GameClientEvents eventHandler;
+    private ServerClientEvents eventHandler;
     private Player player;
 
-    public GameClient(String hostIP, int port, GameClientEvents eventHandler, Player player) {
+    public ServerClientEvents getEventHandler() {
+        return eventHandler;
+    }
+
+    public void setEventHandler(ServerClientEvents eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public ServerClient(String hostIP, int port, ServerClientEvents eventHandler, Player player) {
         clientHandler = new ClientHandler(this, hostIP, port);
         this.eventHandler = eventHandler;
         this.player = player;
@@ -33,7 +45,7 @@ public class GameClient {
     }
 
     private class ClientHandler extends Thread {
-        private GameClient client;
+        private ServerClient client;
         private Socket socket;
 
         private InputStream in;
@@ -44,7 +56,7 @@ public class GameClient {
 
         private boolean receiveMessages = true;
 
-        ClientHandler(GameClient client, String hostIP, int port) {
+        ClientHandler(ServerClient client, String hostIP, int port) {
             this.client = client;
             this.hostIP = hostIP;
             this.port = port;
@@ -53,15 +65,13 @@ public class GameClient {
         @Override
         public void run() {
             try {
-                socket = new Socket();
-                socket.connect(new InetSocketAddress(hostIP, port));
+                this.socket = new Socket();
+                this.socket.connect(new InetSocketAddress(hostIP, port));
 
-                client.eventHandler.onJoin(socket.getRemoteSocketAddress());
+                this.in = socket.getInputStream();
+                this.out = socket.getOutputStream();
 
-                in = socket.getInputStream();
-                out = socket.getOutputStream();
-
-                sendMessage("<D>" + player.getName() + "</D>");
+                this.client.eventHandler.onJoin(socket.getRemoteSocketAddress());
 
                 this.readInput();
             } catch (IOException e) {
@@ -77,9 +87,9 @@ public class GameClient {
                 try {
                     int len = in.read(buffer);
 
-                    byte[] resizedBuffer = Arrays.copyOfRange(buffer, 0, len);
-
                     if (len == -1) this.close();
+
+                    byte[] resizedBuffer = Arrays.copyOfRange(buffer, 0, len);
 
                     if (len != 0) {
                         client.eventHandler.onHostMessage(new String(resizedBuffer, "UTF-8"));

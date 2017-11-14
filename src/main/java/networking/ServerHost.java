@@ -9,13 +9,21 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GameHost {
+public class ServerHost {
     private final ServerSocket server;
     private final Set<ClientHandler> clients;
     private final ClientAcceptor acceptor;
     private final int maxPlayers;
-    private final GameServerEvents eventHandler;
+    private ServerHostEvents eventHandler;
     private final Object playerLockObj = new Object();
+
+    public ServerHostEvents getEventHandler() {
+        return eventHandler;
+    }
+
+    public void setEventHandler(ServerHostEvents eventHandler) {
+        this.eventHandler = eventHandler;
+    }
 
     public void removeClient(ClientHandler handler) {
         clients.remove(handler);
@@ -25,11 +33,11 @@ public class GameHost {
         }
     }
 
-    public GameHost(int maxPlayers, GameServerEvents eventHandler) throws IOException {
+    public ServerHost(int maxPlayers, ServerHostEvents eventHandler) throws IOException {
         this.eventHandler = eventHandler;
         this.maxPlayers = maxPlayers;
         server = new ServerSocket(1337);
-        clients = new HashSet();
+        clients = new HashSet<>();
         acceptor = new ClientAcceptor(this);
     }
 
@@ -41,8 +49,9 @@ public class GameHost {
         acceptor.acceptClients = false;
     }
 
-    public void close() {
+    public void close() throws IOException {
         this.stopAccepting();
+        this.server.close();
 
         for (ClientHandler client : clients) {
             client.close();
@@ -67,10 +76,10 @@ public class GameHost {
      * Runs concurrently to the main thread so it can accept incoming clients.
      */
     private class ClientAcceptor extends Thread {
-        private final GameHost host;
+        private final ServerHost host;
         private boolean acceptClients = true;
 
-        ClientAcceptor(GameHost host) {
+        ClientAcceptor(ServerHost host) {
             this.host = host;
         }
 
@@ -101,7 +110,7 @@ public class GameHost {
      * Every client runs concurrently to the main thread allowing them to communicate with the host.
      */
     private class ClientHandler extends Thread {
-        private final GameHost host;
+        private final ServerHost host;
         private final Socket client;
 
         private final InputStream in;
@@ -109,7 +118,7 @@ public class GameHost {
 
         private boolean receiveMessages = true;
 
-        ClientHandler(GameHost host, Socket client) throws IOException {
+        ClientHandler(ServerHost host, Socket client) throws IOException {
             this.host = host;
             this.client = client;
 
@@ -164,8 +173,12 @@ public class GameHost {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             ClientHandler that = (ClientHandler) o;
 

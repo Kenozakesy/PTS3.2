@@ -1,6 +1,11 @@
+
 import Business.Lobby;
+import Business.MainServerManager;
+import Business.exceptions.AlreadyHostingException;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,134 +14,130 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import networking.GameClient;
-import networking.GameClientEvents;
+import networking.ServerClientEvents;
+import networking.ServerHostEvents;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
-/**
- * Created by Gebruiker on 26-9-2017.
- */
-public class LobbyController implements Initializable, GameClientEvents {
-
-    //private ArrayList lobbyList
-
-    private GameClient client;
+public class LobbyController implements Initializable, Observer {
 
     @FXML
     private Button btnCreateGame;
-
     @FXML
     private ListView<Lobby> lvLobby;
-
     @FXML
     private Button btnSend;
-
     @FXML
     private TextField tfSend;
-
     @FXML
     private ListView lvChat;
 
-    private HashMap<String, Lobby> lobbies;
+    private MainServerManager mainServerManager;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        client = new GameClient("145.93.133.180", 1336, this, StaticPlayer.getPlayer());
-        client.start();
-
-        lobbies = new HashMap<>();
-        //get every lobby
+        mainServerManager = MainServerManager.getInstance(this);
     }
 
     @FXML
     public void refresh() {
-        client.sendMessage("<LR>!</LR>");
+        mainServerManager.refreshLobbies();
     }
 
     @FXML
     public void btnSend() {
         String text = tfSend.getText();
-        //lvChat.getItems().add(text);
-        client.sendMessage(text);
+        tfSend.setText("");
+        mainServerManager.sendMessage("<C>" + text + "</C>");
     }
 
     @FXML
     public void btnCreateGame() {
-        //create a new lobby
-
-
-        //goes to different view
-        //starts the game with current options
-        Stage stage = (Stage) btnCreateGame.getScene().getWindow();
-        stage.hide();
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CreateGame.fxml"));
-        Parent root1 = null;
-        try {
-
-            StartGameController startcontroller = new StartGameController();
-            startcontroller.setClient(client);
-
-            startcontroller.setPreviousStage(stage);
-
-            fxmlLoader.setController(startcontroller);
-            root1 = (Parent) fxmlLoader.load();
-
-            Stage stage2 = new Stage();
-            stage2.setScene(new Scene(root1));
-            stage2.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        createLobbyScreen(true, new Lobby(StaticPlayer.getPlayer().getName(), "localhost"));
     }
 
-    @Override
-    public void onHostMessage(String message) {
-        String lobbyString = StringUtils.substringBetween(message, "<L>", "</L>");
-        if (lobbyString != null) {
-            String[] data = lobbyString.split(";");
-            lobbies.put(data[1], new Lobby(data[0], data[1]));
-            refreshLobbyListView();
-            return;
+    @FXML
+    public void LisViewClick(MouseEvent click) {
+        if (click.getClickCount() == 2) {
+            //Use ListView's getSelected Item
+            Lobby lobby = lvLobby.getSelectionModel().getSelectedItem();
+            createLobbyScreen(false, lobby);
         }
-
-        String lobbyQuitString = StringUtils.substringBetween(message, "<LQ>", "</LQ>");
-        if (lobbyQuitString != null) {
-            lobbies.remove(lobbyQuitString);
-            refreshLobbyListView();
-            return;
-        }
-
-        Platform.runLater(() -> {
-            lvChat.getItems().add(message);
-        });
-    }
-
-    @Override
-    public void onJoin(SocketAddress address) {
-
-    }
-
-    @Override
-    public void onServerClose() {
-
     }
 
     private void refreshLobbyListView() {
         Platform.runLater(() -> {
             lvLobby.getItems().clear();
 
-            for (Lobby lobby : lobbies.values()) {
+            for (Lobby lobby : mainServerManager.getLobbies()) {
                 lvLobby.getItems().add(lobby);
             }
         });
+    }
+
+    private void createLobbyScreen(boolean isHost, Lobby lobby) {
+        Stage stage = (Stage) btnCreateGame.getScene().getWindow();
+        stage.hide();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CreateGame.fxml"));
+        Parent root1 = null;
+
+        try {
+            CreateGameController CreateGame = new CreateGameController();
+            CreateGame.setLobby(lobby);
+
+            if (isHost) {
+                try {
+                    lobby.startHosting(CreateGame);
+                } catch (AlreadyHostingException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                String IP = lvLobby.getSelectionModel().getSelectedItem().getIP();
+                try {
+                    lobby.joinLobby(IP, 1337, CreateGame);
+                } catch (AlreadyHostingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            CreateGame.setPreviousStage(stage);
+
+            fxmlLoader.setController(CreateGame);
+            root1 = fxmlLoader.load();
+
+            Stage stage2 = new Stage();
+            stage2.setScene(new Scene(root1));
+            stage2.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof String) {
+            String chatMessage = getChatMessage((String) arg);
+            if (chatMessage != null) {
+                Platform.runLater(() -> lvChat.getItems().add(chatMessage));
+                return;
+            }
+        }
+
+        this.refreshLobbyListView();
+    }
+
+    private String getChatMessage(String message) {
+        return StringUtils.substringBetween(message, "<C>", "</C>");
     }
 }

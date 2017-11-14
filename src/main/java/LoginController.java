@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Controller {
+public class LoginController {
 
     @FXML
     TextField textField;
@@ -20,30 +20,29 @@ public class Controller {
     Button button;
 
     @FXML
-    public void logIn(Event e){
+    public void logIn(Event e) {
 
         String name = textField.getText();
-        Player player = new Player(name);
 
-        StaticPlayer.setName(name);
+        StaticPlayer.initializePlayer();
+        StaticPlayer.getPlayer().setName(name);
 
-        if (player.getName() == name) {
-            System.out.println("Playername: " + name);
-        }
+        System.out.println("Playername: " + StaticPlayer.getPlayer().getName());
 
-        //goes to different view
-        //starts the game with current options
         Stage stage = (Stage) button.getScene().getWindow();
         stage.close();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyView.fxml"));
         Parent root1 = null;
         try {
-            root1 = (Parent) fxmlLoader.load();
+            root1 = fxmlLoader.load();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        Stage stage2 = new Stage();
-        stage2.setScene(new Scene(root1)); stage2.show();
+        if (root1 != null) {
+            Stage stage2 = new Stage();
+            stage2.setScene(new Scene(root1));
+            stage2.show();
+        }
     }
 }
