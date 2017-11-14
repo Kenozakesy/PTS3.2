@@ -59,6 +59,8 @@ public class Game {
         //verwijderd de kaart uit de hand van de speler
         player.getCardsInHand().remove(card);
 
+
+
         // Check of alle spelers hun kaart gespeeld hebben.
         if (chosenCards.size() >= lobby.getPlayers().size() -1) {
 
@@ -82,7 +84,7 @@ public class Game {
     }
 
     // Een zwarte kaart wordt gekozen om te lezen en wordt meteen uit de te kiezen kaarten gehaald.
-    public void pickBlackCard() {
+    private void pickBlackCard() {
         CzarCard card = czarCards.get(random.nextInt(czarCards.size()));
         this.currentCzar = card;
         czarCards.remove(card);
@@ -92,6 +94,7 @@ public class Game {
     public void newTurn() {
         czarTurn = false;
 
+        pickBlackCard();
         cardSharing();
 
         //Volgende Czar wordt willekeurig gekozen. Moet nog aangepast worden.
