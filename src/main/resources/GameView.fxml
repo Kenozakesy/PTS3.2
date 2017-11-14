@@ -85,7 +85,7 @@
       <TextArea fx:id="taCard7" editable="false" layoutX="915.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
       <TextArea fx:id="taCard8" editable="false" layoutX="1065.0" layoutY="275.0" prefHeight="200.0" prefWidth="150.0" wrapText="true" />
       <Button fx:id="btnLeaveGame" layoutX="1165.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnLeaveGame" text="Leave Game" />
-      <HBox fx:id="hboxCzarCards" layoutX="351.0" layoutY="14.0" prefHeight="200.0" prefWidth="706.0" spacing="20.0" visible="false">
+      <HBox fx:id="hboxCzarCards" layoutX="351.0" layoutY="14.0" prefHeight="200.0" prefWidth="706.0" spacing="20.0">
          <children>
             <TextArea fx:id="taCzar1" editable="false" prefHeight="184.0" prefWidth="158.0" wrapText="true" />
             <TextArea fx:id="taCzar2" editable="false" prefHeight="184.0" prefWidth="158.0" wrapText="true" />
@@ -93,7 +93,7 @@
             <TextArea fx:id="taCzar4" editable="false" prefHeight="184.0" prefWidth="158.0" wrapText="true" />
          </children>
       </HBox>
-      <HBox fx:id="hboxCzarSelect" layoutX="351.0" layoutY="220.0" prefHeight="44.0" prefWidth="693.0" spacing="35.0" visible="false">
+      <HBox fx:id="hboxCzarSelect" layoutX="351.0" layoutY="220.0" prefHeight="44.0" prefWidth="693.0" spacing="35.0">
          <children>
             <RadioButton fx:id="rbCzarPick1" contentDisplay="CENTER" minWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" text="Select" toggleGroup="$Group">
                <padding>

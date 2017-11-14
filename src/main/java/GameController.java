@@ -12,9 +12,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable{
@@ -195,22 +197,23 @@ public class GameController implements Initializable{
         stage2.setScene(new Scene(root1)); stage2.show();
     }
 
-    //TODO Turn this test code into actual code
+    //laad aan het begin van een niewe ronde de kaarten voor een client in
     public void loadPlayerHand()
     {
-        List<PlayCard> list = StaticPlayer.getPlayer().getCardsInHand();
-        lobby.getGame().pickBlackCard();
-        CzarCard czarCard = lobby.getGame().getCurrentCzar();
+        Player player = StaticPlayer.getPlayerFromGame(this.lobby);
+        List<PlayCard> cardsInHand = player.getCardsInHand();
 
-        taCard1.setText(list.get(0).getText());
-        taCard2.setText(list.get(1).getText());
-        taCard3.setText(list.get(2).getText());
-        taCard4.setText(list.get(3).getText());
-        taCard5.setText(list.get(4).getText());
-        taCard6.setText(list.get(5).getText());
-        taCard7.setText(list.get(6).getText());
-        taCard8.setText(list.get(7).getText());
-        taBlackCard.setText(czarCard.getText());
+        CzarCard CzarCard = lobby.getGame().getCurrentCzarCard();
+
+        taCard1.setText(cardsInHand.get(0).getText());
+        taCard2.setText(cardsInHand.get(1).getText());
+        taCard3.setText(cardsInHand.get(2).getText());
+        taCard4.setText(cardsInHand.get(3).getText());
+        taCard5.setText(cardsInHand.get(4).getText());
+        taCard6.setText(cardsInHand.get(5).getText());
+        taCard7.setText(cardsInHand.get(6).getText());
+        taCard8.setText(cardsInHand.get(7).getText());
+        taBlackCard.setText(CzarCard.getText());
     }
 
     //moet aangeroepen worden wanneer het de turn is van de czar en wanneer een nieuwe beurt begint

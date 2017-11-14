@@ -26,7 +26,7 @@ public class Game {
     private Map<Player, PlayCard> chosenCards;
 
 
-    public CzarCard getCurrentCzar() {
+    public CzarCard getCurrentCzarCard() {
         return currentCzar;
     }
     public boolean getIsCzarTurn() {
