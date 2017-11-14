@@ -84,7 +84,7 @@ public class Game {
     }
 
     // Een zwarte kaart wordt gekozen om te lezen en wordt meteen uit de te kiezen kaarten gehaald.
-    private void pickBlackCard() {
+    public void pickBlackCard() {
         CzarCard card = czarCards.get(random.nextInt(czarCards.size()));
         this.currentCzar = card;
         czarCards.remove(card);
