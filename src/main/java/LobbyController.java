@@ -59,7 +59,7 @@ public class LobbyController implements Initializable, Observer {
 
     @FXML
     public void LisViewClick(MouseEvent click) {
-        if (click.getClickCount() == 2) {
+        if (click.getClickCount() == 2 && lvLobby.getSelectionModel().getSelectedIndex() != -1) {
             //Use ListView's getSelected Item
             Lobby lobby = lvLobby.getSelectionModel().getSelectedItem();
             createLobbyScreen(false, lobby);
