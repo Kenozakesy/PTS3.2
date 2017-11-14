@@ -10,16 +10,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import networking.MessageType;
+import networking.ServerClientEvents;
+import networking.ServerHostEvents;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class GameController implements Initializable{
+public class GameController implements Initializable, ServerHostEvents, ServerClientEvents{
     @FXML
     private Button btnSend;
     @FXML
@@ -229,5 +233,67 @@ public class GameController implements Initializable{
         {
 
         }
+    }
+
+    @Override
+    public void onClientMessage(Socket client, MessageType messageType, String message) {
+
+    }
+
+    @Override
+    public void onClientJoin(Socket client) {
+
+    }
+
+    @Override
+    public void onClientLeave(Socket client) {
+
+    }
+
+    @Override
+    public void onHostMessage(MessageType messageType, String message) {
+
+        switch (messageType)
+        {
+            case CHAT_MESSAGE:
+                break;
+            case LOBBY_DATA:
+                break;
+            case LOBBY_QUIT:
+                break;
+            case PLAYER_DATA:
+                break;
+            case LOBBY_LIST_SYNC_REQUEST:
+                break;
+            case START_GAME:
+                break;
+            case UPDATE_LOBBY_SETTINGS:
+                break;
+            case RECEIVE_CARD:
+                Player player = StaticPlayer.getPlayer();
+                player.getCardsInHand().clear();
+
+                String[] array = message.split(",");
+                for (String s : array)
+                {
+                    for (PlayCard P: lobby.getGame().getPlayCards()) {
+                        if(s == Integer.toString(P.getId()));
+                        {
+                            player.addToHand(P);
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onJoin(SocketAddress address) {
+
+    }
+
+    @Override
+    public void onServerClose() {
+
     }
 }

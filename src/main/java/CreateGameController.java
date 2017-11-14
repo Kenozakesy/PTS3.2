@@ -186,10 +186,13 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
             lobby.messageClients(MessageType.START_GAME, builder.toString());
             startGameScreen(lobby);
 
+
         } catch (Exception exception) {
             exception.printStackTrace();
             System.out.println(exception.getMessage());
         }
+
+
     }
 
     public void updateCardSets() {
@@ -307,6 +310,14 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
             gameController.setLobby(lobby);
 
             lobby.startGame();
+
+            //kaarten verdelen
+            if(lobby.isHost())
+            {
+                lobby.setHostEventHandler(gameController);
+            } else {
+                lobby.setClientEventHandler(gameController);
+            }
 
             fxmlLoader.setController(gameController);
 

@@ -7,6 +7,7 @@ package Business;
 import Business.Enums.Role;
 import Business.staticClasses.StaticPlayer;
 import DAL.SqlCard;
+import networking.MessageType;
 
 import java.net.Socket;
 import java.util.*;
@@ -118,18 +119,33 @@ public class Game {
     //deelt nieuwe kaarten uit
     private void cardSharing()
     {
+        if(!lobby.isHost())
+        {
+            return;
+        }
         try {
             for (int i = 0; i < 8; i++) {
                 //voegd een kaart toe aan speler hand en verwijderd die uit de stapel
                 for (Player player : lobby.getPlayers().values()) {
                     if (player.getCardsInHand().size() < 8) {
+
                         int index = random.nextInt(playCards.size());
+
                         player.addToHand(playCards.get(index));
+
                         playCards.remove(index);
                     }
                 }
             }
 
+            for (Player player : lobby.getPlayers().values()) {
+                StringBuilder builder = new StringBuilder();
+                for (PlayCard C: player.getCardsInHand())
+                {
+                    builder.append(C.getId() + ",");
+                }
+                lobby.messageClient(player, MessageType.RECEIVE_CARD, builder.toString());
+            }
         }
         catch(Exception ex){
             //Do nothing
