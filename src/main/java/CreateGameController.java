@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import networking.MessageType;
 import networking.ServerClientEvents;
 import networking.ServerHostEvents;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -38,7 +37,13 @@ import java.util.ResourceBundle;
 public class CreateGameController implements Initializable, ServerHostEvents, ServerClientEvents {
 
     @FXML
-    public Button btnStartGame;
+    private Button btnStartGame;
+
+    @FXML
+    private Button btnLeft;
+
+    @FXML
+    private Button btnRight;
 
     @FXML
     private ListView lvPickedCards;
@@ -88,6 +93,8 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
 
     public void initialize(URL location, ResourceBundle resources) {
         lobby.getPlayers().put(new Socket(), StaticPlayer.getPlayer());
+
+        disableControls();
 
         updateScoreBoard();
         updateCardSets();
@@ -241,6 +248,8 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
                 break;
             case LOBBY_DATA:
                 break;
+            case LOBBY_QUIT:
+                break;
             case PLAYER_DATA:
                 handleHostPlayerData(message);
                 break;
@@ -249,13 +258,10 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
             case START_GAME:
                 handleStartGame(message);
                 break;
+            case UPDATE_LOBBY_SETTINGS:
+                break;
         }
 
-        //TODO veranderen van cardsets
-        if (message.equals("Change cardsets"))
-        {
-
-        }
         //TODO verlaten van spelers
         //TODO veranderen van gamesettings
     }
@@ -272,14 +278,6 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
     @Override
     public void onServerClose() {
 
-    }
-
-    private String getClientData(String input) {
-        return StringUtils.substringBetween(input, "<D>", "</D>");
-    }
-
-    private String getChatMessage(String input) {
-        return StringUtils.substringBetween(input, "<C>", "</C>");
     }
 
     private void putChatMessage(String input) {
@@ -358,7 +356,6 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
 
         for (int i = 0; i < splitMessage.length; i++) {
             sets.add(StaticPlayer.getPlayer().getCardsetList().get(Integer.valueOf(splitMessage[i])));
-
         }
 
         lobby.setCardSetsUsing(sets);
@@ -370,5 +367,19 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
                 e.printStackTrace();
             }
         });
+    }
+
+    private void disableControls() {
+        if (lobby != null && !lobby.isHost()) {
+            ddSpectatorLimit.setDisable(true);
+            ddScorelimit.setDisable(true);
+            ddPlayerLimit.setDisable(true);
+            ddIdleTimer.setDisable(true);
+            ddBlankCards.setDisable(true);
+
+            btnStartGame.setVisible(false);
+            btnLeft.setDisable(true);
+            btnRight.setDisable(true);
+        }
     }
 }

@@ -101,7 +101,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         client.sendMessage(MessageType.PLAYER_DATA, StaticPlayer.getPlayer().getName());
 
         try {
-            Thread.sleep(1);
+            Thread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

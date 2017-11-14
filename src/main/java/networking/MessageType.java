@@ -6,5 +6,6 @@ public enum MessageType {
     LOBBY_QUIT,
     PLAYER_DATA,
     LOBBY_LIST_SYNC_REQUEST,
-    START_GAME
+    START_GAME,
+    UPDATE_LOBBY_SETTINGS
 }
