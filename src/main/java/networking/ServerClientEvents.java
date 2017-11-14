@@ -3,7 +3,7 @@ package networking;
 import java.net.SocketAddress;
 
 public interface ServerClientEvents {
-    void onHostMessage(String message);
+    void onHostMessage(MessageType messageType, String message);
 
     void onJoin(SocketAddress address);
 

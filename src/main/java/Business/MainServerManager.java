@@ -1,9 +1,9 @@
 package Business;
 
 import Business.staticClasses.StaticPlayer;
+import networking.MessageType;
 import networking.ServerClient;
 import networking.ServerClientEvents;
-import org.apache.commons.lang3.StringUtils;
 
 import java.net.SocketAddress;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         lobbies = new ArrayList<>();
         if (observer != null) this.addObserver(observer);
 
-        client = new ServerClient("145.93.133.38", 1336, this, StaticPlayer.getPlayer());
+        client = new ServerClient("145.93.133.214", 1336, this, StaticPlayer.getPlayer());
         client.start();
     }
 
@@ -47,8 +47,8 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     }
 
     // Stuurt een message naar de mainserver
-    public void sendMessage(String message) {
-        client.sendMessage(message);
+    public void sendMessage(MessageType messageType, String message) {
+        client.sendMessage(messageType, message);
     }
 
     public void addLobby(Lobby lobby) {
@@ -64,42 +64,47 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     }
 
     @Override
-    public void onHostMessage(String message) {
-        String lobbyString = StringUtils.substringBetween(message, "<L>", "</L>");
-        if (lobbyString != null) {
-            String[] data = lobbyString.split(";");
-            this.addLobby(new Lobby(data[0], data[1]));
-        }
+    public void onHostMessage(MessageType messageType, String message) {
+        switch (messageType) {
+            case CHAT_MESSAGE:
+                this.setChanged();
+                this.notifyObservers(message);
+                break;
 
-        String lobbyQuitString = StringUtils.substringBetween(message, "<LQ>", "</LQ>");
-        if (lobbyQuitString != null) {
-            for (Lobby lobby : this.getLobbies()) {
-                if (lobby.getIP().equals(lobbyQuitString)) {
-                    this.removeLobby(lobby);
+            case LOBBY_DATA:
+                String[] data = message.split(";");
+                this.addLobby(new Lobby(data[0], data[1]));
+                break;
+
+            case LOBBY_QUIT:
+                for (Lobby lobby : this.getLobbies()) {
+                    if (lobby.getIP().equals(message)) {
+                        this.removeLobby(lobby);
+                    }
                 }
-            }
-        }
+                break;
 
-        String chatMessage = StringUtils.substringBetween(message, "<C>", "</C>");
-        if (chatMessage != null) {
-            this.setChanged();
-            this.notifyObservers(message);
-        }
-    }
+            case PLAYER_DATA:
+                break;
 
-    public Lobby getLobbyByIP(String ip) {
-        for(Lobby lobby : this.getLobbies()) {
-            if(lobby.getIP().equals(ip)) {
-                return lobby;
-            }
-        }
+            case LOBBY_LIST_SYNC_REQUEST:
+                break;
 
-        return null;
+            case START_GAME:
+                break;
+        }
     }
 
     @Override
     public void onJoin(SocketAddress address) {
-        client.sendMessage("<D>" + StaticPlayer.getPlayer().getName() + "</D>");
+        client.sendMessage(MessageType.PLAYER_DATA, StaticPlayer.getPlayer().getName());
+
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         this.refreshLobbies();
     }
 
@@ -109,6 +114,6 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     }
 
     public void refreshLobbies() {
-        client.sendMessage("<LR>!</LR>");
+        client.sendMessage(MessageType.LOBBY_LIST_SYNC_REQUEST, "!");
     }
 }

@@ -4,8 +4,6 @@ import Business.MainServerManager;
 import Business.exceptions.AlreadyHostingException;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,14 +14,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import networking.ServerClientEvents;
-import networking.ServerHostEvents;
-import org.apache.commons.lang3.NotImplementedException;
-import org.apache.commons.lang3.StringUtils;
+import networking.MessageType;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
@@ -35,8 +28,6 @@ public class LobbyController implements Initializable, Observer {
     private Button btnCreateGame;
     @FXML
     private ListView<Lobby> lvLobby;
-    @FXML
-    private Button btnSend;
     @FXML
     private TextField tfSend;
     @FXML
@@ -58,7 +49,7 @@ public class LobbyController implements Initializable, Observer {
     public void btnSend() {
         String text = tfSend.getText();
         tfSend.setText("");
-        mainServerManager.sendMessage("<C>" + text + "</C>");
+        mainServerManager.sendMessage(MessageType.CHAT_MESSAGE, text);
     }
 
     @FXML
@@ -127,17 +118,11 @@ public class LobbyController implements Initializable, Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof String) {
-            String chatMessage = getChatMessage((String) arg);
-            if (chatMessage != null) {
-                Platform.runLater(() -> lvChat.getItems().add(chatMessage));
-                return;
-            }
+            Platform.runLater(() -> lvChat.getItems().add(arg.toString()));
         }
 
-        this.refreshLobbyListView();
-    }
-
-    private String getChatMessage(String message) {
-        return StringUtils.substringBetween(message, "<C>", "</C>");
+        if (arg instanceof Lobby) {
+            this.refreshLobbyListView();
+        }
     }
 }

@@ -36,8 +36,8 @@ public class ServerClient {
         clientHandler.start();
     }
 
-    public void sendMessage(String message) {
-        clientHandler.sendMessage(message);
+    public void sendMessage(MessageType messageType, String message) {
+        clientHandler.sendMessage(messageType, message);
     }
 
     public void close() {
@@ -89,10 +89,14 @@ public class ServerClient {
 
                     if (len == -1) this.close();
 
-                    byte[] resizedBuffer = Arrays.copyOfRange(buffer, 0, len);
 
                     if (len != 0) {
-                        client.eventHandler.onHostMessage(new String(resizedBuffer, "UTF-8"));
+                        byte[] resizedBuffer = Arrays.copyOfRange(buffer, 1, len);
+
+                        MessageType messageType = MessageType.values()[buffer[0]];
+                        String message = new String(resizedBuffer, "UTF-8");
+
+                        client.eventHandler.onHostMessage(messageType, message);
                         buffer = new byte[512];
                     }
                 } catch (IOException ex) {
@@ -102,8 +106,9 @@ public class ServerClient {
             }
         }
 
-        private void sendMessage(String message) {
+        private void sendMessage(MessageType messageType, String message) {
             try {
+                message = (char) messageType.ordinal() + message;
                 out.write(message.getBytes("UTF-8"));
                 out.flush();
             } catch (IOException e) {

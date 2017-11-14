@@ -6,10 +6,7 @@ import Business.exceptions.NotClientException;
 import Business.exceptions.NotHostException;
 import Business.staticClasses.StaticPlayer;
 import DAL.SqlCardset;
-import networking.ServerClient;
-import networking.ServerClientEvents;
-import networking.ServerHost;
-import networking.ServerHostEvents;
+import networking.*;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -164,7 +161,7 @@ public class Lobby {
         lobbyHost = new ServerHost(maxPlayers, eventHandler);
         lobbyHost.start();
 
-        MainServerManager.getInstance().sendMessage("<L>" + StaticPlayer.getPlayer().getName() + ";" + InetAddress.getLocalHost().getHostAddress() + "</L>");
+        MainServerManager.getInstance().sendMessage(MessageType.LOBBY_DATA, StaticPlayer.getPlayer().getName() + ";" + InetAddress.getLocalHost().getHostAddress());
     }
 
     public void joinLobby(String ip, int port, ServerClientEvents eventHandler) throws AlreadyHostingException {
@@ -173,48 +170,48 @@ public class Lobby {
             throw new AlreadyHostingException();
         }
 
-            lobbyClient = new ServerClient(ip, port, eventHandler, StaticPlayer.getPlayer());
-            lobbyClient.start();
+        lobbyClient = new ServerClient(ip, port, eventHandler, StaticPlayer.getPlayer());
+        lobbyClient.start();
     }
 
-    public void messageClients(String message) throws NotHostException {
+    public void messageClients(MessageType messageType, String message) throws NotHostException {
         if (lobbyHost == null) {
             throw new NotHostException();
         }
 
-        lobbyHost.messageAll(message);
+        lobbyHost.messageAll(messageType, message);
     }
 
-    public void messageServer(String message) throws NotClientException {
+    public void messageServer(MessageType messageType, String message) throws NotClientException {
         if (lobbyClient == null) {
             throw new NotClientException();
         }
 
-        lobbyClient.sendMessage(message);
+        lobbyClient.sendMessage(messageType, message);
     }
 
-    public void messageClient(Socket socket, String message) throws NotHostException {
+    public void messageClient(Socket socket, MessageType messageType, String message) throws NotHostException {
         if (lobbyHost == null) {
             throw new NotHostException();
         }
 
-        lobbyHost.messageClient(socket, message);
+        lobbyHost.messageClient(socket, messageType, message);
     }
 
-    public void messageClient(Player player, String message) throws NotHostException {
+    public void messageClient(Player player, MessageType messageType, String message) throws NotHostException {
         if (lobbyHost == null) {
             throw new NotHostException();
         }
 
         for (Map.Entry<Socket, Player> entry : players.entrySet()) {
             if (entry.getValue() == player) {
-                this.messageClient(entry.getKey(), message);
+                this.messageClient(entry.getKey(), messageType, message);
             }
         }
     }
 
-    public void messageMainServer(String message) {
-        MainServerManager.getInstance().sendMessage(message);
+    public void messageMainServer(MessageType messageType, String message) {
+        MainServerManager.getInstance().sendMessage(messageType, message);
     }
 
     public void startGame() {

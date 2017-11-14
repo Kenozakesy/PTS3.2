@@ -35,7 +35,7 @@ public class ServerTest implements ServerHostEvents, ServerClientEvents {
     }
 
     @Override
-    public void onClientMessage(Socket client, String message) {
+    public void onClientMessage(Socket client, MessageType messageType, String message) {
 
     }
 
@@ -50,7 +50,7 @@ public class ServerTest implements ServerHostEvents, ServerClientEvents {
     }
 
     @Override
-    public void onHostMessage(String message) {
+    public void onHostMessage(MessageType messageType, String message) {
 
     }
 

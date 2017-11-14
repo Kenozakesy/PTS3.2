@@ -17,6 +17,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import networking.MessageType;
 import networking.ServerClientEvents;
 import networking.ServerHostEvents;
 import org.apache.commons.lang3.StringUtils;
@@ -117,7 +118,7 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
         }
         if (lobby.isHost()) {
             try {
-                lobby.messageClients("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
+                lobby.messageClients(MessageType.CHAT_MESSAGE, StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
             } catch (NotHostException e1) {
                 e1.printStackTrace();
             }
@@ -125,7 +126,7 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
             putChatMessage(StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
         } else {
             try {
-                lobby.messageServer("<C>" + StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText() + "</C>");
+                lobby.messageServer(MessageType.CHAT_MESSAGE, StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
             } catch (NotClientException e1) {
                 e1.printStackTrace();
             }
@@ -147,7 +148,7 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
             Stage stage = (Stage) btnStartGame.getScene().getWindow();
             stage.close();
 
-            mainServerManager.sendMessage("<L>quit</L>");
+            mainServerManager.sendMessage(MessageType.LOBBY_QUIT, "!");
 
             try {
                 lobby.close();
@@ -169,12 +170,13 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
             }
             // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
             StringBuilder builder = new StringBuilder();
-            builder.append("Start game,");
+
             for (Object o : lvPickedCards.getItems()) {
                 Cardset cardset = (Cardset) o;
                 builder.append(cardset.getId() + ",");
             }
-            lobby.messageClients(builder.toString());
+
+            lobby.messageClients(MessageType.START_GAME, builder.toString());
             startGameScreen(lobby);
 
         } catch (Exception exception) {
@@ -197,42 +199,27 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
     }
 
     @Override
-    public void onClientMessage(Socket client, String message) {
-        String clientDataString = getClientData(message);
-        if (clientDataString != null) {
-            try {
-                for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
-                    lobby.messageClient(client, "<D>" + entry.getValue().getName() + "</D>");
-                    Thread.sleep(1);
+    public void onClientMessage(Socket client, MessageType messageType, String message) {
+        switch (messageType) {
+
+            case CHAT_MESSAGE:
+                try {
+                    lobby.messageClients(MessageType.CHAT_MESSAGE, message);
+                } catch (NotHostException e) {
+                    e.printStackTrace();
                 }
 
-                for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
-                    if (entry.getValue() == StaticPlayer.getPlayer()) {
-                        continue;
-                    }
-
-                    lobby.messageClient(entry.getKey(), message);
-                    Thread.sleep(1);
-                }
-            } catch (NotHostException | InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Player player = new Player(clientDataString);
-            lobby.getPlayers().put(client, player);
-
-            updateScoreBoard();
-        }
-
-        String chatMessage = getChatMessage(message);
-        if (chatMessage != null) {
-            try {
-                lobby.messageClients(message);
-            } catch (NotHostException e) {
-                e.printStackTrace();
-            }
-
-            putChatMessage(chatMessage);
+                putChatMessage(message);
+                break;
+            case LOBBY_DATA:
+                break;
+            case PLAYER_DATA:
+                handleClientPlayerData(client, message);
+                break;
+            case LOBBY_LIST_SYNC_REQUEST:
+                break;
+            case START_GAME:
+                break;
         }
     }
 
@@ -247,39 +234,26 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
     }
 
     @Override
-    public void onHostMessage(String message) {
-        String clientData = getClientData(message);
-        if (clientData != null) {
-            lobby.getPlayers().put(new Socket(), new Player(clientData));
-            updateScoreBoard();
-        }
-
-        String chatMessage = getChatMessage(message);
-        if (chatMessage != null) {
-            putChatMessage(chatMessage);
-        }
-
-        String[] splitMessage = message.split(",");
-        //TODO start spel
-        // Start van het spel
-        if (splitMessage[0].equals("Start game")) {
-            ArrayList<Cardset> sets = new ArrayList<>();
-            for (int i = 1; i < splitMessage.length; i++) {
-                sets.add(StaticPlayer.getPlayer().getCardsetList().get(Integer.valueOf(splitMessage[i])));
-            }
-            lobby.setCardSetsUsing(sets);
-
-            Platform.runLater(() -> {
-                try {
-                    startGameScreen(lobby);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+    public void onHostMessage(MessageType messageType, String message) {
+        switch (messageType) {
+            case CHAT_MESSAGE:
+                putChatMessage(message);
+                break;
+            case LOBBY_DATA:
+                break;
+            case PLAYER_DATA:
+                handleHostPlayerData(message);
+                break;
+            case LOBBY_LIST_SYNC_REQUEST:
+                break;
+            case START_GAME:
+                handleStartGame(message);
+                break;
         }
 
         //TODO veranderen van cardsets
-        if (message.equals("Change cardsets")) {
+        if (message.equals("Change cardsets"))
+        {
 
         }
         //TODO verlaten van spelers
@@ -289,7 +263,7 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
     @Override
     public void onJoin(SocketAddress address) {
         try {
-            lobby.messageServer("<D>" + StaticPlayer.getPlayer().getName() + "</D>");
+            lobby.messageServer(MessageType.PLAYER_DATA, StaticPlayer.getPlayer().getName());
         } catch (NotClientException e) {
             e.printStackTrace();
         }
@@ -345,5 +319,56 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void handleClientPlayerData(Socket client, String message) {
+        try {
+            for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
+                lobby.messageClient(client, MessageType.PLAYER_DATA, message);
+                Thread.sleep(1);
+            }
+
+            for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
+                if (entry.getValue() == StaticPlayer.getPlayer()) {
+                    continue;
+                }
+
+                lobby.messageClient(entry.getKey(), MessageType.PLAYER_DATA, message);
+                Thread.sleep(1);
+            }
+        } catch (NotHostException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Player player = new Player(message);
+        lobby.getPlayers().put(client, player);
+
+        updateScoreBoard();
+    }
+
+    private void handleHostPlayerData(String message) {
+        lobby.getPlayers().put(new Socket(), new Player(message));
+        updateScoreBoard();
+    }
+
+    private void handleStartGame(String message) {
+        String[] splitMessage = message.split(",");
+
+        ArrayList<Cardset> sets = new ArrayList<>();
+
+        for (int i = 0; i < splitMessage.length; i++) {
+            sets.add(StaticPlayer.getPlayer().getCardsetList().get(Integer.valueOf(splitMessage[i])));
+
+        }
+
+        lobby.setCardSetsUsing(sets);
+
+        Platform.runLater(() -> {
+            try {
+                startGameScreen(lobby);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

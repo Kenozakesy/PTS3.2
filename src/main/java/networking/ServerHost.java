@@ -58,16 +58,16 @@ public class ServerHost {
         }
     }
 
-    public void messageAll(String message) {
+    public void messageAll(MessageType messageType, String message) {
         for (ClientHandler client : clients) {
-            client.sendMessage(message);
+            client.sendMessage(messageType, message);
         }
     }
 
-    public void messageClient(Socket client, String message) {
+    public void messageClient(Socket client, MessageType messageType, String message) {
         for (ClientHandler clientHandler : clients) {
             if (clientHandler.client.equals(client)) {
-                clientHandler.sendMessage(message);
+                clientHandler.sendMessage(messageType, message);
             }
         }
     }
@@ -134,12 +134,15 @@ public class ServerHost {
                 try {
                     int len = in.read(buffer);
 
-                    byte[] resizedBuffer = Arrays.copyOfRange(buffer, 0, len);
-
                     if (len == -1) this.close();
 
                     if (len != 0) {
-                        host.eventHandler.onClientMessage(client, new String(resizedBuffer, "UTF-8"));
+                        byte[] resizedBuffer = Arrays.copyOfRange(buffer, 1, len);
+
+                        MessageType messageType = MessageType.values()[buffer[0]];
+                        String message = new String(resizedBuffer, "UTF-8");
+
+                        host.eventHandler.onClientMessage(client, messageType, message);
                         buffer = new byte[512];
                     }
                 } catch (IOException e) {
@@ -149,8 +152,9 @@ public class ServerHost {
             }
         }
 
-        void sendMessage(String message) {
+        void sendMessage(MessageType messageType, String message) {
             try {
+                message = (char) messageType.ordinal() + message;
                 out.write(message.getBytes("UTF-8"));
                 out.flush();
             } catch (IOException e) {
