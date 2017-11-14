@@ -93,27 +93,27 @@ public class LobbyController implements Initializable, Observer {
         Parent root1 = null;
 
         try {
-            StartGameController startController = new StartGameController();
-            startController.setLobby(lobby);
+            CreateGameController CreateGame = new CreateGameController();
+            CreateGame.setLobby(lobby);
 
             if (isHost) {
                 try {
-                    lobby.startHosting(startController);
+                    lobby.startHosting(CreateGame);
                 } catch (AlreadyHostingException e) {
                     e.printStackTrace();
                 }
             } else {
                 String IP = lvLobby.getSelectionModel().getSelectedItem().getIP();
                 try {
-                    lobby.joinLobby(IP, 1337, startController);
+                    lobby.joinLobby(IP, 1337, CreateGame);
                 } catch (AlreadyHostingException e) {
                     e.printStackTrace();
                 }
             }
 
-            startController.setPreviousStage(stage);
+            CreateGame.setPreviousStage(stage);
 
-            fxmlLoader.setController(startController);
+            fxmlLoader.setController(CreateGame);
             root1 = fxmlLoader.load();
 
             Stage stage2 = new Stage();
