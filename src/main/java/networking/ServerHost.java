@@ -165,10 +165,10 @@ public class ServerHost {
 
         private void close() {
             try {
-                this.receiveMessages = false;
-                this.client.close();
                 host.removeClient(this);
                 host.eventHandler.onClientLeave(client);
+                this.receiveMessages = false;
+                this.client.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Could not close client: " + client.getRemoteSocketAddress());

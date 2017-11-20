@@ -230,6 +230,14 @@ public class Lobby {
         }
     }
 
+    public void disconnect() throws NotClientException {
+        if (isHost()) {
+            throw new NotClientException();
+        }
+
+        lobbyClient.close();
+    }
+
     public void close() throws NotHostException {
         if (!isHost()) {
             throw new NotHostException();

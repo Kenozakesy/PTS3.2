@@ -6,6 +6,8 @@ import Business.exceptions.NotClientException;
 import Business.exceptions.NotHostException;
 import Business.staticClasses.StaticPlayer;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +36,7 @@ import java.util.ResourceBundle;
  */
 
 
-public class CreateGameController implements Initializable, ServerHostEvents, ServerClientEvents {
+public class CreateGameController implements Initializable, ChangeListener<String>, ServerHostEvents, ServerClientEvents {
 
     @FXML
     private Button btnStartGame;
@@ -52,19 +54,19 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
     private ListView lvCardsets;
 
     @FXML
-    private ComboBox ddScorelimit;
+    private ComboBox<String> ddScorelimit;
 
     @FXML
-    private ComboBox ddPlayerLimit;
+    private ComboBox<String> ddPlayerLimit;
 
     @FXML
-    private ComboBox ddSpectatorLimit;
+    private ComboBox<String> ddSpectatorLimit;
 
     @FXML
-    private ComboBox ddIdleTimer;
+    private ComboBox<String> ddIdleTimer;
 
     @FXML
-    private ComboBox ddBlankCards;
+    private ComboBox<String> ddBlankCards;
 
     @FXML
     private TextField tfChatBox;
@@ -95,6 +97,14 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
         lobby.getPlayers().put(new Socket(), StaticPlayer.getPlayer());
 
         disableControls();
+
+        if (lobby.isHost()) {
+            ddBlankCards.valueProperty().addListener(this);
+            ddIdleTimer.valueProperty().addListener(this);
+            ddPlayerLimit.valueProperty().addListener(this);
+            ddScorelimit.valueProperty().addListener(this);
+            ddSpectatorLimit.valueProperty().addListener(this);
+        }
 
         updateScoreBoard();
         updateCardSets();
@@ -150,11 +160,6 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
     @FXML
     private void btnLeaveGame(Event e) {
         if (lobby.isHost()) {
-            //goes to different view
-            //starts the game with current options
-            Stage stage = (Stage) btnStartGame.getScene().getWindow();
-            stage.close();
-
             mainServerManager.sendMessage(MessageType.LOBBY_QUIT, "!");
 
             try {
@@ -163,8 +168,19 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
                 e1.printStackTrace();
             }
 
-            previousStage.show();
+
+        } else {
+            try {
+                lobby.disconnect();
+            } catch (NotClientException e1) {
+                e1.printStackTrace();
+            }
         }
+
+        Stage stage = (Stage) btnStartGame.getScene().getWindow();
+        stage.close();
+
+        previousStage.show();
     }
 
     @FXML
@@ -240,7 +256,9 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
 
     @Override
     public void onClientLeave(Socket client) {
+        System.out.println(lobby.getPlayers().get(client).getName() + "has left!");
         lobby.getPlayers().remove(client);
+        updateScoreBoard();
     }
 
     @Override
@@ -262,6 +280,15 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
                 handleStartGame(message);
                 break;
             case UPDATE_LOBBY_SETTINGS:
+                String[] splitMessage = message.split(",");
+
+                Platform.runLater(() -> {
+                    ddScorelimit.getSelectionModel().select(Integer.valueOf(splitMessage[0]));
+                    ddPlayerLimit.getSelectionModel().select(Integer.valueOf(splitMessage[1]));
+                    ddSpectatorLimit.getSelectionModel().select(Integer.valueOf(splitMessage[2]));
+                    ddIdleTimer.getSelectionModel().select(Integer.valueOf(splitMessage[3]));
+                    ddBlankCards.getSelectionModel().select(Integer.valueOf(splitMessage[4]));
+                });
                 break;
         }
 
@@ -312,8 +339,7 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
             lobby.startGame();
 
             //kaarten verdelen
-            if(lobby.isHost())
-            {
+            if (lobby.isHost()) {
                 lobby.setHostEventHandler(gameController);
             } else {
                 lobby.setClientEventHandler(gameController);
@@ -382,6 +408,7 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
 
     private void disableControls() {
         if (lobby != null && !lobby.isHost()) {
+            //Disable/hide controls which should not be used by a client
             ddSpectatorLimit.setDisable(true);
             ddScorelimit.setDisable(true);
             ddPlayerLimit.setDisable(true);
@@ -391,6 +418,31 @@ public class CreateGameController implements Initializable, ServerHostEvents, Se
             btnStartGame.setVisible(false);
             btnLeft.setDisable(true);
             btnRight.setDisable(true);
+
+            //Set the opacity to 1 so that the value is more readable
+            ddScorelimit.setStyle("-fx-opacity: 1");
+            ddPlayerLimit.setStyle("-fx-opacity: 1");
+            ddSpectatorLimit.setStyle("-fx-opacity: 1");
+            ddIdleTimer.setStyle("-fx-opacity: 1");
+            ddBlankCards.setStyle("-fx-opacity: 1");
+        }
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        // This only gets called when the user is a server host.
+
+        String message =
+                ddScorelimit.getSelectionModel().getSelectedIndex() + "," +
+                        ddPlayerLimit.getSelectionModel().getSelectedIndex() + "," +
+                        ddSpectatorLimit.getSelectionModel().getSelectedIndex() + "," +
+                        ddIdleTimer.getSelectionModel().getSelectedIndex() + "," +
+                        ddBlankCards.getSelectionModel().getSelectedIndex();
+
+        try {
+            lobby.messageClients(MessageType.UPDATE_LOBBY_SETTINGS, message);
+        } catch (NotHostException e) {
+            e.printStackTrace();
         }
     }
 }

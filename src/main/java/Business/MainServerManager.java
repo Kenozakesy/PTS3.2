@@ -26,7 +26,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         lobbies = new ArrayList<>();
         if (observer != null) this.addObserver(observer);
 
-        client = new ServerClient("145.93.133.214", 1336, this, StaticPlayer.getPlayer());
+        client = new ServerClient("localhost", 1336, this, StaticPlayer.getPlayer());
         client.start();
     }
 
@@ -104,6 +104,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
             Thread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         this.refreshLobbies();
