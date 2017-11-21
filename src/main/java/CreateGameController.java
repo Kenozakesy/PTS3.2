@@ -167,8 +167,6 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             } catch (NotHostException e1) {
                 e1.printStackTrace();
             }
-
-
         } else {
             try {
                 lobby.disconnect();
@@ -363,20 +361,20 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
 
     private void handleClientPlayerData(Socket client, String message) {
         try {
+            //Send all current players to the connecting client.
             for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
-                lobby.messageClient(client, MessageType.PLAYER_DATA, message);
-                Thread.sleep(1);
+                lobby.messageClient(client, MessageType.PLAYER_DATA, entry.getValue().getName());
             }
 
+            //Send current players the new player
             for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
                 if (entry.getValue() == StaticPlayer.getPlayer()) {
                     continue;
                 }
 
                 lobby.messageClient(entry.getKey(), MessageType.PLAYER_DATA, message);
-                Thread.sleep(1);
             }
-        } catch (NotHostException | InterruptedException e) {
+        } catch (NotHostException e) {
             e.printStackTrace();
         }
 

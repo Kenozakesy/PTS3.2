@@ -1,5 +1,7 @@
 package networking;
 
+import Business.staticClasses.IntConverter;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -137,12 +139,34 @@ public class ServerHost {
                     if (len == -1) this.close();
 
                     if (len != 0) {
-                        byte[] resizedBuffer = Arrays.copyOfRange(buffer, 1, len);
+                        byte[] lengthBytes = Arrays.copyOfRange(buffer, 0, 4);
+                        int messageLength = IntConverter.byteArrayToInt(lengthBytes) + 4;
 
-                        MessageType messageType = MessageType.values()[buffer[0]];
-                        String message = new String(resizedBuffer, "UTF-8");
+                        byte[] messageBuffer = Arrays.copyOfRange(buffer, 5, messageLength);
+
+                        MessageType messageType = MessageType.values()[buffer[4]];
+                        String message = new String(messageBuffer, "UTF-8");
 
                         host.eventHandler.onClientMessage(client, messageType, message);
+
+                        int index = messageLength;
+
+                        while (index != len -1) {
+                            byte[] resizedArray = Arrays.copyOfRange(buffer, index, len);
+
+                            lengthBytes = Arrays.copyOfRange(resizedArray, 0, 4);
+                            messageLength = IntConverter.byteArrayToInt(lengthBytes) + 4;
+
+                            messageBuffer = Arrays.copyOfRange(resizedArray, 5, messageLength);
+
+                            messageType = MessageType.values()[resizedArray[4]];
+                            message = new String(messageBuffer, "UTF-8");
+
+                            host.eventHandler.onClientMessage(client, messageType, message);
+
+                            index += messageLength;
+                        }
+
                         buffer = new byte[512];
                     }
                 } catch (IOException e) {
@@ -155,6 +179,7 @@ public class ServerHost {
         void sendMessage(MessageType messageType, String message) {
             try {
                 message = (char) messageType.ordinal() + message;
+                message = new String(IntConverter.intToByteArray(message.length()), "UTF-8") + message;
                 out.write(message.getBytes("UTF-8"));
                 out.flush();
             } catch (IOException e) {

@@ -99,14 +99,6 @@ public class MainServerManager extends Observable implements ServerClientEvents 
     @Override
     public void onJoin(SocketAddress address) {
         client.sendMessage(MessageType.PLAYER_DATA, StaticPlayer.getPlayer().getName());
-
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            Thread.currentThread().interrupt();
-        }
-
         this.refreshLobbies();
     }
 
