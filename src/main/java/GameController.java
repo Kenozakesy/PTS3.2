@@ -101,7 +101,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     private List<String> chatList = new ArrayList<String>();
 
     public void initialize(URL location, ResourceBundle resources) {
-        loadPlayerHand();
+
     }
 
     @FXML
@@ -238,6 +238,28 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @Override
     public void onClientMessage(Socket client, MessageType messageType, String message) {
 
+        switch (messageType){
+            case PLAY_CARD:
+
+                int id = Integer.parseInt(message);
+
+                PlayCard card = null;
+                for(PlayCard playCard: lobby.getGame().getPlayCards())
+                {
+                    if (playCard.getId() == id)
+                    {
+                        card = playCard;
+                        break;
+                    }
+                }
+
+                lobby.getGame().addToChosenCards(lobby.getPlayers().get(client), card);
+                break;
+
+                default: break;
+        }
+
+
     }
 
     @Override
@@ -283,7 +305,24 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         }
                     }
                 }
+                loadPlayerHand();
                 break;
+
+            case CHOSEN_CARDS:
+                ArrayList<PlayCard> list = new ArrayList<>();
+                try {
+                    list.addAll(lobby.getGame().getChosenCards().values());
+                }
+                catch (NullPointerException e) {
+                    e.printStackTrace();
+                    break;
+                }
+                taCzar1.setText(list.get(0).getText());
+                taCzar2.setText(list.get(1).getText());
+                taCzar3.setText(list.get(2).getText());
+                taCzar4.setText(list.get(3).getText());
+                break;
+                default: break;
         }
     }
 

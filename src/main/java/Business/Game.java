@@ -5,7 +5,8 @@ package Business;
  */
 
 import Business.Enums.Role;
-import Business.staticClasses.StaticPlayer;
+import Business.exceptions.NotClientException;
+import Business.exceptions.NotHostException;
 import DAL.SqlCard;
 import networking.MessageType;
 
@@ -55,6 +56,19 @@ public class Game {
 
         //gets player
         PlayCard card = player.getCardsInHand().get(cardPosition);
+
+        if(lobby.isHost()) {
+            chosenCards.put(player,card);
+        }
+        else {
+            try {
+                lobby.messageServer(MessageType.PLAY_CARD, String.valueOf(card.getId()));
+            }
+                catch(NotClientException e) {
+                    // do nothing
+                }
+        }
+
         //kiest kaart om in te zenden
         chosenCards.put(player, card);
         //verwijderd de kaart uit de hand van de speler
@@ -170,6 +184,28 @@ public class Game {
         }
         return false;
     }
-}
+
+    public void addToChosenCards(Player player, PlayCard playCard){
+        chosenCards.put(player,playCard);
+        StringBuilder builder = new StringBuilder();
+
+        if(chosenCards.size() >= lobby.getPlayers().size() && lobby.isHost())
+        {
+            for (PlayCard card : chosenCards.values()) {
+                    builder.append(String.valueOf(card.getId()));
+                }
+               try {
+                   lobby.messageClients(MessageType.CHOSEN_CARDS, builder.toString());
+               }
+               catch (NotHostException e) {
+                 e.printStackTrace();
+               }
+
+            }
+        }
+
+    }
+
+
 
 

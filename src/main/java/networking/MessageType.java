@@ -8,7 +8,9 @@ public enum MessageType {
     LOBBY_LIST_SYNC_REQUEST,
     START_GAME,
     UPDATE_LOBBY_SETTINGS,
-    RECEIVE_CARD
+    RECEIVE_CARD,
+    PLAY_CARD,
+    CHOSEN_CARDS
 }
 
 
