@@ -103,7 +103,7 @@ public class ServerClient {
 
                         int index = messageLength;
 
-                        while (index != len -1) {
+                        while (index != len) {
                             byte[] resizedArray = Arrays.copyOfRange(buffer, index, len);
 
                             lengthBytes = Arrays.copyOfRange(resizedArray, 0, 4);
