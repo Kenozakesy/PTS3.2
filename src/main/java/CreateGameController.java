@@ -199,8 +199,8 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                     builder.append(cardset.getId() + ",");
                 }
 
-                lobby.messageClients(MessageType.START_GAME, builder.toString());
                 startGameScreen(lobby);
+                lobby.messageClients(MessageType.START_GAME, builder.toString());
             }
 
         } catch (Exception exception) {

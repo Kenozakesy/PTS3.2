@@ -114,7 +114,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     @FXML   //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
-        Player player = StaticPlayer.getPlayerFromGame(lobby);
+        Player player = StaticPlayer.getPlayer();
 
         boolean check = false;
         if(player.getRole().equals(Role.Pleb)) {
@@ -205,7 +205,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     //laad aan het begin van een niewe ronde de kaarten voor een client in
     public void loadPlayerHand()
     {
-        Player player = StaticPlayer.getPlayerFromGame(this.lobby);
+        Player player = StaticPlayer.getPlayer();
         List<PlayCard> cardsInHand = player.getCardsInHand();
 
         CzarCard CzarCard = lobby.getGame().getCurrentCzarCard();
@@ -237,6 +237,28 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     @Override
     public void onClientMessage(Socket client, MessageType messageType, String message) {
+
+        switch (messageType){
+            case PLAY_CARD:
+
+                int id = Integer.parseInt(message);
+
+                PlayCard card = null;
+                for(PlayCard playCard: lobby.getGame().getPlayCards())
+                {
+                    if (playCard.getId() == id)
+                    {
+                        card = playCard;
+                        break;
+                    }
+                }
+
+                lobby.getGame().addToChosenCards(lobby.getPlayers().get(client), card);
+                break;
+
+                default: break;
+        }
+
 
     }
 
@@ -283,7 +305,24 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         }
                     }
                 }
+
                 break;
+
+            case CHOSEN_CARDS:
+                ArrayList<PlayCard> list = new ArrayList<>();
+                try {
+                    list.addAll(lobby.getGame().getChosenCards().values());
+                }
+                catch (NullPointerException e) {
+                    e.printStackTrace();
+                    break;
+                }
+                taCzar1.setText(list.get(0).getText());
+                taCzar2.setText(list.get(1).getText());
+                taCzar3.setText(list.get(2).getText());
+                taCzar4.setText(list.get(3).getText());
+                break;
+                default: break;
         }
     }
 

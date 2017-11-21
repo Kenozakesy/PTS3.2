@@ -30,19 +30,7 @@ public class StaticPlayer {
         return player;
     }
 
-    public static Player getPlayerFromGame(Lobby lobby)
-    {
-        Player player = null;
-        for (Map.Entry<Socket, Player> P: lobby.getPlayers().entrySet())
-        {
-            if(StaticPlayer.getPlayer().getName() == P.getValue().getName())
-            {
-                player = P.getValue();
-                break;
-            }
-        }
-        return player;
-    }
+
 
 
 }
