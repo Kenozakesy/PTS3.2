@@ -101,7 +101,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     private List<String> chatList = new ArrayList<String>();
 
     public void initialize(URL location, ResourceBundle resources) {
-        loadPlayerHand();
+       // loadPlayerHand();
     }
 
     @FXML
@@ -305,7 +305,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         }
                     }
                 }
-
+                loadPlayerHand();
                 break;
 
             case CHOSEN_CARDS:
