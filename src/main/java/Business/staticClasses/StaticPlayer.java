@@ -16,33 +16,39 @@ import java.util.Map;
  */
 public class StaticPlayer {
 
-    private static Player player = null;
+    private static StaticPlayer player = new StaticPlayer();
+    private String name;
 
-    public static void initializePlayer()
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
+
+    private StaticPlayer()
     {
-        if (player == null) {
-            player = new Player();
-        }
+
     }
 
-    public static Player getPlayer()
+    public static StaticPlayer getinstance()
     {
+        if(player == null)
+        {
+            player = new StaticPlayer();
+        }
         return player;
     }
 
-    public static Player getPlayerFromGame(Lobby lobby)
+    public Player getPlayer(Lobby lobby)
     {
         Player player = null;
-        for (Map.Entry<Socket, Player> P: lobby.getPlayers().entrySet())
-        {
-            if(StaticPlayer.getPlayer().getName() == P.getValue().getName())
+        for (Player P: lobby.getPlayers().values()) {
+            if(P.getName() == name)
             {
-                player = P.getValue();
-                break;
+                player = P;
             }
         }
         return player;
     }
+
+
 
 
 }

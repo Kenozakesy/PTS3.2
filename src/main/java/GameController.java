@@ -114,7 +114,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     @FXML   //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
-        Player player = StaticPlayer.getPlayerFromGame(lobby);
+        Player player = StaticPlayer.getinstance().getPlayer(lobby);
 
         boolean check = false;
         if(player.getRole().equals(Role.Pleb)) {
@@ -205,7 +205,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     //laad aan het begin van een niewe ronde de kaarten voor een client in
     public void loadPlayerHand()
     {
-        Player player = StaticPlayer.getPlayer();
+        Player player = StaticPlayer.getinstance().getPlayer(lobby);
         List<PlayCard> cardsInHand = player.getCardsInHand();
 
         CzarCard CzarCard = lobby.getGame().getCurrentCzarCard();
@@ -292,7 +292,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             case UPDATE_LOBBY_SETTINGS:
                 break;
             case RECEIVE_CARD:
-                Player player = StaticPlayer.getPlayer();
+                Player player = StaticPlayer.getinstance().getPlayer(lobby);
                 player.getCardsInHand().clear();
 
                 String[] array = message.split(",");
