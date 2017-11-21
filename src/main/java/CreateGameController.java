@@ -344,14 +344,17 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             if (lobby.isHost()) {
                 lobby.setHostEventHandler(gameController);
             } else {
+                System.out.println("Setting client eventhandler");
                 lobby.setClientEventHandler(gameController);
             }
 
             fxmlLoader.setController(gameController);
 
+            System.out.println("Loading");
             Parent root1 = fxmlLoader.load();
             Stage stage2 = new Stage();
             stage2.setScene(new Scene(root1));
+            System.out.println("Showing");
             stage2.show();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -394,10 +397,12 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         ArrayList<Cardset> sets = new ArrayList<>();
 
         for (int i = 0; i < splitMessage.length; i++) {
-            sets.add(StaticPlayer.getPlayer().getCardsetList().get(Integer.valueOf(splitMessage[i])));
+            sets.add(lobby.getCardSetsNotUsing().get(Integer.valueOf(splitMessage[i])));
         }
 
         lobby.setCardSetsUsing(sets);
+
+        System.out.println("Starting");
 
         Platform.runLater(() -> {
             try {
