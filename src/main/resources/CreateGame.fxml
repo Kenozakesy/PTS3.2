@@ -155,5 +155,6 @@
       <Button fx:id="btnRight" layoutX="746.0" layoutY="209.0" mnemonicParsing="false" onAction="#btnRight" text="---&gt;" />
       <Button fx:id="btnLeft" layoutX="746.0" layoutY="252.0" mnemonicParsing="false" onAction="#btnLeft" text="&lt;---" />
       <ListView fx:id="lvChat" layoutX="334.0" layoutY="451.0" prefHeight="220.0" prefWidth="708.0" />
+      <Label fx:id="lbError" layoutX="850.0" layoutY="363.0" style="-fx-text-fill: red;" />
    </children>
 </AnchorPane>

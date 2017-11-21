@@ -14,10 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import networking.MessageType;
 import networking.ServerClientEvents;
@@ -40,6 +37,9 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
 
     @FXML
     private Button btnStartGame;
+
+    @FXML
+    private Label lbError;
 
     @FXML
     private Button btnLeft;
@@ -189,19 +189,21 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         //starts the game with current options
         try {
             if (lvPickedCards.getItems().size() < 1) {
-                throw new Exception("Errormessage: Geen cardsets geslecteerd.");
+                lbError.setText("Please choose a cardpack.");
+                //throw new Exception("Errormessage: Geen cardsets geselecteerd.");
             }
-            // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
-            StringBuilder builder = new StringBuilder();
+            else {
+                // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
+                StringBuilder builder = new StringBuilder();
 
-            for (Object o : lvPickedCards.getItems()) {
-                Cardset cardset = (Cardset) o;
-                builder.append(cardset.getId() + ",");
+                for (Object o : lvPickedCards.getItems()) {
+                    Cardset cardset = (Cardset) o;
+                    builder.append(cardset.getId() + ",");
+                }
+
+                lobby.messageClients(MessageType.START_GAME, builder.toString());
+                startGameScreen(lobby);
             }
-
-            lobby.messageClients(MessageType.START_GAME, builder.toString());
-            startGameScreen(lobby);
-
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -342,14 +344,17 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             if (lobby.isHost()) {
                 lobby.setHostEventHandler(gameController);
             } else {
+                System.out.println("Setting client eventhandler");
                 lobby.setClientEventHandler(gameController);
             }
 
             fxmlLoader.setController(gameController);
 
+            System.out.println("Loading");
             Parent root1 = fxmlLoader.load();
             Stage stage2 = new Stage();
             stage2.setScene(new Scene(root1));
+            System.out.println("Showing");
             stage2.show();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -392,10 +397,12 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         ArrayList<Cardset> sets = new ArrayList<>();
 
         for (int i = 0; i < splitMessage.length; i++) {
-            sets.add(StaticPlayer.getPlayer().getCardsetList().get(Integer.valueOf(splitMessage[i])));
+            sets.add(lobby.getCardSetsNotUsing().get(Integer.valueOf(splitMessage[i])));
         }
 
         lobby.setCardSetsUsing(sets);
+
+        System.out.println("Starting");
 
         Platform.runLater(() -> {
             try {
