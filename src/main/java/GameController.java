@@ -101,7 +101,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     private List<String> chatList = new ArrayList<String>();
 
     public void initialize(URL location, ResourceBundle resources) {
-
+        loadPlayerHand();
     }
 
     @FXML
@@ -205,7 +205,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     //laad aan het begin van een niewe ronde de kaarten voor een client in
     public void loadPlayerHand()
     {
-        Player player = StaticPlayer.getPlayerFromGame(this.lobby);
+        Player player = StaticPlayer.getPlayer();
         List<PlayCard> cardsInHand = player.getCardsInHand();
 
         CzarCard CzarCard = lobby.getGame().getCurrentCzarCard();
@@ -305,7 +305,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         }
                     }
                 }
-                loadPlayerHand();
+
                 break;
 
             case CHOSEN_CARDS:
