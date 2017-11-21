@@ -331,13 +331,14 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 for (String s : array)
                 {
                     for (PlayCard P: lobby.getGame().getPlayCards()) {
-                        if(s == Integer.toString(P.getId()));
+
+                        if(s.equals(String.valueOf(P.getId())))
                         {
                             player.addToHand(P);
                         }
                     }
                 }
-
+                loadPlayerHand();
                 break;
 
             case CHOSEN_CARDS:
