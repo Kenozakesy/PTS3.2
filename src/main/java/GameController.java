@@ -114,7 +114,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     @FXML   //Czar chooses a card and a new rounds starts
     public void btnChoose(Event e){
-        Player player = StaticPlayer.getPlayerFromGame(lobby);
+        Player player = StaticPlayer.getPlayer();
 
         boolean check = false;
         if(player.getRole().equals(Role.Pleb)) {
