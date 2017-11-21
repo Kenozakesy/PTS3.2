@@ -48,7 +48,6 @@ public class Game {
         playCards = new ArrayList<>();
         chosenCards = new HashMap<>();
         getDecks();
-        newTurn();
     }
 
     // Methode wordt aangeroepen nadat een speler een kaart speelt.
@@ -158,6 +157,7 @@ public class Game {
                 {
                     builder.append(C.getId() + ",");
                 }
+
                 lobby.messageClient(player, MessageType.RECEIVE_CARD, builder.toString());
             }
         }

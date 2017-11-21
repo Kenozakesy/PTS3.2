@@ -1,5 +1,6 @@
 import Business.*;
 import Business.Enums.Role;
+import Business.exceptions.NotClientException;
 import Business.staticClasses.StaticPlayer;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -93,6 +94,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     private HBox hboxPlayerSelect;
 
     private Lobby lobby;
+    int playerGottenCard = 0;
 
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
@@ -102,6 +104,14 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     public void initialize(URL location, ResourceBundle resources) {
        // loadPlayerHand();
+        if(!lobby.isHost())
+        {
+            try {
+                lobby.messageServer(MessageType.RECEIVE_CARD, "!");
+            } catch (NotClientException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
@@ -239,6 +249,28 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     public void onClientMessage(Socket client, MessageType messageType, String message) {
 
         switch (messageType){
+            case CHAT_MESSAGE:
+                break;
+            case LOBBY_DATA:
+                break;
+            case LOBBY_QUIT:
+                break;
+            case PLAYER_DATA:
+                break;
+            case LOBBY_LIST_SYNC_REQUEST:
+                break;
+            case START_GAME:
+                break;
+            case UPDATE_LOBBY_SETTINGS:
+                break;
+            case RECEIVE_CARD:
+                playerGottenCard++;
+                if(playerGottenCard == lobby.getPlayers().size() -1)
+                {
+                    lobby.getGame().newTurn();
+                    playerGottenCard = 0;
+                }
+                break;
             case PLAY_CARD:
 
                 int id = Integer.parseInt(message);
@@ -256,10 +288,10 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 lobby.getGame().addToChosenCards(lobby.getPlayers().get(client), card);
                 break;
 
-                default: break;
+            case CHOSEN_CARDS:
+                break;
+            default: break;
         }
-
-
     }
 
     @Override
@@ -274,7 +306,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     @Override
     public void onHostMessage(MessageType messageType, String message) {
-
+        System.out.println("on host");
         switch (messageType)
         {
             case CHAT_MESSAGE:
@@ -305,7 +337,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         }
                     }
                 }
-                loadPlayerHand();
+
                 break;
 
             case CHOSEN_CARDS:
