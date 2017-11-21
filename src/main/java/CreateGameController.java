@@ -14,10 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import networking.MessageType;
 import networking.ServerClientEvents;
@@ -40,6 +37,9 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
 
     @FXML
     private Button btnStartGame;
+
+    @FXML
+    private Label lbError;
 
     @FXML
     private Button btnLeft;
@@ -189,19 +189,21 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         //starts the game with current options
         try {
             if (lvPickedCards.getItems().size() < 1) {
-                throw new Exception("Errormessage: Geen cardsets geslecteerd.");
+                lbError.setText("Please choose a cardpack.");
+                //throw new Exception("Errormessage: Geen cardsets geselecteerd.");
             }
-            // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
-            StringBuilder builder = new StringBuilder();
+            else {
+                // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
+                StringBuilder builder = new StringBuilder();
 
-            for (Object o : lvPickedCards.getItems()) {
-                Cardset cardset = (Cardset) o;
-                builder.append(cardset.getId() + ",");
+                for (Object o : lvPickedCards.getItems()) {
+                    Cardset cardset = (Cardset) o;
+                    builder.append(cardset.getId() + ",");
+                }
+
+                lobby.messageClients(MessageType.START_GAME, builder.toString());
+                startGameScreen(lobby);
             }
-
-            lobby.messageClients(MessageType.START_GAME, builder.toString());
-            startGameScreen(lobby);
-
 
         } catch (Exception exception) {
             exception.printStackTrace();
