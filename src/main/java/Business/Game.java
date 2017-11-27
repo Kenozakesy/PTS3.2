@@ -21,6 +21,7 @@ public class Game {
     private Random random = new Random();
     private List<CzarCard> czarCards;
     private List<PlayCard> playCards;
+    private List<PlayCard> allCards;
     private CzarCard currentCzar;
     private boolean czarTurn;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
@@ -40,6 +41,10 @@ public class Game {
         return czarCards;
     }
 
+    public List<PlayCard> getAllCards() {
+        return allCards;
+    }
+
     public List<PlayCard> getPlayCards() {
         return playCards;
     }
@@ -56,18 +61,19 @@ public class Game {
         this.lobby = lobby;
         czarCards = new ArrayList<>();
         playCards = new ArrayList<>();
+        allCards = new ArrayList<>();
         chosenCards = new HashMap<>();
         getDecks();
     }
 
     // Methode wordt aangeroepen nadat een speler een kaart speelt.
     public void playerPicksCard(int cardPosition, Player player) {
-
-        //gets player
+            //gets player
         PlayCard card = player.getCardsInHand().get(cardPosition);
 
         if (lobby.isHost()) {
-            chosenCards.put(player, card);
+            addToChosenCards(player, card);
+            player.getCardsInHand().remove(card);
         } else {
             try {
                 lobby.messageServer(MessageType.PLAY_CARD, String.valueOf(card.getId()));
@@ -75,20 +81,16 @@ public class Game {
                 // do nothing
             }
         }
-
         //kiest kaart om in te zenden
-        chosenCards.put(player, card);
+        //    chosenCards.put(player, card);
         //verwijderd de kaart uit de hand van de speler
-        player.getCardsInHand().remove(card);
-
 
         // Check of alle spelers hun kaart gespeeld hebben.
         if (chosenCards.size() >= lobby.getPlayers().size() - 1) {
-
             //bericht sturen server bijhouden wie heeft gekozen (peter fix this)
             czarTurn = true;
+            }
         }
-    }
 
     public void czarPicksCards(String cardText) {
         // Einde van de beurt, nieuwe ronde start etc.
@@ -162,6 +164,7 @@ public class Game {
         for (Cardset c : lobby.getCardSetsUsing()) {
             czarCards.addAll(sqlCard.getAllCzarCardsFromCardSet(c));
             playCards.addAll(sqlCard.getAllPlayCardsFromCardSet(c));
+            allCards.addAll(sqlCard.getAllPlayCardsFromCardSet(c));
         }
     }
 
@@ -174,7 +177,7 @@ public class Game {
         return false;
     }
 
-    public void addToChosenCards(Player player, PlayCard playCard) {
+    public boolean addToChosenCards(Player player, PlayCard playCard) {
         chosenCards.put(player, playCard);
         StringBuilder builder = new StringBuilder();
 
@@ -184,11 +187,13 @@ public class Game {
             }
             try {
                 lobby.messageClients(MessageType.CHOSEN_CARDS, builder.toString());
+                return true;
             } catch (NotHostException e) {
                 e.printStackTrace();
             }
 
         }
+        return false;
     }
 }
 
