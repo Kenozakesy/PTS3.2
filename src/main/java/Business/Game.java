@@ -191,7 +191,7 @@ public class Game {
         chosenCards.put(player, playCard);
         StringBuilder builder = new StringBuilder();
 
-        if (chosenCards.size() >= lobby.getPlayers().size() && lobby.isHost()) {
+        if (chosenCards.size() >= lobby.getPlayers().size() -1 && lobby.isHost()) {
             for (PlayCard card : chosenCards.values()) {
                 builder.append(String.valueOf(card.getId()));
             }
