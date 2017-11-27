@@ -1,6 +1,6 @@
 package networking;
 
-import Business.staticClasses.IntConverter;
+import business.statics.IntConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,9 +98,7 @@ public class ServerHost {
                         ClientHandler handler = new ClientHandler(host, client);
                         host.clients.add(handler);
                         handler.start();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
+                    } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }

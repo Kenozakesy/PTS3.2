@@ -1,7 +1,7 @@
 package networking;
 
-import Business.Player;
-import Business.staticClasses.IntConverter;
+import business.Player;
+import business.statics.IntConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
