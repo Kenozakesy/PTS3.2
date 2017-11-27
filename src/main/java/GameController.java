@@ -270,19 +270,33 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     loadPlayerHand();
                 }
                 break;
+
             case PLAY_CARD:
 
                 int id = Integer.parseInt(message);
 
                 PlayCard card = null;
-                for (PlayCard playCard : lobby.getGame().getPlayCards()) {
+                for (PlayCard playCard : lobby.getGame().getAllCards()) {
                     if (playCard.getId() == id) {
                         card = playCard;
                         break;
                     }
                 }
 
-                lobby.getGame().addToChosenCards(lobby.getPlayers().get(client), card);
+                if (lobby.getGame().addToChosenCards(lobby.getPlayers().get(client), card) ){
+                    ArrayList<PlayCard> list = new ArrayList<>();
+                    try {
+                        list.addAll(lobby.getGame().getChosenCards().values());
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        break;
+                    }
+                    taCzar1.setText(list.get(0).getText());
+                    taCzar2.setText(list.get(1).getText());
+                    taCzar3.setText(list.get(2).getText());
+                    taCzar4.setText(list.get(3).getText());
+                }
+
                 break;
 
             case CHOSEN_CARDS:
