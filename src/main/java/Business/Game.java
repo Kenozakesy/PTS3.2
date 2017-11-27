@@ -115,22 +115,9 @@ public class Game {
 
         pickBlackCard();
         cardSharing();
-
-        //Volgende Czar wordt willekeurig gekozen. Moet nog aangepast worden.
-        for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
-            Random ran = new Random();
-            int pos = ran.nextInt(lobby.getPlayers().size() + 1);
-            int tel = 1;
-            for (Map.Entry<Socket, Player> p : lobby.getPlayers().entrySet()) {
-                if (tel == pos) {
-                    p.getValue().setRole(Role.Czar);
-                } else {
-                    p.getValue().setRole(Role.Pleb);
-                }
-                tel++;
-            }
-        }
+        lobby.setRoles();
     }
+
 
     //deelt nieuwe kaarten uit
     private void cardSharing() {
