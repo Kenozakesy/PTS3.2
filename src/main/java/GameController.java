@@ -345,6 +345,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 loadPlayerHand();
                 break;
 
+            case PLAY_CARD:
+                break;
             case CHOSEN_CARDS:
                 ArrayList<PlayCard> list = new ArrayList<>();
                 try {
@@ -357,6 +359,11 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 taCzar2.setText(list.get(1).getText());
                 taCzar3.setText(list.get(2).getText());
                 taCzar4.setText(list.get(3).getText());
+                break;
+            case GET_ROLE:
+                Role role = Role.values()[Integer.valueOf(message)];
+                StaticPlayer.getPlayer().setRole(role);
+                updateTurn();
                 break;
             default:
                 break;
