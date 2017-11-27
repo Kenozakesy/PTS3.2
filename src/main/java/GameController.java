@@ -384,6 +384,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
         }
     }
 
+    
     @Override
     public void onJoin(SocketAddress address) {
 
