@@ -31,16 +31,26 @@ public class Game {
     public CzarCard getCurrentCzarCard() {
         return currentCzar;
     }
+
     public boolean getIsCzarTurn() {
         return czarTurn;
     }
+
     public List<CzarCard> getCzarCards() {
         return czarCards;
     }
+
     public List<PlayCard> getPlayCards() {
         return playCards;
     }
-    public Map<Player, PlayCard> getChosenCards(){ return chosenCards; }
+
+    public Map<Player, PlayCard> getChosenCards() {
+        return chosenCards;
+    }
+
+    public void setCurrentCzar(CzarCard currentCzar) {
+        this.currentCzar = currentCzar;
+    }
 
     public Game(Lobby lobby) {
         this.lobby = lobby;
@@ -56,16 +66,14 @@ public class Game {
         //gets player
         PlayCard card = player.getCardsInHand().get(cardPosition);
 
-        if(lobby.isHost()) {
-            chosenCards.put(player,card);
-        }
-        else {
+        if (lobby.isHost()) {
+            chosenCards.put(player, card);
+        } else {
             try {
                 lobby.messageServer(MessageType.PLAY_CARD, String.valueOf(card.getId()));
+            } catch (NotClientException e) {
+                // do nothing
             }
-                catch(NotClientException e) {
-                    // do nothing
-                }
         }
 
         //kiest kaart om in te zenden
@@ -74,9 +82,8 @@ public class Game {
         player.getCardsInHand().remove(card);
 
 
-
         // Check of alle spelers hun kaart gespeeld hebben.
-        if (chosenCards.size() >= lobby.getPlayers().size() -1) {
+        if (chosenCards.size() >= lobby.getPlayers().size() - 1) {
 
             //bericht sturen server bijhouden wie heeft gekozen (peter fix this)
             czarTurn = true;
@@ -85,10 +92,8 @@ public class Game {
 
     public void czarPicksCards(String cardText) {
         // Einde van de beurt, nieuwe ronde start etc.
-        for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet())
-        {
-            if(entry.getValue().getText().equals(cardText))
-            {
+        for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet()) {
+            if (entry.getValue().getText().equals(cardText)) {
                 entry.getKey().increasePoints();
             }
         }
@@ -112,16 +117,14 @@ public class Game {
         cardSharing();
 
         //Volgende Czar wordt willekeurig gekozen. Moet nog aangepast worden.
-        for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet())
-        {
+        for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
             Random ran = new Random();
             int pos = ran.nextInt(lobby.getPlayers().size() + 1);
             int tel = 1;
             for (Map.Entry<Socket, Player> p : lobby.getPlayers().entrySet()) {
-                if (tel == pos){
+                if (tel == pos) {
                     p.getValue().setRole(Role.Czar);
-                }
-                else{
+                } else {
                     p.getValue().setRole(Role.Pleb);
                 }
                 tel++;
@@ -130,10 +133,8 @@ public class Game {
     }
 
     //deelt nieuwe kaarten uit
-    private void cardSharing()
-    {
-        if(!lobby.isHost())
-        {
+    private void cardSharing() {
+        if (!lobby.isHost()) {
             return;
         }
         try {
@@ -153,15 +154,18 @@ public class Game {
 
             for (Player player : lobby.getPlayers().values()) {
                 StringBuilder builder = new StringBuilder();
-                for (PlayCard C: player.getCardsInHand())
-                {
-                    builder.append(C.getId() + ",");
+
+                builder.append(this.currentCzar.getId());
+                builder.append(",");
+
+                for (PlayCard C : player.getCardsInHand()) {
+                    builder.append(C.getId());
+                    builder.append(",");
                 }
 
                 lobby.messageClient(player, MessageType.RECEIVE_CARD, builder.toString());
             }
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             //Do nothing
         }
     }
@@ -174,37 +178,32 @@ public class Game {
         }
     }
 
-    public boolean playedCard(Player player){
-        for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet())
-        {
-            if(entry.getKey().getName().equals(player.getName()))
-            {
+    public boolean playedCard(Player player) {
+        for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet()) {
+            if (entry.getKey().getName().equals(player.getName())) {
                 return true;
             }
         }
         return false;
     }
 
-    public void addToChosenCards(Player player, PlayCard playCard){
-        chosenCards.put(player,playCard);
+    public void addToChosenCards(Player player, PlayCard playCard) {
+        chosenCards.put(player, playCard);
         StringBuilder builder = new StringBuilder();
 
-        if(chosenCards.size() >= lobby.getPlayers().size() && lobby.isHost())
-        {
+        if (chosenCards.size() >= lobby.getPlayers().size() && lobby.isHost()) {
             for (PlayCard card : chosenCards.values()) {
-                    builder.append(String.valueOf(card.getId()));
-                }
-               try {
-                   lobby.messageClients(MessageType.CHOSEN_CARDS, builder.toString());
-               }
-               catch (NotHostException e) {
-                 e.printStackTrace();
-               }
-
+                builder.append(String.valueOf(card.getId()));
             }
-        }
+            try {
+                lobby.messageClients(MessageType.CHOSEN_CARDS, builder.toString());
+            } catch (NotHostException e) {
+                e.printStackTrace();
+            }
 
+        }
     }
+}
 
 
 

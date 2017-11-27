@@ -1,5 +1,8 @@
-import Business.*;
+import Business.CzarCard;
 import Business.Enums.Role;
+import Business.Lobby;
+import Business.PlayCard;
+import Business.Player;
 import Business.exceptions.NotClientException;
 import Business.staticClasses.StaticPlayer;
 import javafx.event.Event;
@@ -21,10 +24,9 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
-public class GameController implements Initializable, ServerHostEvents, ServerClientEvents{
+public class GameController implements Initializable, ServerHostEvents, ServerClientEvents {
     @FXML
     private Button btnSend;
     @FXML
@@ -103,9 +105,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     private List<String> chatList = new ArrayList<String>();
 
     public void initialize(URL location, ResourceBundle resources) {
-       // loadPlayerHand();
-        if(!lobby.isHost())
-        {
+        if (!lobby.isHost()) {
             try {
                 lobby.messageServer(MessageType.RECEIVE_CARD, "!");
             } catch (NotClientException e) {
@@ -115,7 +115,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     @FXML
-    public void btnSend( Event e){
+    public void btnSend(Event e) {
         String chat;
 
         chat = tbChat.getText();
@@ -123,81 +123,53 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     @FXML   //Czar chooses a card and a new rounds starts
-    public void btnChoose(Event e){
+    public void btnChoose(Event e) {
         Player player = StaticPlayer.getPlayer();
 
         boolean check = false;
-        if(player.getRole().equals(Role.Pleb)) {
+        if (player.getRole().equals(Role.Pleb)) {
             //hier moet een betere manier voor zijn
 
-            if (rbtnCard1.isSelected())
-            {
+            if (rbtnCard1.isSelected()) {
                 lobby.getGame().playerPicksCard(0, player);
-            }
-            else if (rbtnCard2.isSelected())
-            {
+            } else if (rbtnCard2.isSelected()) {
                 lobby.getGame().playerPicksCard(1, player);
-            }
-            else if (rbtnCard3.isSelected())
-            {
+            } else if (rbtnCard3.isSelected()) {
                 lobby.getGame().playerPicksCard(2, player);
-            }
-            else if (rbtnCard4.isSelected())
-            {
+            } else if (rbtnCard4.isSelected()) {
                 lobby.getGame().playerPicksCard(3, player);
-            }
-            else if (rbtnCard5.isSelected())
-            {
+            } else if (rbtnCard5.isSelected()) {
                 lobby.getGame().playerPicksCard(4, player);
-            }
-            else if (rbtnCard6.isSelected())
-            {
+            } else if (rbtnCard6.isSelected()) {
                 lobby.getGame().playerPicksCard(5, player);
-            }
-            else if (rbtnCard7.isSelected())
-            {
+            } else if (rbtnCard7.isSelected()) {
                 lobby.getGame().playerPicksCard(6, player);
-            }
-            else if (rbtnCard8.isSelected())
-            {
+            } else if (rbtnCard8.isSelected()) {
                 lobby.getGame().playerPicksCard(7, player);
             }
-            if (lobby.getGame().playedCard(player))
-            {
+            if (lobby.getGame().playedCard(player)) {
                 hboxPlayerSelect.setVisible(false);
             }
-        }
-        else if(player.getRole().equals(Role.Czar))
-        {
-            if(rbCzarPick1.isSelected())
-            {
+        } else if (player.getRole().equals(Role.Czar)) {
+            if (rbCzarPick1.isSelected()) {
                 String cardtext = taCzar1.getText();
                 lobby.getGame().czarPicksCards(cardtext);
-            }
-            else if(rbCzarPick2.isSelected())
-            {
+            } else if (rbCzarPick2.isSelected()) {
                 String cardtext = taCzar2.getText();
                 lobby.getGame().czarPicksCards(cardtext);
-            }
-            else if(rbCzarPick3.isSelected())
-            {
+            } else if (rbCzarPick3.isSelected()) {
                 String cardtext = taCzar3.getText();
                 lobby.getGame().czarPicksCards(cardtext);
-            }
-            else if(rbCzarPick4.isSelected())
-            {
+            } else if (rbCzarPick4.isSelected()) {
                 String cardtext = taCzar4.getText();
                 lobby.getGame().czarPicksCards(cardtext);
             }
-        }
-        else
-        {
+        } else {
             //Do nothing
         }
     }
 
-    public void btnLeaveGame()
-    {
+    public void btnLeaveGame() {
         Stage stage = (Stage) btnLeaveGame.getScene().getWindow();
         stage.close();
 
@@ -209,12 +181,12 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             e1.printStackTrace();
         }
         Stage stage2 = new Stage();
-        stage2.setScene(new Scene(root1)); stage2.show();
+        stage2.setScene(new Scene(root1));
+        stage2.show();
     }
 
     //laad aan het begin van een niewe ronde de kaarten voor een client in
-    public void loadPlayerHand()
-    {
+    public void loadPlayerHand() {
         Player player = StaticPlayer.getPlayer();
         List<PlayCard> cardsInHand = player.getCardsInHand();
 
@@ -232,23 +204,50 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     //moet aangeroepen worden wanneer het de turn is van de czar en wanneer een nieuwe beurt begint
-    public void updateTurn()
-    {
-        Player player = new Player("test");
-        if(player.getRole() == Role.Czar)
-        {
+    public void updateTurn() {
+        this.changeControlVisibility();
+    }
 
-        }
-        else if(player.getRole() == Role.Pleb)
-        {
+    private void changeControlVisibility() {
+        switch (StaticPlayer.getPlayer().getRole()) {
+            case Czar:
+                this.setCzarRadioButtonsVisibility(true);
+                this.setPlebRadioButtonsVisibility(false);
+                break;
 
+            case Pleb:
+                this.setCzarRadioButtonsVisibility(false);
+                this.setPlebRadioButtonsVisibility(true);
+                break;
+
+            case Spectator:
+                this.setCzarRadioButtonsVisibility(false);
+                this.setPlebRadioButtonsVisibility(false);
+                break;
         }
+    }
+
+    private void setCzarRadioButtonsVisibility(boolean value) {
+        rbCzarPick1.setVisible(value);
+        rbCzarPick2.setVisible(value);
+        rbCzarPick3.setVisible(value);
+        rbCzarPick4.setVisible(value);
+    }
+
+    private void setPlebRadioButtonsVisibility(boolean value) {
+        rbtnCard1.setVisible(value);
+        rbtnCard2.setVisible(value);
+        rbtnCard3.setVisible(value);
+        rbtnCard4.setVisible(value);
+        rbtnCard5.setVisible(value);
+        rbtnCard6.setVisible(value);
+        rbtnCard7.setVisible(value);
+        rbtnCard8.setVisible(value);
     }
 
     @Override
     public void onClientMessage(Socket client, MessageType messageType, String message) {
-
-        switch (messageType){
+        switch (messageType) {
             case CHAT_MESSAGE:
                 break;
             case LOBBY_DATA:
@@ -265,10 +264,10 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
             case RECEIVE_CARD:
                 playerGottenCard++;
-                if(playerGottenCard == lobby.getPlayers().size() -1)
-                {
+                if (playerGottenCard == lobby.getPlayers().size() - 1) {
                     lobby.getGame().newTurn();
                     playerGottenCard = 0;
+                    loadPlayerHand();
                 }
                 break;
             case PLAY_CARD:
@@ -276,10 +275,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 int id = Integer.parseInt(message);
 
                 PlayCard card = null;
-                for(PlayCard playCard: lobby.getGame().getPlayCards())
-                {
-                    if (playCard.getId() == id)
-                    {
+                for (PlayCard playCard : lobby.getGame().getPlayCards()) {
+                    if (playCard.getId() == id) {
                         card = playCard;
                         break;
                     }
@@ -290,7 +287,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
             case CHOSEN_CARDS:
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -307,8 +305,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @Override
     public void onHostMessage(MessageType messageType, String message) {
         System.out.println("on host");
-        switch (messageType)
-        {
+        switch (messageType) {
             case CHAT_MESSAGE:
                 break;
             case LOBBY_DATA:
@@ -328,16 +325,23 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 player.getCardsInHand().clear();
 
                 String[] array = message.split(",");
-                for (String s : array)
-                {
-                    for (PlayCard P: lobby.getGame().getPlayCards()) {
 
-                        if(s.equals(String.valueOf(P.getId())))
-                        {
+                for (CzarCard card : lobby.getGame().getCzarCards()) {
+                    if (array[0].equals(String.valueOf(card.getId()))) {
+                        lobby.getGame().setCurrentCzar(card);
+                        break;
+                    }
+                }
+
+                for (int i = 1; i < array.length; i++) {
+                    for (PlayCard P : lobby.getGame().getPlayCards()) {
+
+                        if (array[i].equals(String.valueOf(P.getId()))) {
                             player.addToHand(P);
                         }
                     }
                 }
+
                 loadPlayerHand();
                 break;
 
@@ -345,8 +349,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 ArrayList<PlayCard> list = new ArrayList<>();
                 try {
                     list.addAll(lobby.getGame().getChosenCards().values());
-                }
-                catch (NullPointerException e) {
+                } catch (NullPointerException e) {
                     e.printStackTrace();
                     break;
                 }
@@ -355,7 +358,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 taCzar3.setText(list.get(2).getText());
                 taCzar4.setText(list.get(3).getText());
                 break;
-                default: break;
+            default:
+                break;
         }
     }
 
