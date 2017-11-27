@@ -10,7 +10,8 @@ public enum MessageType {
     UPDATE_LOBBY_SETTINGS,
     RECEIVE_CARD,
     PLAY_CARD,
-    CHOSEN_CARDS
+    CHOSEN_CARDS,
+    GET_ROLE
 }
 
 

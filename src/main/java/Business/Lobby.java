@@ -11,10 +11,7 @@ import networking.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class Lobby {
 
@@ -28,6 +25,7 @@ public class Lobby {
     private Game game;
 
     //Fields
+    private int playerCzarCheck = 0;
     private String ip;
     private String lobbyID;
     private int maxPlayers = 5;
@@ -39,6 +37,7 @@ public class Lobby {
 
     private Map<Socket, Player> spectators = new HashMap<>(maxSpectators);
     private Map<Socket, Player> players = new HashMap<>(maxPlayers);
+    private List<Player> playerList = new ArrayList<>();
 
     //Properties
     public boolean isHost() {
@@ -217,16 +216,39 @@ public class Lobby {
     public void startGame() {
         game = new Game(this);
 
-        Random ran = new Random();
-        int pos = ran.nextInt(players.size());
-        int tel = 0;
-        for (Player p : players.values()) {
-            if (tel == pos) {
-                p.setRole(Role.Czar);
+        //voegd spelers toe aan lijst boor orde
+        for (Map.Entry<Socket, Player> entry : players.entrySet()) {
+            playerList.add(entry.getValue());
+        }
+
+        //verdeeld rollen in het spel
+        setRoles();
+
+    }
+
+    public void setRoles() {
+        for (Player P : playerList) {
+            if (playerCzarCheck == playerList.indexOf(P)) {
+                P.setRole(Role.Czar);
             } else {
-                p.setRole(Role.Pleb);
+                P.setRole(Role.Pleb);
             }
-            tel++;
+        }
+        playerCzarCheck++;
+
+        if (playerCzarCheck >= maxPlayers) {
+            playerCzarCheck = 0;
+        }
+
+        //hier nog het versturen naar de andere client
+        if (this.isHost()) {
+            for (Player P : playerList) {
+                try {
+                    messageClient(P, MessageType.GET_ROLE, String.valueOf(P.getRole().ordinal()));
+                } catch (NotHostException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
