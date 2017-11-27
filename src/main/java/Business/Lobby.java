@@ -244,7 +244,10 @@ public class Lobby {
         if (this.isHost()) {
             for (Player P : playerList) {
                 try {
-                    messageClient(P, MessageType.GET_ROLE, String.valueOf(P.getRole().ordinal()));
+                    if(P != StaticPlayer.getPlayer())
+                    {
+                        messageClient(P, MessageType.GET_ROLE, String.valueOf(P.getRole().ordinal()));
+                    }
                 } catch (NotHostException e) {
                     e.printStackTrace();
                 }
