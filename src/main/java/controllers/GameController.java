@@ -137,29 +137,33 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @FXML   //CZAR chooses a card and a new rounds starts
     public void btnChoose(Event e) {
         Player player = StaticPlayer.getPlayer();
+        boolean hostListisFull = false;
 
         if (player.getRole() == Role.PLEB) {
             //hier moet een betere manier voor zijn
 
             if (rbtnCard1.isSelected()) {
-                lobby.getGame().playerPicksCard(0, player);
+                hostListisFull = lobby.getGame().playerPicksCard(0, player);
             } else if (rbtnCard2.isSelected()) {
-                lobby.getGame().playerPicksCard(1, player);
+                hostListisFull = lobby.getGame().playerPicksCard(1, player);
             } else if (rbtnCard3.isSelected()) {
-                lobby.getGame().playerPicksCard(2, player);
+                hostListisFull = lobby.getGame().playerPicksCard(2, player);
             } else if (rbtnCard4.isSelected()) {
-                lobby.getGame().playerPicksCard(3, player);
+                hostListisFull = lobby.getGame().playerPicksCard(3, player);
             } else if (rbtnCard5.isSelected()) {
-                lobby.getGame().playerPicksCard(4, player);
+                hostListisFull = lobby.getGame().playerPicksCard(4, player);
             } else if (rbtnCard6.isSelected()) {
-                lobby.getGame().playerPicksCard(5, player);
+                hostListisFull = lobby.getGame().playerPicksCard(5, player);
             } else if (rbtnCard7.isSelected()) {
-                lobby.getGame().playerPicksCard(6, player);
+                hostListisFull = lobby.getGame().playerPicksCard(6, player);
             } else if (rbtnCard8.isSelected()) {
-                lobby.getGame().playerPicksCard(7, player);
+                hostListisFull = lobby.getGame().playerPicksCard(7, player);
             }
             if (lobby.getGame().playedCard(player)) {
                 hboxPlayerSelect.setVisible(false);
+            }
+            if (hostListisFull){
+                getCardsForHost();
             }
         } else if (player.getRole() == Role.CZAR) {
             if (rbCzarPick1.isSelected()) {
@@ -294,10 +298,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         break;
                     }
 
-                    taCzar1.setText(list.get(0).getText());
-                    taCzar2.setText(list.get(1).getText());
-                    taCzar3.setText(list.get(2).getText());
-                    taCzar4.setText(list.get(3).getText());
+                    showPlayedCards(list);
                 }
 
                 break;
@@ -361,11 +362,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     e.printStackTrace();
                     break;
                 }
-
-                taCzar1.setText(list.get(0).getText());
-                taCzar2.setText(list.get(1).getText());
-                taCzar3.setText(list.get(2).getText());
-                taCzar4.setText(list.get(3).getText());
+                showPlayedCards(list);
                 break;
 
             case GET_ROLE:
@@ -389,8 +386,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
         }
     }
-
-
+    
     @Override
     public void onJoin(SocketAddress address) {
 
@@ -410,5 +406,27 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 lvScore.getItems().add(player.getName() + ": " + player.getPoints() + "  " + role);
             }
         });
+    }
+    private void getCardsForHost() {
+        List<PlayCard> list = new ArrayList<>();
+        list.addAll(lobby.getGame().getChosenCards().values());
+
+        showPlayedCards(list);
+    }
+
+    //Laat alle gespeelde kaarten zien op de GUI.
+    private void showPlayedCards(List<PlayCard> list){
+
+        try {
+            taCzar1.setText(list.get(0).getText());
+            taCzar2.setText(list.get(1).getText());
+            taCzar3.setText(list.get(2).getText());
+            taCzar4.setText(list.get(3).getText());
+        }
+        catch (IndexOutOfBoundsException ex)
+        {
+           ex.printStackTrace();
+        }
+
     }
 }
