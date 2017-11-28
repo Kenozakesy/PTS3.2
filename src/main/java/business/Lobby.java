@@ -226,29 +226,32 @@ public class Lobby {
     }
 
     public void setRoles() {
-        for (Player P : playerList) {
-            if (playerCzarCheck == playerList.indexOf(P)) {
-                P.setRole(Role.CZAR);
-            } else {
-                P.setRole(Role.PLEB);
-            }
-        }
-        playerCzarCheck++;
-
-        if (playerCzarCheck >= maxPlayers) {
-            playerCzarCheck = 0;
-        }
-
-        //hier nog het versturen naar de andere client
-        if (this.isHost()) {
+            if (this.isHost()) {
             for (Player P : playerList) {
-                try {
-                    if (P != StaticPlayer.getPlayer()) {
-                        messageClient(P, MessageType.GET_ROLE, String.valueOf(P.getRole().ordinal()));
-                    }
-                } catch (NotHostException e) {
-                    e.printStackTrace();
+                if (playerCzarCheck == playerList.indexOf(P)) {
+                    P.setRole(Role.CZAR);
+                } else {
+                    P.setRole(Role.PLEB);
                 }
+            }
+            playerCzarCheck++;
+
+            if (playerCzarCheck >= maxPlayers) {
+                playerCzarCheck = 0;
+            }
+
+            //hier nog het versturen naar de andere client
+            StringBuilder builder = new StringBuilder();
+            for (Player P : playerList) {
+                if(StaticPlayer.getPlayer() != P) {
+                    builder.append(P.getName() + "," + P.getRole().ordinal() + ",");
+                }
+            }
+
+            try {
+                    messageClients(MessageType.GET_ROLE, builder.toString());
+            } catch (NotHostException e) {
+                e.printStackTrace();
             }
         }
     }
