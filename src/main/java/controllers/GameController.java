@@ -35,7 +35,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @FXML
     private Button btnChoose;
     @FXML
-    private ListView lvPlayers;
+    private ListView lvScore;
     @FXML
     private RadioButton rbtnCard1;
     @FXML
@@ -250,6 +250,22 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
         rbtnCard8.setVisible(value);
     }
 
+    private void updateScoreBoard() {
+        Platform.runLater(() -> {
+            lvScore.getItems().clear();
+
+            for (Player player : lobby.getPlayers().values()) {
+                String role = "";
+                if(player.getRole() == Role.CZAR) {
+                    role = "CZAR";
+                    lvScore.getItems().add(player.getName() + ": " + player.getPoints() + "  " + role
+
+                    );
+                }
+            }
+        });
+    }
+
     @Override
     public void onClientMessage(Socket client, MessageType messageType, String message) {
         switch (messageType) {
@@ -348,6 +364,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
 
             case GET_ROLE:
+
+                //moet nog geupdate worden --zodat alle rollen overgezet kunnen worden
                 Role role = Role.values()[Integer.valueOf(message)];
                 StaticPlayer.getPlayer().setRole(role);
                 updateTurn();
