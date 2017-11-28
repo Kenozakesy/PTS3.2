@@ -333,8 +333,21 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
             case CHOSEN_CARDS:
                 ArrayList<PlayCard> list = new ArrayList<>();
+                String[] cards = message.split(",");
 
                 try {
+                    for(String string : cards)
+                    {
+                       int id = Integer.parseInt(string);
+                       for(PlayCard card : lobby.getGame().getAllCards())
+                       {
+                           if(card.getId() == id)
+                           {
+                               list.add(card);
+                           }
+                       }
+
+                    }
                     list.addAll(lobby.getGame().getChosenCards().values());
                 } catch (NullPointerException e) {
                     e.printStackTrace();

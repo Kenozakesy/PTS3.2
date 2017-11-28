@@ -172,13 +172,15 @@ public class Game {
         return false;
     }
 
+    // Host ontvangt een kaart van zichzelf of een clients.
+    // Deze methode wordt aangeroepen in de GameController bij OnClientMessage
     public boolean addToChosenCards(Player player, PlayCard playCard) {
         chosenCards.put(player, playCard);
         StringBuilder builder = new StringBuilder();
 
         if (chosenCards.size() >= lobby.getPlayers().size() - 1 && lobby.isHost()) {
             for (PlayCard card : chosenCards.values()) {
-                builder.append(String.valueOf(card.getId()));
+                builder.append(String.valueOf(card.getId()) + ",");
             }
             try {
                 lobby.messageClients(MessageType.CHOSEN_CARDS, builder.toString());
