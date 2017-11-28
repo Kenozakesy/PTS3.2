@@ -22,6 +22,7 @@ public class Game {
     private List<PlayCard> allCards;
     private CzarCard currentCzar;
     private boolean czarTurn;
+    private static final int MAX_HAND_SIZE = 8;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
 
     private Map<Player, PlayCard> chosenCards;
@@ -171,8 +172,8 @@ public class Game {
     }
 
     public boolean playedCard(Player player) {
-        for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet()) {
-            if (entry.getKey().getName().equals(player.getName())) {
+        if (player.getCardsInHand().size() != MAX_HAND_SIZE) {
+            {
                 return true;
             }
         }

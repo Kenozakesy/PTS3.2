@@ -355,7 +355,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                                 list.add(card);
                             }
                         }
-
                     }
                     list.addAll(lobby.getGame().getChosenCards().values());
                 } catch (NullPointerException e) {
@@ -386,7 +385,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
         }
     }
-    
+
     @Override
     public void onJoin(SocketAddress address) {
 
@@ -425,7 +424,9 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
         }
         catch (IndexOutOfBoundsException ex)
         {
-           ex.printStackTrace();
+            // do nothing
+            // Kunt proberen om een stuk of 4 if's te maken ipv deze try-catch
+            // Als je ogen dat aankunnen
         }
 
     }
