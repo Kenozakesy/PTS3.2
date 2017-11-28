@@ -219,14 +219,10 @@ public class Lobby {
         for (Map.Entry<Socket, Player> entry : players.entrySet()) {
             playerList.add(entry.getValue());
         }
-
-        //verdeeld rollen in het spel
-        setRoles();
-
     }
 
     public void setRoles() {
-            if (this.isHost()) {
+        if (this.isHost()) {
             for (Player P : playerList) {
                 if (playerCzarCheck == playerList.indexOf(P)) {
                     P.setRole(Role.CZAR);
@@ -243,11 +239,11 @@ public class Lobby {
             //hier nog het versturen naar de andere client
             StringBuilder builder = new StringBuilder();
             for (Player P : playerList) {
-                    builder.append(P.getName() + "," + P.getRole().ordinal() + ",");
+                builder.append(P.getName() + "," + P.getRole().ordinal() + ",");
             }
 
             try {
-                    messageClients(MessageType.GET_ROLE, builder.toString());
+                messageClients(MessageType.GET_ROLE, builder.toString());
             } catch (NotHostException e) {
                 e.printStackTrace();
             }
@@ -256,13 +252,13 @@ public class Lobby {
 
     public void disconnect() {
         if (isHost()) {
-           this.close();
-        } else{
+            this.close();
+        } else {
             lobbyClient.close();
         }
     }
 
-    private void close()  {
+    private void close() {
         try {
             this.messageMainServer(MessageType.LOBBY_QUIT, "!");
             lobbyHost.close();

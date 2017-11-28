@@ -220,6 +220,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     //moet aangeroepen worden wanneer het de turn is van de czar en wanneer een nieuwe beurt begint
     public void updateTurn() {
         this.changeControlVisibility();
+        updateScoreBoard();
     }
 
     private void changeControlVisibility() {
@@ -267,6 +268,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
                 if (checkCardRequestCount()) {
                     lobby.getGame().newTurn();
+                    updateTurn();
                     loadPlayerHand();
                 }
                 break;
@@ -345,16 +347,13 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 String[] cards = message.split(",");
 
                 try {
-                    for(String string : cards)
-                    {
-                       int id = Integer.parseInt(string);
-                       for(PlayCard card : lobby.getGame().getAllCards())
-                       {
-                           if(card.getId() == id)
-                           {
-                               list.add(card);
-                           }
-                       }
+                    for (String string : cards) {
+                        int id = Integer.parseInt(string);
+                        for (PlayCard card : lobby.getGame().getAllCards()) {
+                            if (card.getId() == id) {
+                                list.add(card);
+                            }
+                        }
 
                     }
                     list.addAll(lobby.getGame().getChosenCards().values());
@@ -373,25 +372,20 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
                 String[] players = message.split(",");
 
-                for (Player P: lobby.getPlayers().values())
-                {
-                    for(int i = 0; i < players.length; i++)
-                    {
-                        if(P.getName().equals(players[i]))
-                        {
+                for (Player P : lobby.getPlayers().values()) {
+                    for (int i = 0; i < players.length; i++) {
+                        if (P.getName().equals(players[i])) {
                             i++;
                             Role role = Role.values()[Integer.valueOf(players[i])];
                             P.setRole(role);
                             break;
-                        }
-                        else {
+                        } else {
                             i += 1;
                         }
                     }
                 }
 
                 updateTurn();
-                updateScoreBoard();
                 break;
         }
     }
@@ -412,11 +406,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             lvScore.getItems().clear();
 
             for (Player player : lobby.getPlayers().values()) {
-                String role = "";
-                if(player.getRole() == Role.CZAR)
-                {
-                    role = "Czar";
-                }
+                String role = player.getRole() == Role.CZAR ? "Czar" : "";
                 lvScore.getItems().add(player.getName() + ": " + player.getPoints() + "  " + role);
             }
         });
