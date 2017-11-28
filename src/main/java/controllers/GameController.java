@@ -376,7 +376,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         tel++;
                     }
                 }
-                
+
                 updateTurn();
                 updateScoreBoard();
                 break;
@@ -399,7 +399,12 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             lvScore.getItems().clear();
 
             for (Player player : lobby.getPlayers().values()) {
-                lvScore.getItems().add(player.getName() + ": " + player.getPoints());
+                String role = "";
+                if(player.getRole() == Role.CZAR)
+                {
+                    role = "Czar";
+                }
+                lvScore.getItems().add(player.getName() + ": " + player.getPoints() + "  " + role);
             }
         });
     }
