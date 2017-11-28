@@ -385,7 +385,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                             break;
                         }
                         else {
-                            i += 2;
+                            i += 1;
                         }
                     }
                 }
