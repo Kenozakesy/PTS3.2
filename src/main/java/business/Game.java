@@ -65,17 +65,23 @@ public class Game {
     }
 
     // Methode wordt aangeroepen nadat een speler een kaart speelt.
-    public void playerPicksCard(int cardPosition, Player player) {
-        //gets player
+    // Returnt true als de Host de laatste kaart heeft gespeeld
+    public boolean playerPicksCard(int cardPosition, Player player) {
         PlayCard card = player.getCardsInHand().get(cardPosition);
+        boolean listIsFull;
 
         if (lobby.isHost()) {
-            addToChosenCards(player, card);
+            listIsFull = addToChosenCards(player, card);
             player.getCardsInHand().remove(card);
-        } else {
+
+            return listIsFull;
+        }
+        else {
             try {
                 lobby.messageServer(MessageType.PLAY_CARD, String.valueOf(card.getId()));
-            } catch (NotClientException e) {
+                player.getCardsInHand().remove(card);
+            }
+            catch (NotClientException e) {
                 // do nothing
             }
         }
@@ -85,6 +91,7 @@ public class Game {
             //bericht sturen server bijhouden wie heeft gekozen (peter fix this)
             czarTurn = true;
         }
+        return false;
     }
 
     public void czarPicksCards(String cardText) {
