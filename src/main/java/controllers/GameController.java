@@ -373,15 +373,20 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
                 String[] players = message.split(",");
 
-                int tel = 0;
                 for (Player P: lobby.getPlayers().values())
                 {
-                    if(P.getName().equals(players[tel]))
+                    for(int i = 0; i < players.length; i++)
                     {
-                        tel++;
-                        Role role = Role.values()[Integer.valueOf(players[tel])];
-                        P.setRole(role);
-                        tel++;
+                        if(P.getName().equals(players[i]))
+                        {
+                            i++;
+                            Role role = Role.values()[Integer.valueOf(players[i])];
+                            P.setRole(role);
+                            break;
+                        }
+                        else {
+                            i += 2;
+                        }
                     }
                 }
 
