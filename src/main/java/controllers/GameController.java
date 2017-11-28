@@ -35,7 +35,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @FXML
     private Button btnChoose;
     @FXML
-    private ListView lvPlayers;
+    private ListView lvScore;
     @FXML
     private RadioButton rbtnCard1;
     @FXML
@@ -364,5 +364,15 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @Override
     public void onServerClose() {
 
+    }
+
+    private void updateScoreBoard() {
+        Platform.runLater(() -> {
+            lvScore.getItems().clear();
+
+            for (Player player : lobby.getPlayers().values()) {
+                lvScore.getItems().add(player.getName() + ": " + player.getPoints());
+            }
+        });
     }
 }
