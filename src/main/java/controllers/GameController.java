@@ -1,10 +1,6 @@
 package controllers;
 
-import business.CzarCard;
-import business.Role;
-import business.Lobby;
-import business.PlayCard;
-import business.Player;
+import business.*;
 import business.exceptions.NotClientException;
 import business.statics.StaticPlayer;
 import javafx.application.Platform;
@@ -27,7 +23,6 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable, ServerHostEvents, ServerClientEvents {
@@ -100,7 +95,20 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     private HBox hboxPlayerSelect;
 
     private Lobby lobby;
-    int playerGottenCard = 0;
+    int cardRequestCount = 0;
+
+    private synchronized void incrementCardRequestCount() {
+        cardRequestCount++;
+    }
+
+    private synchronized boolean checkCardRequestCount() {
+        if (cardRequestCount == lobby.getPlayers().size() - 1) {
+            cardRequestCount = 0;
+            return true;
+        }
+
+        return false;
+    }
 
     public void setLobby(Lobby lobby) {
         this.lobby = lobby;
@@ -255,10 +263,10 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     public void onClientMessage(Socket client, MessageType messageType, String message) {
         switch (messageType) {
             case RECEIVE_CARD:
-                playerGottenCard++;
-                if (playerGottenCard == lobby.getPlayers().size() - 1) {
+                this.incrementCardRequestCount();
+
+                if (checkCardRequestCount()) {
                     lobby.getGame().newTurn();
-                    playerGottenCard = 0;
                     loadPlayerHand();
                 }
                 break;
