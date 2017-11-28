@@ -27,6 +27,7 @@ import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class GameController implements Initializable, ServerHostEvents, ServerClientEvents {
@@ -361,9 +362,23 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
 
             case GET_ROLE:
-                Role role = Role.values()[Integer.valueOf(message)];
-                StaticPlayer.getPlayer().setRole(role);
+
+                String[] players = message.split(",");
+
+                int tel = 0;
+                for (Player P: lobby.getPlayers().values())
+                {
+                    if(P.getName().equals(players[tel]))
+                    {
+                        tel++;
+                        Role role = Role.values()[Integer.valueOf(players[tel])];
+                        P.setRole(role);
+                        tel++;
+                    }
+                }
+                
                 updateTurn();
+                updateScoreBoard();
                 break;
         }
     }

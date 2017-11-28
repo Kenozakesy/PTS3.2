@@ -243,9 +243,7 @@ public class Lobby {
             //hier nog het versturen naar de andere client
             StringBuilder builder = new StringBuilder();
             for (Player P : playerList) {
-                if(StaticPlayer.getPlayer() != P) {
                     builder.append(P.getName() + "," + P.getRole().ordinal() + ",");
-                }
             }
 
             try {
