@@ -2,7 +2,6 @@ package controllers;
 
 import business.CardSet;
 import business.Lobby;
-import business.MainServerManager;
 import business.Player;
 import business.exceptions.NotClientException;
 import business.exceptions.NotHostException;
@@ -27,6 +26,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -183,16 +183,8 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             if (lvPickedCards.getItems().size() < 1) {
                 lbError.setText("Please choose a cardpack.");
             } else {
-                // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
-                StringBuilder builder = new StringBuilder();
-
-                for (Object o : lvPickedCards.getItems()) {
-                    CardSet cardSet = (CardSet) o;
-                    builder.append(cardSet.getId() + ",");
-                }
-
                 startGameScreen(lobby);
-                lobby.messageClients(MessageType.START_GAME, builder.toString());
+                lobby.messageClients(MessageType.START_GAME, "!");
             }
 
         } catch (Exception exception) {
@@ -266,31 +258,52 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                     ddBlankCards.getSelectionModel().select(Integer.valueOf(splitMessage[4]));
                 });
                 break;
-            case UPDATE_CARDSETS:
 
+            case UPDATE_CARDSETS:
                 int id = Integer.parseInt(message);
 
                 for (CardSet set : lobby.getCardSetsUsing()) {
-                    if(set.getId() == id)
-                    {
+                    if (set.getId() == id) {
                         lobby.getCardSetsUsing().remove(set);
                         lobby.getCardSetsNotUsing().add(set);
-                        Platform.runLater( ()->updateCardSets());
+                        Platform.runLater(() -> updateCardSets());
                         return;
                     }
-
                 }
 
                 for (CardSet set : lobby.getCardSetsNotUsing()) {
-                    if(set.getId() == id) {
-
+                    if (set.getId() == id) {
                         lobby.getCardSetsNotUsing().remove(set);
                         lobby.getCardSetsUsing().add(set);
-                        Platform.runLater( ()->updateCardSets());
+                        Platform.runLater(() -> updateCardSets());
                         return;
                     }
                 }
 
+                break;
+
+            case INIT_PRE_CHOSEN_CARD_SETS:
+                String[] setIds = message.split(",");
+
+                List<CardSet> sets = new ArrayList<>();
+
+                for (String setId : setIds) {
+                    int parsedId = Integer.parseInt(setId);
+
+                    for (CardSet set : lobby.getCardSetsNotUsing()) {
+                        if (set.getId() == parsedId) {
+                            sets.add(set);
+                            break;
+                        }
+                    }
+                }
+
+                for (CardSet set : sets) {
+                    lobby.getCardSetsNotUsing().remove(set);
+                    lobby.getCardSetsUsing().add(set);
+                }
+
+                Platform.runLater(() -> updateCardSets());
                 break;
         }
     }
@@ -358,6 +371,8 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
 
     private void handleClientPlayerData(Socket client, String message) {
         try {
+            this.sendChosenCards(client);
+
             //Send all current players to the connecting client.
             for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
                 lobby.messageClient(client, MessageType.PLAYER_DATA, entry.getValue().getName());
@@ -381,22 +396,26 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         updateScoreBoard();
     }
 
+    private void sendChosenCards(Socket client) {
+        StringBuilder builder = new StringBuilder();
+
+        for (CardSet set : lobby.getCardSetsUsing()) {
+            builder.append(set.getId() + ",");
+        }
+
+        try {
+            lobby.messageClient(client, MessageType.INIT_PRE_CHOSEN_CARD_SETS, builder.toString());
+        } catch (NotHostException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void handleHostPlayerData(String message) {
         lobby.getPlayers().put(new Socket(), new Player(message));
         updateScoreBoard();
     }
 
     private void handleStartGame(String message) {
-        String[] splitMessage = message.split(",");
-
-        ArrayList<CardSet> sets = new ArrayList<>();
-
-        for (int i = 0; i < splitMessage.length; i++) {
-            sets.add(lobby.getCardSetsNotUsing().get(Integer.valueOf(splitMessage[i])));
-        }
-
-        lobby.setCardSetsUsing(sets);
-
         System.out.println("Starting");
 
         Platform.runLater(() -> {

@@ -12,7 +12,8 @@ public enum MessageType {
     PLAY_CARD,
     CHOSEN_CARDS,
     GET_ROLE,
-    UPDATE_CARDSETS
+    UPDATE_CARDSETS,
+    INIT_PRE_CHOSEN_CARD_SETS
 }
 
 
