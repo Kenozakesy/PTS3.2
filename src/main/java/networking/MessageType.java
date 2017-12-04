@@ -11,7 +11,8 @@ public enum MessageType {
     RECEIVE_CARD,
     PLAY_CARD,
     CHOSEN_CARDS,
-    GET_ROLE
+    GET_ROLE,
+    UPDATE_CARDSETS
 }
 
 

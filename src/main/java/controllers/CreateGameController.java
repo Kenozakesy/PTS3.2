@@ -103,7 +103,6 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             ddScorelimit.valueProperty().addListener(this);
             ddSpectatorLimit.valueProperty().addListener(this);
         }
-
         updateScoreBoard();
         updateCardSets();
     }
@@ -113,6 +112,13 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         if (lvCardsets.getSelectionModel().getSelectedItem() != null) {
             CardSet set = (CardSet) lvCardsets.getSelectionModel().getSelectedItem();
             lobby.setToUsingSets(set);
+
+            try {
+                lobby.messageClients(MessageType.UPDATE_CARDSETS, String.valueOf(set.getId()));
+            } catch (NotHostException e1) {
+                e1.printStackTrace();
+            }
+
             updateCardSets();
         }
     }
@@ -122,6 +128,13 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         if (lvPickedCards.getSelectionModel().getSelectedItem() != null) {
             CardSet set = (CardSet) lvPickedCards.getSelectionModel().getSelectedItem();
             lobby.setToNotUsingSets(set);
+
+            try {
+                lobby.messageClients(MessageType.UPDATE_CARDSETS, String.valueOf(set.getId()));
+            } catch (NotHostException e1) {
+                e1.printStackTrace();
+            }
+
             updateCardSets();
         }
     }
@@ -252,6 +265,32 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                     ddIdleTimer.getSelectionModel().select(Integer.valueOf(splitMessage[3]));
                     ddBlankCards.getSelectionModel().select(Integer.valueOf(splitMessage[4]));
                 });
+                break;
+            case UPDATE_CARDSETS:
+
+                int id = Integer.parseInt(message);
+
+                for (CardSet set : lobby.getCardSetsUsing()) {
+                    if(set.getId() == id)
+                    {
+                        lobby.getCardSetsUsing().remove(set);
+                        lobby.getCardSetsNotUsing().add(set);
+                        Platform.runLater( ()->updateCardSets());
+                        return;
+                    }
+
+                }
+
+                for (CardSet set : lobby.getCardSetsNotUsing()) {
+                    if(set.getId() == id) {
+
+                        lobby.getCardSetsNotUsing().remove(set);
+                        lobby.getCardSetsUsing().add(set);
+                        Platform.runLater( ()->updateCardSets());
+                        return;
+                    }
+                }
+
                 break;
         }
     }
