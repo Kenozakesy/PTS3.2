@@ -41,6 +41,9 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     private Button btnStartGame;
 
     @FXML
+    private Label lbPlayers;
+
+    @FXML
     private Label lbError;
 
     @FXML
@@ -182,24 +185,32 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     private void btnStartGame(Event e) {
         //goes to different view
         //starts the game with current options
-        try {
-            if (lvPickedCards.getItems().size() < 1) {
-                lbError.setText("Please choose a cardpack.");
-            } else {
-                // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
-                StringBuilder builder = new StringBuilder();
 
-                for (Object o : lvPickedCards.getItems()) {
-                    CardSet cardSet = (CardSet) o;
-                    builder.append(cardSet.getId() + ",");
+        if(lobby.getPlayers().size() <= lobby.getMaxPlayers()) {
+
+            try {
+                if (lvPickedCards.getItems().size() < 1) {
+                    lbError.setText("Please choose a cardpack.");
+                } else {
+                    // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
+                    StringBuilder builder = new StringBuilder();
+
+                    for (Object o : lvPickedCards.getItems()) {
+                        CardSet cardSet = (CardSet) o;
+                        builder.append(cardSet.getId() + ",");
+                    }
+
+                    startGameScreen(lobby);
+                    lobby.messageClients(MessageType.START_GAME, builder.toString());
                 }
 
-                startGameScreen(lobby);
-                lobby.messageClients(MessageType.START_GAME, builder.toString());
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        }
+        else
+        {
+            lbPlayers.setText("Too many players to start!");
         }
     }
 
