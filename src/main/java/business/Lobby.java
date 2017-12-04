@@ -55,6 +55,12 @@ public class Lobby {
         return maxSpectators;
     }
 
+    public void setMaxPlayers(int maxPlayers) {this.maxPlayers = maxPlayers;}
+    public void setMaxSpectators(int maxSpectators) {this.maxSpectators = maxSpectators;}
+    public void setScoreLimit(int scoreLimit) {this.scoreLimit = scoreLimit;}
+    public void setBlankCards(int blankCards) {this.blankCards = blankCards;}
+    public void setTimeLimit(int timeLimit) {this.timeLimit = timeLimit;}
+
     public int getScoreLimit() {
         return scoreLimit;
     }
