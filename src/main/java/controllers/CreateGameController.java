@@ -2,7 +2,6 @@ package controllers;
 
 import business.CardSet;
 import business.Lobby;
-import business.MainServerManager;
 import business.Player;
 import business.exceptions.NotClientException;
 import business.exceptions.NotHostException;
@@ -27,6 +26,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -108,7 +108,6 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         }
 
 
-
         updateScoreBoard();
         updateCardSets();
     }
@@ -186,30 +185,19 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         //goes to different view
         //starts the game with current options
 
-        if(lobby.getPlayers().size() <= lobby.getMaxPlayers()) {
-
+        if (lobby.getPlayers().size() <= lobby.getMaxPlayers()) {
             try {
                 if (lvPickedCards.getItems().size() < 1) {
                     lbError.setText("Please choose a cardpack.");
                 } else {
-                    // Geeft de cardsets mee aan de clients en start de schermen bij de spelers
-                    StringBuilder builder = new StringBuilder();
-
-                    for (Object o : lvPickedCards.getItems()) {
-                        CardSet cardSet = (CardSet) o;
-                        builder.append(cardSet.getId() + ",");
-                    }
-
                     startGameScreen(lobby);
-                    lobby.messageClients(MessageType.START_GAME, builder.toString());
+                    lobby.messageClients(MessageType.START_GAME, "");
                 }
 
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             lbPlayers.setText("Too many players to start!");
         }
     }
@@ -269,6 +257,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             case START_GAME:
                 handleStartGame(message);
                 break;
+
             case UPDATE_LOBBY_SETTINGS:
                 String[] splitMessage = message.split(",");
 
@@ -280,31 +269,53 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                     ddBlankCards.getSelectionModel().select(Integer.valueOf(splitMessage[4]));
                 });
                 break;
-            case UPDATE_CARDSETS:
 
+            case UPDATE_CARDSETS:
                 int id = Integer.parseInt(message);
 
                 for (CardSet set : lobby.getCardSetsUsing()) {
-                    if(set.getId() == id)
-                    {
+                    if (set.getId() == id) {
                         lobby.getCardSetsUsing().remove(set);
                         lobby.getCardSetsNotUsing().add(set);
-                        Platform.runLater( ()->updateCardSets());
+                        Platform.runLater(() -> updateCardSets());
                         return;
                     }
 
                 }
 
                 for (CardSet set : lobby.getCardSetsNotUsing()) {
-                    if(set.getId() == id) {
-
+                    if (set.getId() == id) {
                         lobby.getCardSetsNotUsing().remove(set);
                         lobby.getCardSetsUsing().add(set);
-                        Platform.runLater( ()->updateCardSets());
+                        Platform.runLater(() -> updateCardSets());
                         return;
                     }
                 }
 
+                break;
+
+            case INIT_PRE_CHOSEN_CARD_SETS:
+                String[] setIds = message.split(",");
+
+                List<CardSet> sets = new ArrayList<>();
+
+                for (String setId : setIds) {
+                    int parsedId = Integer.parseInt(setId);
+
+                    for (CardSet set : lobby.getCardSetsNotUsing()) {
+                        if (set.getId() == parsedId) {
+                            sets.add(set);
+                            break;
+                        }
+                    }
+                }
+
+                for (CardSet set : sets) {
+                    lobby.getCardSetsNotUsing().remove(set);
+                    lobby.getCardSetsUsing().add(set);
+                }
+
+                Platform.runLater(() -> updateCardSets());
                 break;
         }
     }
@@ -371,6 +382,8 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     }
 
     private void handleClientPlayerData(Socket client, String message) {
+        this.sendChosenCardSets(client);
+
         try {
             //Send all current players to the connecting client.
             for (Map.Entry<Socket, Player> entry : lobby.getPlayers().entrySet()) {
@@ -401,16 +414,6 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     }
 
     private void handleStartGame(String message) {
-        String[] splitMessage = message.split(",");
-
-        ArrayList<CardSet> sets = new ArrayList<>();
-
-        for (int i = 0; i < splitMessage.length; i++) {
-            sets.add(lobby.getCardSetsNotUsing().get(Integer.valueOf(splitMessage[i])));
-        }
-
-        lobby.setCardSetsUsing(sets);
-
         System.out.println("Starting");
 
         Platform.runLater(() -> {
@@ -436,7 +439,6 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             btnRight.setDisable(true);
 
             //Set the opacity to 1 so that the value is more readable
-
             String opacityCSS = "-fx-opacity: 1";
             ddScorelimit.setStyle(opacityCSS);
             ddPlayerLimit.setStyle(opacityCSS);
@@ -449,7 +451,6 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         // This only gets called when the user is a server host.
-
         lobby.setScoreLimit(ddScorelimit.getSelectionModel().getSelectedIndex());
         lobby.setMaxPlayers(ddPlayerLimit.getSelectionModel().getSelectedIndex());
         lobby.setMaxSpectators(ddSpectatorLimit.getSelectionModel().getSelectedIndex());
@@ -469,6 +470,22 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             e.printStackTrace();
         }
     }
+
+    private void sendChosenCardSets(Socket client) {
+        // Geeft de cardsets mee aan de client
+        StringBuilder builder = new StringBuilder();
+
+        for (CardSet set : lobby.getCardSetsUsing()) {
+            builder.append(set.getId() + ",");
+        }
+
+        try {
+            lobby.messageClient(client, MessageType.INIT_PRE_CHOSEN_CARD_SETS, builder.toString());
+        } catch (NotHostException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void returnToPreviousScreen() {
         Stage stage = (Stage) btnStartGame.getScene().getWindow();
