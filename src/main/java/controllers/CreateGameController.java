@@ -103,6 +103,9 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             ddScorelimit.valueProperty().addListener(this);
             ddSpectatorLimit.valueProperty().addListener(this);
         }
+
+
+
         updateScoreBoard();
         updateCardSets();
     }
@@ -435,6 +438,12 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         // This only gets called when the user is a server host.
+
+        lobby.setScoreLimit(ddScorelimit.getSelectionModel().getSelectedIndex());
+        lobby.setMaxPlayers(ddPlayerLimit.getSelectionModel().getSelectedIndex());
+        lobby.setMaxSpectators(ddSpectatorLimit.getSelectionModel().getSelectedIndex());
+        lobby.setTimeLimit(ddIdleTimer.getSelectionModel().getSelectedIndex());
+        lobby.setBlankCards(ddBlankCards.getSelectionModel().getSelectedIndex());
 
         String message =
                 ddScorelimit.getSelectionModel().getSelectedIndex() + "," +
