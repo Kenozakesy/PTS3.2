@@ -30,7 +30,7 @@ public class LoginController {
         Stage stage = (Stage) button.getScene().getWindow();
         stage.close();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../Lobby.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../LobbyView.fxml"));
 
         Parent root1 = null;
         try {

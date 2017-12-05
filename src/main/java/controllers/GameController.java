@@ -169,15 +169,19 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             if (rbCzarPick1.isSelected()) {
                 String cardtext = taCzar1.getText();
                 lobby.getGame().czarPicksCards(cardtext);
+
             } else if (rbCzarPick2.isSelected()) {
                 String cardtext = taCzar2.getText();
                 lobby.getGame().czarPicksCards(cardtext);
+
             } else if (rbCzarPick3.isSelected()) {
                 String cardtext = taCzar3.getText();
                 lobby.getGame().czarPicksCards(cardtext);
+
             } else if (rbCzarPick4.isSelected()) {
                 String cardtext = taCzar4.getText();
                 lobby.getGame().czarPicksCards(cardtext);
+
             }
         }
     }
@@ -289,6 +293,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 }
 
                 if (lobby.getGame().addToChosenCards(lobby.getPlayers().get(client), card)) {
+
                     ArrayList<PlayCard> list = new ArrayList<>();
 
                     try {
@@ -383,6 +388,20 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
                 updateTurn();
                 break;
+            case INCREASE_POINTS: //new piece of code still to be tested
+
+                for (Player p : lobby.getPlayers().values()) {
+                    if(p.getName().equals(message))
+                    {
+                        p.increasePoints();
+                    }
+                }
+
+                break;
+            case DELETE_CHOSEN_CARDS:
+                lobby.getGame().getChosenCards().clear();
+                getCardsForHost();
+                break;
         }
     }
 
@@ -427,7 +446,14 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             // do nothing
             // Kunt proberen om een stuk of 4 if's te maken ipv deze try-catch
             // Als je ogen dat aankunnen
+            taCzar1.setText("");
+            taCzar2.setText("");
+            taCzar3.setText("");
+            taCzar4.setText("");
+
         }
 
     }
+
+
 }
