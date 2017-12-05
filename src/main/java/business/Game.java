@@ -149,8 +149,7 @@ public class Game {
             for (int i = 0; i < 8; i++) {
                 //voegd een kaart toe aan speler hand en verwijderd die uit de stapel
                 for (Player player : lobby.getPlayers().values()) {
-                    //if (player.getCardsInHand().size() < 8) { <-- code mag weg als de while werkt.
-                    while(playedCard(player)) {
+                    if (player.getCardsInHand().size() < 8) {
                         int index = random.nextInt(playCards.size());
 
                         player.addToHand(playCards.get(index));
