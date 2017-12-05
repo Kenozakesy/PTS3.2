@@ -100,10 +100,26 @@ public class Game {
         for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet()) {
             if (entry.getValue().getText().equals(cardText)) {
                 entry.getKey().increasePoints();
+
+                //Speler met punt erbij moet 1 punt krijgen doorgestuurd
+                try {
+                    lobby.messageClients(MessageType.INCREASE_POINTS, entry.getKey().getName());
+                } catch (NotHostException e) {
+                    e.printStackTrace();
+                }
+                break;
             }
         }
-        //verwijder kaarten uit geheugen
-        chosenCards.clear();
+
+        //verwijder chosencards (voor iedereen)
+        try {
+            chosenCards.clear();
+            lobby.messageClients(MessageType.DELETE_CHOSEN_CARDS, "!");
+        } catch (NotHostException e) {
+            e.printStackTrace();
+        }
+
+        //nieuwe beurt moet aangemaakt worden (mooet og gedaan worden)
         newTurn();
     }
 
