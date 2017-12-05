@@ -20,7 +20,7 @@ public class Game {
     private List<CzarCard> czarCards;
     private List<PlayCard> playCards;
     private List<PlayCard> allCards;
-    private CzarCard currentCzar;
+    private CzarCard currentCzar; // Is dus de zwarte kaart die op tafel ligt, waarop gespeeld wordt.
     private boolean czarTurn;
     private static final int MAX_HAND_SIZE = 8;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
@@ -133,8 +133,8 @@ public class Game {
             for (int i = 0; i < 8; i++) {
                 //voegd een kaart toe aan speler hand en verwijderd die uit de stapel
                 for (Player player : lobby.getPlayers().values()) {
-                    if (player.getCardsInHand().size() < 8) {
-
+                    //if (player.getCardsInHand().size() < 8) { <-- code mag weg als de while werkt.
+                    while(playedCard(player)) {
                         int index = random.nextInt(playCards.size());
 
                         player.addToHand(playCards.get(index));
