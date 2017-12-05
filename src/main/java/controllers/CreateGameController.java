@@ -472,6 +472,10 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     }
 
     private void sendChosenCardSets(Socket client) {
+        if (lobby.getCardSetsUsing().size() == 0) {
+            return;
+        }
+
         // Geeft de cardsets mee aan de client
         StringBuilder builder = new StringBuilder();
 
