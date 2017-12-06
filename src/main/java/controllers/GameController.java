@@ -307,6 +307,9 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 }
 
                 break;
+            case INCREASE_POINTS:
+                lobby.getGame().czarPicksCards(message);
+                break;
         }
     }
 
@@ -397,10 +400,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     }
                 }
 
-                break;
-            case DELETE_CHOSEN_CARDS:
-                lobby.getGame().getChosenCards().clear();
-                getCardsForHost();
                 break;
         }
     }

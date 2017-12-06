@@ -96,31 +96,37 @@ public class Game {
     }
 
     public void czarPicksCards(String cardText) {
-        // Einde van de beurt, nieuwe ronde start etc.
-        for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet()) {
-            if (entry.getValue().getText().equals(cardText)) {
-                entry.getKey().increasePoints();
-
-                //Speler met punt erbij moet 1 punt krijgen doorgestuurd
-                try {
-                    lobby.messageClients(MessageType.INCREASE_POINTS, entry.getKey().getName());
-                } catch (NotHostException e) {
-                    e.printStackTrace();
+        //Speler met punt erbij moet 1 punt krijgen doorgestuurd
+        if(lobby.isHost()) {
+            String playerName = null;
+            for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet()) {
+                if (entry.getValue().getText().equals(cardText)) {
+                    entry.getKey().increasePoints();
+                    playerName = entry.getKey().getName();
+                    break;
                 }
-                break;
+            }
+
+            try {
+                lobby.messageClients(MessageType.INCREASE_POINTS, playerName);
+            } catch (NotHostException e) {
+                e.printStackTrace();
+            }
+
+            //nieuwe beurt moet aangemaakt worden (moet og gedaan worden)
+            newTurn();
+        }
+        else
+        {
+            try {
+                lobby.messageServer(MessageType.INCREASE_POINTS, cardText);
+            } catch (NotClientException e) {
+                e.printStackTrace();
             }
         }
 
         //verwijder chosencards (voor iedereen)
-        try {
-            chosenCards.clear();
-            lobby.messageClients(MessageType.DELETE_CHOSEN_CARDS, "!");
-        } catch (NotHostException e) {
-            e.printStackTrace();
-        }
-
-        //nieuwe beurt moet aangemaakt worden (mooet og gedaan worden)
-        newTurn();
+        chosenCards.clear();
     }
 
     // Een zwarte kaart wordt gekozen om te lezen en wordt meteen uit de te kiezen kaarten gehaald.
