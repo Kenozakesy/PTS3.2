@@ -212,8 +212,16 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     //laad aan het begin van een niewe ronde de kaarten voor een client in
     public void loadPlayerHand() {
         List<PlayCard> cardsInHand = StaticPlayer.getPlayer().getCardsInHand();
-
         CzarCard czarCard = lobby.getGame().getCurrentCzarCard();
+
+        taCard1.clear();
+        taCard2.clear();
+        taCard3.clear();
+        taCard4.clear();
+        taCard5.clear();
+        taCard6.clear();
+        taCard7.clear();
+        taCard8.clear();
 
         try
         {
