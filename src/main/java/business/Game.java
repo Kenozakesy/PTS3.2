@@ -19,6 +19,7 @@ public class Game {
     private Random random = new Random();
     private List<CzarCard> czarCards;
     private List<PlayCard> playCards;
+    private List<PlayCard> subPilePlayCards;
     private List<PlayCard> allCards;
     private CzarCard currentCzar; // Is dus de zwarte kaart die op tafel ligt, waarop gespeeld wordt.
     private boolean czarTurn;
@@ -156,15 +157,23 @@ public class Game {
                 //voegd een kaart toe aan speler hand en verwijderd die uit de stapel
                 for (Player player : lobby.getPlayers().values()) {
                     if (player.getCardsInHand().size() < 8) {
-                        int index = random.nextInt(playCards.size());
 
+                        if(playCards.size() <= 0)
+                        {
+                            playCards.addAll(subPilePlayCards);
+                            subPilePlayCards.clear();
+                        }
+
+                        int index = random.nextInt(playCards.size());
                         player.addToHand(playCards.get(index));
 
+                        subPilePlayCards.add(playCards.get(index));
                         playCards.remove(index);
                     }
                 }
             }
 
+            //voor het doorsturen kaarten naar bijbehorende client
             for (Player player : lobby.getPlayers().values()) {
                 StringBuilder builder = new StringBuilder();
 
