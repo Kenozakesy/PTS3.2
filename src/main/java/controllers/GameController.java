@@ -326,9 +326,9 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
             case INCREASE_POINTS:
                 lobby.getGame().czarPicksCards(message);
-                updateTurn();
                 break;
         }
+        updateScoreBoard();
     }
 
     @Override
