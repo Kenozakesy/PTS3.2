@@ -185,6 +185,10 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 lobby.getGame().czarPicksCards(cardtext);
 
             }
+            if(lobby.isHost())
+            {
+                updateTurn();
+            }
         }
         loadPlayerHand();
     }
@@ -212,9 +216,10 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     //laad aan het begin van een niewe ronde de kaarten voor een client in
-    public void loadPlayerHand() {
+    private void loadPlayerHand() {
         List<PlayCard> cardsInHand = StaticPlayer.getPlayer().getCardsInHand();
         CzarCard czarCard = lobby.getGame().getCurrentCzarCard();
+
 
         taCard1.clear();
         taCard2.clear();
@@ -249,6 +254,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             this.changeControlVisibility();
             updateScoreBoard();
             deleteChosenCardsUI();
+            loadPlayerHand();
         });
     }
 
@@ -320,6 +326,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
             case INCREASE_POINTS:
                 lobby.getGame().czarPicksCards(message);
+                updateTurn();
                 break;
         }
         updateScoreBoard();
@@ -360,7 +367,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     }
                 }
 
-                loadPlayerHand();
+                //loadPlayerHand();
                 break;
 
             case CHOSEN_CARDS:
