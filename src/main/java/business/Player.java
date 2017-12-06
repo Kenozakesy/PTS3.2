@@ -56,10 +56,13 @@ public class Player {
     }
 
     public void removeFromHand(PlayCard card) {
+        PlayCard cardpar = null;
         for(PlayCard cardInHand : cardsInHand) {
             if(cardInHand.getId() == card.getId()) {
-                cardsInHand.remove(card);
+                cardpar = cardInHand;
+                break;
             }
         }
+        cardsInHand.remove(cardpar);
     }
 }

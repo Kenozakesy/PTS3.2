@@ -73,14 +73,14 @@ public class Game {
 
         if (lobby.isHost()) {
             listIsFull = addToChosenCards(player, card);
-            player.getCardsInHand().remove(card);
+            player.removeFromHand(card);
 
             return listIsFull;
         }
         else {
             try {
                 lobby.messageServer(MessageType.PLAY_CARD, String.valueOf(card.getId()));
-                //player.getCardsInHand().remove(card);
+                player.removeFromHand(card);
             }
             catch (NotClientException e) {
                 // do nothing
