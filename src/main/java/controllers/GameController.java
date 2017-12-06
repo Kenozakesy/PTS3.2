@@ -322,7 +322,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
                     showPlayedCards(list);
                 }
-
+                lobby.getPlayers().get(client).getCardsInHand().remove(card);
                 break;
             case INCREASE_POINTS:
                 lobby.getGame().czarPicksCards(message);

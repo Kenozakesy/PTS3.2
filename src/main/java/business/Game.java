@@ -80,7 +80,7 @@ public class Game {
         else {
             try {
                 lobby.messageServer(MessageType.PLAY_CARD, String.valueOf(card.getId()));
-                player.getCardsInHand().remove(card);
+                //player.getCardsInHand().remove(card);
             }
             catch (NotClientException e) {
                 // do nothing
