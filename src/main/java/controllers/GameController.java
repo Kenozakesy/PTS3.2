@@ -243,9 +243,11 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     //moet aangeroepen worden wanneer het de turn is van de czar en wanneer een nieuwe beurt begint
     public void updateTurn() {
-        this.changeControlVisibility();
-        updateScoreBoard();
-        deleteChosenCardsUI();
+        Platform.runLater( ()-> {
+            this.changeControlVisibility();
+            updateScoreBoard();
+            deleteChosenCardsUI();
+        });
     }
 
     private void changeControlVisibility() {
