@@ -93,6 +93,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     private Button btnLeaveGame;
     @FXML
     private HBox hboxPlayerSelect;
+    @FXML
+    private HBox hboxCzarSelect;
 
     private Lobby lobby;
     int cardRequestCount = 0;
@@ -270,21 +272,11 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     private void setCzarRadioButtonsVisibility(boolean value) {
-        rbCzarPick1.setVisible(value);
-        rbCzarPick2.setVisible(value);
-        rbCzarPick3.setVisible(value);
-        rbCzarPick4.setVisible(value);
+        hboxCzarSelect.setVisible(value);
     }
 
     private void setPlebRadioButtonsVisibility(boolean value) {
-        rbtnCard1.setVisible(value);
-        rbtnCard2.setVisible(value);
-        rbtnCard3.setVisible(value);
-        rbtnCard4.setVisible(value);
-        rbtnCard5.setVisible(value);
-        rbtnCard6.setVisible(value);
-        rbtnCard7.setVisible(value);
-        rbtnCard8.setVisible(value);
+        hboxPlayerSelect.setVisible(value);
     }
 
     @Override
