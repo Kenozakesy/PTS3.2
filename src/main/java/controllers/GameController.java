@@ -184,6 +184,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
             }
         }
+        loadPlayerHand();
     }
 
     public void btnLeaveGame() {
@@ -214,21 +215,29 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
         CzarCard czarCard = lobby.getGame().getCurrentCzarCard();
 
-        taCard1.setText(cardsInHand.get(0).getText());
-        taCard2.setText(cardsInHand.get(1).getText());
-        taCard3.setText(cardsInHand.get(2).getText());
-        taCard4.setText(cardsInHand.get(3).getText());
-        taCard5.setText(cardsInHand.get(4).getText());
-        taCard6.setText(cardsInHand.get(5).getText());
-        taCard7.setText(cardsInHand.get(6).getText());
-        taCard8.setText(cardsInHand.get(7).getText());
-        taBlackCard.setText(czarCard.getText());
+        try
+        {
+            taCard1.setText(cardsInHand.get(0).getText());
+            taCard2.setText(cardsInHand.get(1).getText());
+            taCard3.setText(cardsInHand.get(2).getText());
+            taCard4.setText(cardsInHand.get(3).getText());
+            taCard5.setText(cardsInHand.get(4).getText());
+            taCard6.setText(cardsInHand.get(5).getText());
+            taCard7.setText(cardsInHand.get(6).getText());
+            taCard8.setText(cardsInHand.get(7).getText());
+            taBlackCard.setText(czarCard.getText());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     //moet aangeroepen worden wanneer het de turn is van de czar en wanneer een nieuwe beurt begint
     public void updateTurn() {
         this.changeControlVisibility();
         updateScoreBoard();
+        deleteChosenCardsUI();
     }
 
     private void changeControlVisibility() {
@@ -276,8 +285,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
                 if (checkCardRequestCount()) {
                     lobby.getGame().newTurn();
-                    updateTurn();
                     loadPlayerHand();
+                    updateTurn();
                 }
                 break;
 
@@ -309,6 +318,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
             case INCREASE_POINTS:
                 lobby.getGame().czarPicksCards(message);
+                updateTurn();
                 break;
         }
     }
@@ -399,7 +409,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         p.increasePoints();
                     }
                 }
-
                 break;
         }
     }
@@ -445,13 +454,17 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             // do nothing
             // Kunt proberen om een stuk of 4 if's te maken ipv deze try-catch
             // Als je ogen dat aankunnen
-            taCzar1.setText("");
-            taCzar2.setText("");
-            taCzar3.setText("");
-            taCzar4.setText("");
-
+            deleteChosenCardsUI();
         }
 
+    }
+
+    private void deleteChosenCardsUI()
+    {
+        taCzar1.clear();
+        taCzar2.clear();
+        taCzar3.clear();
+        taCzar4.clear();
     }
 
 
