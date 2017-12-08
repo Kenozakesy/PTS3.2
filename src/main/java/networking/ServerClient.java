@@ -54,6 +54,7 @@ public class ServerClient {
 
         private final String hostIP;
         private final int port;
+        private static final String UTF_8 = "UTF-8";
 
         private boolean receiveMessages = true;
 
@@ -97,7 +98,7 @@ public class ServerClient {
                         byte[] messageBuffer = Arrays.copyOfRange(buffer, 5, messageLength);
 
                         MessageType messageType = MessageType.values()[buffer[4]];
-                        String message = new String(messageBuffer, "UTF-8");
+                        String message = new String(messageBuffer, UTF_8);
 
                         client.eventHandler.onHostMessage(messageType, message);
 
@@ -111,7 +112,7 @@ public class ServerClient {
                             messageBuffer = Arrays.copyOfRange(resizedArray, 5, messageLength);
 
                             messageType = MessageType.values()[resizedArray[4]];
-                            message = new String(messageBuffer, "UTF-8");
+                            message = new String(messageBuffer, UTF_8);
 
                             client.eventHandler.onHostMessage(messageType, message);
 
@@ -130,8 +131,8 @@ public class ServerClient {
         private void sendMessage(MessageType messageType, String message) {
             try {
                 message = (char) messageType.ordinal() + message;
-                message = new String(IntConverter.intToByteArray(message.length()), "UTF-8") + message;
-                out.write(message.getBytes("UTF-8"));
+                message = new String(IntConverter.intToByteArray(message.length()), UTF_8) + message;
+                out.write(message.getBytes(UTF_8));
                 out.flush();
             } catch (IOException e) {
                 e.printStackTrace();

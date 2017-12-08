@@ -194,10 +194,11 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     public void btnLeaveGame() {
-
+        // leave game method for later
+        throw new UnsupportedOperationException();
     }
 
-    private void returnToMainScreen() {
+     void returnToMainScreen() {
         Platform.runLater(() -> {
             Stage stage = (Stage) btnLeaveGame.getScene().getWindow();
             stage.close();
@@ -274,6 +275,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 this.setCzarRadioButtonsVisibility(false);
                 this.setPlebRadioButtonsVisibility(false);
                 break;
+                default: break;
         }
     }
 
@@ -332,17 +334,20 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 lobby.getGame().czarPicksCards(message);
                 updateTurn();
                 break;
+                default: break;
         }
         updateScoreBoard();
     }
 
     @Override
     public void onClientJoin(Socket client) {
+        // interface method. Currently unused.
 
     }
 
     @Override
     public void onClientLeave(Socket client) {
+        // interface method. Currently unused.
 
     }
 
@@ -371,7 +376,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     }
                 }
 
-                //loadPlayerHand();
                 break;
 
             case CHOSEN_CARDS:
@@ -398,9 +402,10 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             case GET_ROLE:
 
                 String[] players = message.split(",");
+                int i;
 
                 for (Player P : lobby.getPlayers().values()) {
-                    for (int i = 0; i < players.length; i++) {
+                    for (i = 0; i < players.length; i++) {
                         if (P.getName().equals(players[i])) {
                             i++;
                             Role role = Role.values()[Integer.valueOf(players[i])];
@@ -423,16 +428,19 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     }
                 }
                 break;
+            default: break;
         }
     }
 
     @Override
     public void onJoin(SocketAddress address) {
+        // interface methode. Ongebruikt momenteel
 
     }
 
     @Override
     public void onServerClose() {
+        // interface methode. Ongebruikt momenteel
 
     }
 

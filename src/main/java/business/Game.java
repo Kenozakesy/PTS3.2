@@ -158,7 +158,7 @@ public class Game {
                 for (Player player : lobby.getPlayers().values()) {
                     if (player.getCardsInHand().size() < 8) {
 
-                        if(playCards.size() <= 0)
+                        if(playCards.isEmpty())
                         {
                             playCards.addAll(subPilePlayCards);
                             subPilePlayCards.clear();
@@ -202,12 +202,13 @@ public class Game {
     }
 
     public boolean playedCard(Player player) {
+        boolean playedCard = false;
+
         if (player.getCardsInHand().size() != MAX_HAND_SIZE) {
-            {
-                return true;
+                playedCard = true;
             }
-        }
-        return false;
+
+        return playedCard;
     }
 
     // Host ontvangt een kaart van zichzelf of een clients.

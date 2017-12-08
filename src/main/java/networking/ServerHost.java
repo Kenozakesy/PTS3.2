@@ -27,12 +27,9 @@ public class ServerHost {
         this.eventHandler = eventHandler;
     }
 
-    public void removeClient(ClientHandler handler) {
+    public synchronized void removeClient(ClientHandler handler) {
         clients.remove(handler);
 
-        synchronized (playerLockObj) {
-            playerLockObj.notify();
-        }
     }
 
     public ServerHost(int maxPlayers, ServerHostEvents eventHandler) throws IOException {
@@ -116,6 +113,7 @@ public class ServerHost {
         private final InputStream in;
         private final OutputStream out;
 
+        private static final String UTF_8 = "UTF-8";
         private boolean receiveMessages = true;
 
         ClientHandler(ServerHost host, Socket client) throws IOException {
@@ -143,7 +141,7 @@ public class ServerHost {
                         byte[] messageBuffer = Arrays.copyOfRange(buffer, 5, messageLength);
 
                         MessageType messageType = MessageType.values()[buffer[4]];
-                        String message = new String(messageBuffer, "UTF-8");
+                        String message = new String(messageBuffer, UTF_8);
 
                         host.eventHandler.onClientMessage(client, messageType, message);
 
@@ -158,7 +156,7 @@ public class ServerHost {
                             messageBuffer = Arrays.copyOfRange(resizedArray, 5, messageLength);
 
                             messageType = MessageType.values()[resizedArray[4]];
-                            message = new String(messageBuffer, "UTF-8");
+                            message = new String(messageBuffer, UTF_8);
 
                             host.eventHandler.onClientMessage(client, messageType, message);
 
@@ -177,7 +175,7 @@ public class ServerHost {
         void sendMessage(MessageType messageType, String message) {
             try {
                 message = (char) messageType.ordinal() + message;
-                message = new String(IntConverter.intToByteArray(message.length()), "UTF-8") + message;
+                message = new String(IntConverter.intToByteArray(message.length()), UTF_8) + message;
                 out.write(message.getBytes("UTF-8"));
                 out.flush();
             } catch (IOException e) {

@@ -67,7 +67,7 @@ public class SqlCard {
             while(sqlConnection.getResult().next()) {
                 int id = sqlConnection.getResult().getInt(1);
                 String name = sqlConnection.getResult().getString(2);
-                Boolean blanc = sqlConnection.getResult().getBoolean(3);
+                // Boolean blanc = sqlConnection.getResult().getBoolean(3)
 
                 //Blank spaces nog toevoegen aan Database
                 CzarCard card = new CzarCard(id, name, cardSet, 1);

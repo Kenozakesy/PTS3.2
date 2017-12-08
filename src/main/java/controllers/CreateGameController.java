@@ -230,6 +230,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             case PLAYER_DATA:
                 handleClientPlayerData(client, message);
                 break;
+            default: break;
         }
     }
 
@@ -255,7 +256,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                 handleHostPlayerData(message);
                 break;
             case START_GAME:
-                handleStartGame(message);
+                handleStartGame();
                 break;
 
             case UPDATE_LOBBY_SETTINGS:
@@ -317,6 +318,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
 
                 Platform.runLater(() -> updateCardSets());
                 break;
+                default: break;
         }
     }
 
@@ -413,7 +415,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         updateScoreBoard();
     }
 
-    private void handleStartGame(String message) {
+    private void handleStartGame() {
         System.out.println("Starting");
 
         Platform.runLater(() -> {
@@ -472,7 +474,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     }
 
     private void sendChosenCardSets(Socket client) {
-        if (lobby.getCardSetsUsing().size() == 0) {
+        if (lobby.getCardSetsUsing().isEmpty()) {
             return;
         }
 
