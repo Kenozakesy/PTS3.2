@@ -17,16 +17,16 @@ import java.util.*;
 public class Game {
     private Lobby lobby;
     private Random random = new Random();
-    private List<CzarCard> czarCards;
-    private List<PlayCard> playCards;
-    private List<PlayCard> subPilePlayCards;
-    private List<PlayCard> allCards;
+    private List<CzarCard> czarCards = new ArrayList<>();
+    private List<PlayCard> playCards = new ArrayList<>();
+    private List<PlayCard> subPilePlayCards = new ArrayList<>();
+    private List<PlayCard> allCards = new ArrayList<>();
     private CzarCard currentCzar; // Is dus de zwarte kaart die op tafel ligt, waarop gespeeld wordt.
     private boolean czarTurn;
     private static final int MAX_HAND_SIZE = 8;
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
 
-    private Map<Player, PlayCard> chosenCards;
+    private Map<Player, PlayCard> chosenCards = new HashMap<>();
 
 
     public CzarCard getCurrentCzarCard() {
@@ -59,10 +59,6 @@ public class Game {
 
     public Game(Lobby lobby) {
         this.lobby = lobby;
-        czarCards = new ArrayList<>();
-        playCards = new ArrayList<>();
-        allCards = new ArrayList<>();
-        chosenCards = new HashMap<>();
         getDecks();
     }
 
@@ -158,16 +154,16 @@ public class Game {
                 for (Player player : lobby.getPlayers().values()) {
                     if (player.getCardsInHand().size() < 8) {
 
-//                        if(playCards.isEmpty())
-//                        {
-//                            playCards.addAll(subPilePlayCards);
-//                            subPilePlayCards.clear();
-//                        }
+                        if(playCards.isEmpty())
+                        {
+                            playCards.addAll(subPilePlayCards);
+                            subPilePlayCards = new ArrayList<>(playCards.size());
+                        }
 
                         int index = random.nextInt(playCards.size());
                         player.addToHand(playCards.get(index));
 
-                        //subPilePlayCards.add(playCards.get(index));
+                        subPilePlayCards.add(playCards.get(index));
                         playCards.remove(index);
                     }
                 }
@@ -189,6 +185,7 @@ public class Game {
             }
         } catch (Exception ex) {
             //Do nothing
+            ex.printStackTrace();
         }
     }
 
