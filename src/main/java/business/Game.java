@@ -130,7 +130,6 @@ public class Game {
     public void pickBlackCard() {
         CzarCard card = czarCards.get(random.nextInt(czarCards.size()));
         this.currentCzar = card;
-        czarCards.remove(card);
     }
 
     // Opnieuw kaarten delen.
