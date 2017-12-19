@@ -158,16 +158,16 @@ public class Game {
                 for (Player player : lobby.getPlayers().values()) {
                     if (player.getCardsInHand().size() < 8) {
 
-                        if(playCards.isEmpty())
-                        {
-                            playCards.addAll(subPilePlayCards);
-                            subPilePlayCards.clear();
-                        }
+//                        if(playCards.isEmpty())
+//                        {
+//                            playCards.addAll(subPilePlayCards);
+//                            subPilePlayCards.clear();
+//                        }
 
                         int index = random.nextInt(playCards.size());
                         player.addToHand(playCards.get(index));
 
-                        subPilePlayCards.add(playCards.get(index));
+                        //subPilePlayCards.add(playCards.get(index));
                         playCards.remove(index);
                     }
                 }
