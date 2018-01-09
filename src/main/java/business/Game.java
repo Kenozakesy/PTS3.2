@@ -73,13 +73,11 @@ public class Game {
             player.removeFromHand(card);
 
             return listIsFull;
-        }
-        else {
+        } else {
             try {
                 lobby.messageServer(MessageType.PLAY_CARD, String.valueOf(card.getId()));
                 player.removeFromHand(card);
-            }
-            catch (NotClientException e) {
+            } catch (NotClientException e) {
                 // do nothing
             }
         }
@@ -94,7 +92,7 @@ public class Game {
 
     public void czarPicksCards(String cardText) {
         //Speler met punt erbij moet 1 punt krijgen doorgestuurd
-        if(lobby.isHost()) {
+        if (lobby.isHost()) {
             String playerName = null;
             for (Map.Entry<Player, PlayCard> entry : chosenCards.entrySet()) {
                 if (entry.getValue().getText().equals(cardText)) {
@@ -105,16 +103,11 @@ public class Game {
             }
 
             try {
-                lobby.messageClients(MessageType.INCREASE_POINTS, playerName);
+                lobby.messageClients(MessageType.INCREASE_POINTS, playerName + "," + cardText);
             } catch (NotHostException e) {
                 e.printStackTrace();
             }
-
-            //nieuwe beurt moet aangemaakt worden (moet og gedaan worden)
-            newTurn();
-        }
-        else
-        {
+        } else {
             try {
                 lobby.messageServer(MessageType.INCREASE_POINTS, cardText);
             } catch (NotClientException e) {
@@ -153,8 +146,7 @@ public class Game {
                 for (Player player : lobby.getPlayers().values()) {
                     if (player.getCardsInHand().size() < 8) {
 
-                        if(playCards.isEmpty())
-                        {
+                        if (playCards.isEmpty()) {
                             playCards.addAll(subPilePlayCards);
                             subPilePlayCards = new ArrayList<>(playCards.size());
                         }
@@ -201,8 +193,8 @@ public class Game {
         boolean playedCard = false;
 
         if (player.getCardsInHand().size() != MAX_HAND_SIZE) {
-                playedCard = true;
-            }
+            playedCard = true;
+        }
 
         return playedCard;
     }

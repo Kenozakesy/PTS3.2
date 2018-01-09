@@ -21,9 +21,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class GameController implements Initializable, ServerHostEvents, ServerClientEvents {
     @FXML
@@ -164,30 +162,41 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             if (lobby.getGame().playedCard(player)) {
                 hboxPlayerSelect.setVisible(false);
             }
-            if (hostListisFull){
+            if (hostListisFull) {
                 getCardsForHost();
             }
         } else if (player.getRole() == Role.CZAR) {
+            String cardText = "";
             if (rbCzarPick1.isSelected()) {
-                String cardtext = taCzar1.getText();
-                lobby.getGame().czarPicksCards(cardtext);
+                cardText = taCzar1.getText();
+                lobby.getGame().czarPicksCards(cardText);
 
             } else if (rbCzarPick2.isSelected()) {
-                String cardtext = taCzar2.getText();
-                lobby.getGame().czarPicksCards(cardtext);
+                cardText = taCzar2.getText();
+                lobby.getGame().czarPicksCards(cardText);
 
             } else if (rbCzarPick3.isSelected()) {
-                String cardtext = taCzar3.getText();
-                lobby.getGame().czarPicksCards(cardtext);
+                cardText = taCzar3.getText();
+                lobby.getGame().czarPicksCards(cardText);
 
             } else if (rbCzarPick4.isSelected()) {
-                String cardtext = taCzar4.getText();
-                lobby.getGame().czarPicksCards(cardtext);
+                cardText = taCzar4.getText();
+                lobby.getGame().czarPicksCards(cardText);
 
             }
-            if(lobby.isHost())
-            {
-                updateTurn();
+
+            if (lobby.isHost()) {
+                this.highlight(cardText);
+
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        lobby.getGame().newTurn();
+                        updateTurn();
+                    }
+                };
+
+                new Timer().schedule(task, 5000);
             }
         }
         loadPlayerHand();
@@ -198,7 +207,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
         throw new UnsupportedOperationException();
     }
 
-     void returnToMainScreen() {
+    void returnToMainScreen() {
         Platform.runLater(() -> {
             Stage stage = (Stage) btnLeaveGame.getScene().getWindow();
             stage.close();
@@ -221,7 +230,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
         List<PlayCard> cardsInHand = StaticPlayer.getPlayer().getCardsInHand();
         CzarCard czarCard = lobby.getGame().getCurrentCzarCard();
 
-
         taCard1.clear();
         taCard2.clear();
         taCard3.clear();
@@ -231,8 +239,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
         taCard7.clear();
         taCard8.clear();
 
-        try
-        {
+        try {
             taCard1.setText(cardsInHand.get(0).getText());
             taCard2.setText(cardsInHand.get(1).getText());
             taCard3.setText(cardsInHand.get(2).getText());
@@ -242,16 +249,14 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             taCard7.setText(cardsInHand.get(6).getText());
             taCard8.setText(cardsInHand.get(7).getText());
             taBlackCard.setText(czarCard.getText());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     //moet aangeroepen worden wanneer het de turn is van de czar en wanneer een nieuwe beurt begint
     public void updateTurn() {
-        Platform.runLater( ()-> {
+        Platform.runLater(() -> {
             this.changeControlVisibility();
             updateScoreBoard();
             deleteChosenCardsUI();
@@ -275,7 +280,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 this.setCzarRadioButtonsVisibility(false);
                 this.setPlebRadioButtonsVisibility(false);
                 break;
-                default: break;
+            default:
+                break;
         }
     }
 
@@ -328,13 +334,24 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     showPlayedCards(list);
                 }
 
-
                 break;
+
             case INCREASE_POINTS:
                 lobby.getGame().czarPicksCards(message);
-                updateTurn();
+                this.highlight(message);
+
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        lobby.getGame().newTurn();
+                        updateTurn();
+                    }
+                };
+
+                new Timer().schedule(task, 5000);
                 break;
-                default: break;
+            default:
+                break;
         }
         updateScoreBoard();
     }
@@ -400,7 +417,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 break;
 
             case GET_ROLE:
-
                 String[] players = message.split(",");
                 int i;
 
@@ -419,17 +435,40 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
                 updateTurn();
                 break;
+
             case INCREASE_POINTS: //new piece of code still to be tested
+                String[] data = message.split(",");
+                String name = data[0];
+                String cardData = data[1];
 
                 for (Player p : lobby.getPlayers().values()) {
-                    if(p.getName().equals(message))
-                    {
+                    if (p.getName().equals(name)) {
                         p.increasePoints();
                     }
                 }
+
+                this.highlight(cardData);
                 break;
-            default: break;
+
+            default:
+                break;
         }
+    }
+
+    private void highlight(String cardData) {
+        if (taCzar1.getText().equals(cardData)) {
+            this.highlightCard(taCzar1);
+        } else if (taCzar2.getText().equals(cardData)) {
+            this.highlightCard(taCzar2);
+        } else if (taCzar3.getText().equals(cardData)) {
+            this.highlightCard(taCzar3);
+        } else {
+            this.highlightCard(taCzar4);
+        }
+    }
+
+    private void highlightCard(TextArea card) {
+        Platform.runLater(() -> card.setStyle("-fx-control-inner-background: green"));
     }
 
     @Override
@@ -454,6 +493,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             }
         });
     }
+
     private void getCardsForHost() {
         List<PlayCard> list = new ArrayList<>();
         list.addAll(lobby.getGame().getChosenCards().values());
@@ -462,31 +502,29 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     //Laat alle gespeelde kaarten zien op de GUI.
-    private void showPlayedCards(List<PlayCard> list){
-
+    private void showPlayedCards(List<PlayCard> list) {
         try {
             taCzar1.setText(list.get(0).getText());
             taCzar2.setText(list.get(1).getText());
             taCzar3.setText(list.get(2).getText());
             taCzar4.setText(list.get(3).getText());
-        }
-        catch (IndexOutOfBoundsException ex)
-        {
+        } catch (IndexOutOfBoundsException ex) {
             // do nothing
             // Kunt proberen om een stuk of 4 if's te maken ipv deze try-catch
             // Als je ogen dat aankunnen
             deleteChosenCardsUI();
         }
-
     }
 
-    private void deleteChosenCardsUI()
-    {
+    private void deleteChosenCardsUI() {
+        taCzar1.setStyle("-fx-background-color: white");
+        taCzar2.setStyle("-fx-background-color: white");
+        taCzar3.setStyle("-fx-background-color: white");
+        taCzar4.setStyle("-fx-background-color: white");
+
         taCzar1.clear();
         taCzar2.clear();
         taCzar3.clear();
         taCzar4.clear();
     }
-
-
 }

@@ -23,6 +23,7 @@ public class LoginController {
     @FXML
     public void logIn(Event e) {
         String name = textField.getText();
+        if (name.contains(",")) return;
 
         StaticPlayer.initializePlayer();
         StaticPlayer.getPlayer().setName(name);
