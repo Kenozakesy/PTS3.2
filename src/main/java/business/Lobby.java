@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Lobby {
 
     //Relations
+    private Logger log = Logger.getLogger("warning");
     private List<CardSet> cardSetsNotUsing = new ArrayList<>();
     private List<CardSet> cardSetsUsing = null;
 
@@ -251,7 +253,7 @@ public class Lobby {
             try {
                 messageClients(MessageType.GET_ROLE, builder.toString());
             } catch (NotHostException e) {
-                e.printStackTrace();
+                log.warning(e.toString());
             }
         }
     }
@@ -269,7 +271,7 @@ public class Lobby {
             this.messageMainServer(MessageType.LOBBY_QUIT, "!");
             lobbyHost.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.toString());
         }
     }
 

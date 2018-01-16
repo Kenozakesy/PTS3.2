@@ -93,6 +93,8 @@ public class MainServerManager extends Observable implements ServerClientEvents 
 
             case START_GAME:
                 break;
+                default:
+                    break;
         }
     }
 

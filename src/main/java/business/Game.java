@@ -10,11 +10,13 @@ import dal.SqlCard;
 import networking.MessageType;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * In Sprint 2 wordt deze klasse volledig uitgewerkt
  */
 public class Game {
+    private Logger log = Logger.getLogger("warning");
     private Lobby lobby;
     private Random random = new Random();
     private List<CzarCard> czarCards = new ArrayList<>();
@@ -105,13 +107,13 @@ public class Game {
             try {
                 lobby.messageClients(MessageType.INCREASE_POINTS, playerName + "," + cardText);
             } catch (NotHostException e) {
-                e.printStackTrace();
+                log.warning(e.toString());
             }
         } else {
             try {
                 lobby.messageServer(MessageType.INCREASE_POINTS, cardText);
             } catch (NotClientException e) {
-                e.printStackTrace();
+                log.warning(e.toString());
             }
         }
 
@@ -176,7 +178,7 @@ public class Game {
             }
         } catch (Exception ex) {
             //Do nothing
-            ex.printStackTrace();
+            log.warning(ex.toString());
         }
     }
 
@@ -213,7 +215,7 @@ public class Game {
                 lobby.messageClients(MessageType.CHOSEN_CARDS, builder.toString());
                 return true;
             } catch (NotHostException e) {
-                e.printStackTrace();
+                log.warning(e.toString());
             }
 
         }
