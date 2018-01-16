@@ -84,5 +84,25 @@ public class GameTest {
         Assert.assertEquals(1, pleb.getPoints());
     }
 
+    @Test
+    public void GameTest()
+    {
+        Lobby lobby = new Lobby("1", "127.0.0.1");
+        Game game = new Game(lobby);
+        CardSet set = new CardSet(1, "name");
+
+        Player player = new Player();
+        CzarCard Czar = new CzarCard(1, "1____", set, 1);
+
+        Assert.assertEquals(game.getIsCzarTurn(), false);
+        Assert.assertEquals(game.getCurrentCzarCard(), null);
+        Assert.assertEquals(game.getAllCards().size(), 0);
+        Assert.assertEquals(game.getChosenCards().size(), 0);
+
+        game.setCurrentCzar(Czar);
+
+        Assert.assertEquals(game.getCurrentCzarCard(), Czar);
+    }
+
 
 }

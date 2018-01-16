@@ -12,21 +12,12 @@ public class Player {
     private int points;
     private Role role;
     private List<PlayCard> cardsInHand = new ArrayList<>();
-    private List<CardSet> cardSetList = null;
 
     public String getName(){return name;}
     public void setName(String name){this.name = name;}
     public int getPoints(){return points;}
     public void setPoints(int n){this.points = n;}
     public Role getRole(){return role;}
-
-    public List<CardSet> getCardSetList() {
-        return cardSetList;
-    }
-
-    public void setCardSetList(List<CardSet> cardSetList) {
-        this.cardSetList = cardSetList;
-    }
 
     public void setRole(Role n){this.role = n;}
     public List<PlayCard> getCardsInHand() {return cardsInHand;}
