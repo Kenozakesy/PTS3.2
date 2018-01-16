@@ -142,6 +142,7 @@ public class ServerClient {
         private void close() {
             try {
                 receiveMessages = false;
+                this.client.eventHandler.onServerClose();
                 this.socket.close();
             } catch (IOException e) {
                 e.printStackTrace();

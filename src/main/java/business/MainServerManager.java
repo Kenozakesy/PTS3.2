@@ -30,7 +30,6 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         client.start();
     }
 
-    // Waarom is lobbycontroller observer, en niet lobby?
     public static MainServerManager getInstance(Observer observer) {
         if (instance == null) {
             instance = new MainServerManager(observer);
@@ -45,6 +44,12 @@ public class MainServerManager extends Observable implements ServerClientEvents 
         }
         return instance;
     }
+
+    public void setObserver(Observer observer) {
+        this.deleteObservers();
+        this.addObserver(observer);
+    }
+
 
     // Stuurt een message naar de mainserver
     public void sendMessage(MessageType messageType, String message) {
@@ -93,8 +98,8 @@ public class MainServerManager extends Observable implements ServerClientEvents 
 
             case START_GAME:
                 break;
-                default:
-                    break;
+            default:
+                break;
         }
     }
 
@@ -106,7 +111,7 @@ public class MainServerManager extends Observable implements ServerClientEvents 
 
     @Override
     public void onServerClose() {
-       // Not used for now
+        // Not used for now
     }
 
     public void refreshLobbies() {

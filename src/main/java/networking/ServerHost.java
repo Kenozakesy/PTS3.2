@@ -8,12 +8,13 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ServerHost {
     private final ServerSocket server;
-    private final Set<ClientHandler> clients;
+    private final Set<ClientHandler> clients = Collections.synchronizedSet(new HashSet<>());
     private final ClientAcceptor acceptor;
     private final int maxPlayers;
     private ServerHostEvents eventHandler;
@@ -27,16 +28,14 @@ public class ServerHost {
         this.eventHandler = eventHandler;
     }
 
-    public synchronized void removeClient(ClientHandler handler) {
+    private synchronized void removeClient(ClientHandler handler) {
         clients.remove(handler);
-
     }
 
     public ServerHost(int maxPlayers, ServerHostEvents eventHandler) throws IOException {
         this.eventHandler = eventHandler;
         this.maxPlayers = maxPlayers;
         server = new ServerSocket(1337);
-        clients = new HashSet<>();
         acceptor = new ClientAcceptor(this);
     }
 
@@ -97,6 +96,7 @@ public class ServerHost {
                         handler.start();
                     } catch (IOException | InterruptedException e) {
                         e.printStackTrace();
+
                     }
                 }
             }

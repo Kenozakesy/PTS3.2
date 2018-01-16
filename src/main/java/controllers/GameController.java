@@ -2,6 +2,7 @@ package controllers;
 
 import business.*;
 import business.exceptions.NotClientException;
+import business.exceptions.NotHostException;
 import business.statics.StaticPlayer;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -203,8 +204,19 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     public void btnLeaveGame() {
-        // leave game method for later
-        throw new UnsupportedOperationException();
+        if (lobby.isHost()) {
+            try {
+                quitHost();
+            } catch (NotHostException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                lobby.messageServer(MessageType.QUIT_GAME, "");
+            } catch (NotClientException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     void returnToMainScreen() {
@@ -216,6 +228,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             Parent root1 = null;
             try {
                 root1 = fxmlLoader.load();
+                MainServerManager.getInstance().setObserver(fxmlLoader.getController());
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -350,10 +363,25 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
                 new Timer().schedule(task, 5000);
                 break;
+
+            case QUIT_GAME:
+                try {
+                    quitHost();
+                } catch (NotHostException e) {
+                    e.printStackTrace();
+                }
+                break;
+
             default:
                 break;
         }
         updateScoreBoard();
+    }
+
+    private void quitHost() throws NotHostException {
+        lobby.messageClients(MessageType.QUIT_GAME, "");
+        returnToMainScreen();
+        lobby.disconnect();
     }
 
     @Override
@@ -364,13 +392,11 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     @Override
     public void onClientLeave(Socket client) {
-        // interface method. Currently unused.
-
+       //Not implemented
     }
 
     @Override
     public void onHostMessage(MessageType messageType, String message) {
-        System.out.println("on host");
         switch (messageType) {
             case RECEIVE_CARD:
                 Player player = StaticPlayer.getPlayer();
@@ -450,6 +476,10 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 this.highlight(cardData);
                 break;
 
+            case QUIT_GAME:
+                returnToMainScreen();
+                break;
+
             default:
                 break;
         }
@@ -479,8 +509,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     @Override
     public void onServerClose() {
-        // interface methode. Ongebruikt momenteel
-
+        //Not implemented
     }
 
     private void updateScoreBoard() {
