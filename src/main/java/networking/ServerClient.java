@@ -145,7 +145,6 @@ public class ServerClient {
                 this.socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Could not close client.");
             }
         }
     }
