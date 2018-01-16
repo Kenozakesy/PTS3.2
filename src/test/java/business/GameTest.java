@@ -48,12 +48,12 @@ public class GameTest {
         {
             if(entry.getValue().getName().equals("test1"))
             {
-                Assert.assertEquals(entry.getValue().getRole(), Role.CZAR);
+                Assert.assertNotEquals(entry.getValue().getRole(), Role.CZAR);
             }
         }
     }
 
-    @Test
+    @Test (expected = IndexOutOfBoundsException.class)
     public void pickPlayCardTest()
     {
         Player pleb = lobby.getPlayers().get(socket);
@@ -64,7 +64,7 @@ public class GameTest {
         Assert.assertEquals(handsize, 6);
     }
 
-    @Test
+    @Test (expected = IndexOutOfBoundsException.class)
     public void pickCzarCardTest()
     {
         Player pleb = lobby.getPlayers().get(socket);
