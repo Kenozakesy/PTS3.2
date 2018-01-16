@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 /**
  * Created by Gebruiker on 12-9-2017.
@@ -83,6 +84,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     private ListView lvScore;
 
     private Stage previousStage;
+    private Logger log = Logger.getLogger("warning");
 
     public void setPreviousStage(Stage previousStage) {
         this.previousStage = previousStage;
@@ -121,7 +123,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             try {
                 lobby.messageClients(MessageType.UPDATE_CARDSETS, String.valueOf(set.getId()));
             } catch (NotHostException e1) {
-                e1.printStackTrace();
+                log.warning(e1.toString());
             }
 
             updateCardSets();
@@ -137,7 +139,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             try {
                 lobby.messageClients(MessageType.UPDATE_CARDSETS, String.valueOf(set.getId()));
             } catch (NotHostException e1) {
-                e1.printStackTrace();
+                log.warning(e.toString());
             }
 
             updateCardSets();
@@ -154,7 +156,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             try {
                 lobby.messageClients(MessageType.CHAT_MESSAGE, StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
             } catch (NotHostException e1) {
-                e1.printStackTrace();
+                log.warning(e.toString());
             }
 
             putChatMessage(StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
@@ -162,7 +164,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             try {
                 lobby.messageServer(MessageType.CHAT_MESSAGE, StaticPlayer.getPlayer().getName() + ": " + tfChatBox.getText());
             } catch (NotClientException e1) {
-                e1.printStackTrace();
+                log.warning(e.toString());
             }
         }
 
@@ -194,8 +196,8 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                     lobby.messageClients(MessageType.START_GAME, "");
                 }
 
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            } catch (Exception e1) {
+                log.warning(e1.toString());
             }
         } else {
             lbPlayers.setText("Too many players to start!");
@@ -222,7 +224,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                 try {
                     lobby.messageClients(MessageType.CHAT_MESSAGE, message);
                 } catch (NotHostException e) {
-                    e.printStackTrace();
+                    log.warning(e.toString());
                 }
 
                 putChatMessage(message);
@@ -241,7 +243,6 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
 
     @Override
     public void onClientLeave(Socket client) {
-        System.out.println(lobby.getPlayers().get(client).getName() + "has left!");
         lobby.getPlayers().remove(client);
         updateScoreBoard();
     }
@@ -327,7 +328,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         try {
             lobby.messageServer(MessageType.PLAYER_DATA, StaticPlayer.getPlayer().getName());
         } catch (NotClientException e) {
-            e.printStackTrace();
+            log.warning(e.toString());
         }
     }
 
@@ -366,20 +367,17 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
             if (lobby.isHost()) {
                 lobby.setHostEventHandler(gameController);
             } else {
-                System.out.println("Setting client eventhandler");
                 lobby.setClientEventHandler(gameController);
             }
 
             fxmlLoader.setController(gameController);
 
-            System.out.println("Loading");
             Parent root1 = fxmlLoader.load();
             Stage stage2 = new Stage();
             stage2.setScene(new Scene(root1));
-            System.out.println("Showing");
             stage2.show();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.warning(ex.toString());
         }
     }
 
@@ -401,7 +399,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                 lobby.messageClient(entry.getKey(), MessageType.PLAYER_DATA, message);
             }
         } catch (NotHostException e) {
-            e.printStackTrace();
+            log.warning(e.toString());
         }
 
         Player player = new Player(message);
@@ -416,13 +414,12 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
     }
 
     private void handleStartGame() {
-        System.out.println("Starting");
 
         Platform.runLater(() -> {
             try {
                 startGameScreen(lobby);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.warning(e.toString());
             }
         });
     }
@@ -469,7 +466,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         try {
             lobby.messageClients(MessageType.UPDATE_LOBBY_SETTINGS, message);
         } catch (NotHostException e) {
-            e.printStackTrace();
+            log.warning(e.toString());
         }
     }
 
@@ -488,7 +485,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
         try {
             lobby.messageClient(client, MessageType.INIT_PRE_CHOSEN_CARD_SETS, builder.toString());
         } catch (NotHostException e) {
-            e.printStackTrace();
+            log.warning(e.toString());
         }
     }
 

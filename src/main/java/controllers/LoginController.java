@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class LoginController {
 
@@ -20,8 +21,11 @@ public class LoginController {
     @FXML
     Button button;
 
+
+
     @FXML
     public void logIn(Event e) {
+
         String name = textField.getText();
         if (name.contains(",")) return;
 
@@ -36,8 +40,9 @@ public class LoginController {
         Parent root1 = null;
         try {
             root1 = fxmlLoader.load();
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException ex) {
+            Logger log = Logger.getLogger("warning");
+            log.warning(ex.toString());
         }
 
         if (root1 != null) {

@@ -192,7 +192,6 @@ public class ServerHost {
                 this.client.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Could not close client: " + client.getRemoteSocketAddress());
             }
         }
 

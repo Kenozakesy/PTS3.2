@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 public class LobbyController implements Initializable, Observer {
 
@@ -34,6 +35,7 @@ public class LobbyController implements Initializable, Observer {
     @FXML
     private ListView lvChat;
 
+    private Logger log = Logger.getLogger("warning");
     private MainServerManager mainServerManager;
 
     @Override
@@ -92,14 +94,14 @@ public class LobbyController implements Initializable, Observer {
                 try {
                     lobby.startHosting(createGameController);
                 } catch (AlreadyHostingException e) {
-                    e.printStackTrace();
+                    log.warning(e.toString());
                 }
             } else {
                 String ip = lvLobby.getSelectionModel().getSelectedItem().getIP();
                 try {
                     lobby.joinLobby(ip, 1337, createGameController);
                 } catch (AlreadyHostingException e) {
-                    e.printStackTrace();
+                    log.warning(e.toString());
                 }
             }
 
@@ -112,7 +114,7 @@ public class LobbyController implements Initializable, Observer {
             stage2.setScene(new Scene(root1));
             stage2.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warning(e.toString());
         }
     }
 
