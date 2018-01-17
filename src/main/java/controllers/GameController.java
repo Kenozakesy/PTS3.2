@@ -96,7 +96,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     private HBox hboxCzarSelect;
 
     private Lobby lobby;
-    int cardRequestCount = 0;
+    private int cardRequestCount = 0;
 
     private synchronized void incrementCardRequestCount() {
         cardRequestCount++;
@@ -138,35 +138,31 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @FXML   //CZAR chooses a card and a new rounds starts
     public void btnChoose(Event e) {
         Player player = StaticPlayer.getPlayer();
-        boolean hostListisFull = false;
 
         if (player.getRole() == Role.PLEB) {
             //hier moet een betere manier voor zijn
 
             if (rbtnCard1.isSelected()) {
-                hostListisFull = lobby.getGame().playerPicksCard(0, player);
+                lobby.getGame().playerPicksCard(0, player);
             } else if (rbtnCard2.isSelected()) {
-                hostListisFull = lobby.getGame().playerPicksCard(1, player);
+                lobby.getGame().playerPicksCard(1, player);
             } else if (rbtnCard3.isSelected()) {
-                hostListisFull = lobby.getGame().playerPicksCard(2, player);
+                lobby.getGame().playerPicksCard(2, player);
             } else if (rbtnCard4.isSelected()) {
-                hostListisFull = lobby.getGame().playerPicksCard(3, player);
+                lobby.getGame().playerPicksCard(3, player);
             } else if (rbtnCard5.isSelected()) {
-                hostListisFull = lobby.getGame().playerPicksCard(4, player);
+                lobby.getGame().playerPicksCard(4, player);
             } else if (rbtnCard6.isSelected()) {
-                hostListisFull = lobby.getGame().playerPicksCard(5, player);
+                lobby.getGame().playerPicksCard(5, player);
             } else if (rbtnCard7.isSelected()) {
-                hostListisFull = lobby.getGame().playerPicksCard(6, player);
+                lobby.getGame().playerPicksCard(6, player);
             } else if (rbtnCard8.isSelected()) {
-                hostListisFull = lobby.getGame().playerPicksCard(7, player);
+                lobby.getGame().playerPicksCard(7, player);
             }
             if (lobby.getGame().playedCard(player)) {
                 hboxPlayerSelect.setVisible(false);
             }
-            if (hostListisFull) {
-                getCardsForHost();
-            }
-        } else if (player.getRole() == Role.CZAR) {
+        } else if (player.getRole() == Role.CZAR && checkIfACardIsSelected()) {
             String cardText = "";
             if (rbCzarPick1.isSelected()) {
                 cardText = taCzar1.getText();
@@ -183,7 +179,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             } else if (rbCzarPick4.isSelected()) {
                 cardText = taCzar4.getText();
                 lobby.getGame().czarPicksCards(cardText);
-
             }
 
             if (lobby.isHost()) {
@@ -200,7 +195,32 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 new Timer().schedule(task, 5000);
             }
         }
+
+        Role role = StaticPlayer.getPlayer().getRole();
+
+        if (role == Role.PLEB && checkIfACardIsSelected()) {
+            btnChoose.setDisable(true);
+        }
+
         loadPlayerHand();
+    }
+
+    private boolean checkIfACardIsSelected() {
+        if (StaticPlayer.getPlayer().getRole() == Role.PLEB &&
+                rbtnCard1.isSelected() || rbtnCard2.isSelected() ||
+                rbtnCard3.isSelected() || rbtnCard4.isSelected() ||
+                rbtnCard5.isSelected() || rbtnCard6.isSelected() ||
+                rbtnCard7.isSelected() || rbtnCard8.isSelected()) {
+            return true;
+        }
+
+        if (StaticPlayer.getPlayer().getRole() == Role.CZAR &&
+                rbCzarPick1.isSelected() || rbCzarPick2.isSelected() ||
+                rbCzarPick3.isSelected() || rbCzarPick4.isSelected()) {
+            return true;
+        }
+
+        return false;
     }
 
     public void btnLeaveGame() {
@@ -277,6 +297,12 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             updateScoreBoard();
             deleteChosenCardsUI();
             loadPlayerHand();
+
+            if (StaticPlayer.getPlayer().getRole() == Role.PLEB) {
+                btnChoose.setDisable(false);
+            } else if (StaticPlayer.getPlayer().getRole() == Role.CZAR) {
+                btnChoose.setDisable(true);
+            }
         });
     }
 
@@ -477,6 +503,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 }
 
                 Platform.runLater(() -> lvChat.getItems().add(name + " has won this round!"));
+                updateScoreBoard();
 
                 this.highlight(cardData);
                 break;
@@ -538,6 +565,10 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     //Laat alle gespeelde kaarten zien op de GUI.
     private void showPlayedCards(List<PlayCard> list) {
         Collections.shuffle(list);
+
+        if (StaticPlayer.getPlayer().getRole() == Role.CZAR) {
+            btnChoose.setDisable(false);
+        }
 
         try {
             taCzar1.setText(list.get(0).getText());
