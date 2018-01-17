@@ -138,29 +138,33 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @FXML   //CZAR chooses a card and a new rounds starts
     public void btnChoose(Event e) {
         Player player = StaticPlayer.getPlayer();
+        boolean hostListIsFull = false;
 
         if (player.getRole() == Role.PLEB) {
             //hier moet een betere manier voor zijn
 
             if (rbtnCard1.isSelected()) {
-                lobby.getGame().playerPicksCard(0, player);
+                hostListIsFull = lobby.getGame().playerPicksCard(0, player);
             } else if (rbtnCard2.isSelected()) {
-                lobby.getGame().playerPicksCard(1, player);
+                hostListIsFull =lobby.getGame().playerPicksCard(1, player);
             } else if (rbtnCard3.isSelected()) {
-                lobby.getGame().playerPicksCard(2, player);
+                hostListIsFull =lobby.getGame().playerPicksCard(2, player);
             } else if (rbtnCard4.isSelected()) {
-                lobby.getGame().playerPicksCard(3, player);
+                hostListIsFull =lobby.getGame().playerPicksCard(3, player);
             } else if (rbtnCard5.isSelected()) {
-                lobby.getGame().playerPicksCard(4, player);
+                hostListIsFull =lobby.getGame().playerPicksCard(4, player);
             } else if (rbtnCard6.isSelected()) {
-                lobby.getGame().playerPicksCard(5, player);
+                hostListIsFull =lobby.getGame().playerPicksCard(5, player);
             } else if (rbtnCard7.isSelected()) {
-                lobby.getGame().playerPicksCard(6, player);
+                hostListIsFull =lobby.getGame().playerPicksCard(6, player);
             } else if (rbtnCard8.isSelected()) {
-                lobby.getGame().playerPicksCard(7, player);
+                hostListIsFull =lobby.getGame().playerPicksCard(7, player);
             }
             if (lobby.getGame().playedCard(player)) {
                 hboxPlayerSelect.setVisible(false);
+            }
+            if (hostListIsFull) {
+                getCardsForHost();
             }
         } else if (player.getRole() == Role.CZAR && checkIfACardIsSelected()) {
             String cardText = "";
