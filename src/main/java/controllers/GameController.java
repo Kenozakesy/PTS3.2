@@ -534,6 +534,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     //Laat alle gespeelde kaarten zien op de GUI.
     private void showPlayedCards(List<PlayCard> list) {
+        Collections.shuffle(list);
+        
         try {
             taCzar1.setText(list.get(0).getText());
             taCzar2.setText(list.get(1).getText());
