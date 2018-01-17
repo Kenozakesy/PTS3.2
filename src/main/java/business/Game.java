@@ -28,7 +28,6 @@ public class Game {
     private boolean czarTurn;
     private static final int MAX_HAND_SIZE = 8;
 
-    private final Random rand = new Random();
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
 
     private Map<Player, PlayCard> chosenCards = new HashMap<>();
@@ -219,7 +218,10 @@ public class Game {
         StringBuilder builder = new StringBuilder();
 
         if (chosenCards.size() >= lobby.getPlayers().size() - 1 && lobby.isHost()) {
-            for (PlayCard card : chosenCards.values()) {
+            List<PlayCard> cards = new ArrayList<>(chosenCards.values());
+            Collections.shuffle(cards);
+
+            for (PlayCard card : cards) {
                 builder.append(String.valueOf(card.getId()) + ",");
             }
 
