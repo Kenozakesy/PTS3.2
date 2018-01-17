@@ -20,12 +20,15 @@ public class Game {
     private Lobby lobby;
     private Random random = new Random();
     private List<CzarCard> czarCards = new ArrayList<>();
+    private List<CzarCard> czarCardsSubPile = new ArrayList<>();
     private List<PlayCard> playCards = new ArrayList<>();
     private List<PlayCard> subPilePlayCards = new ArrayList<>();
     private List<PlayCard> allCards = new ArrayList<>();
     private CzarCard currentCzar; // Is dus de zwarte kaart die op tafel ligt, waarop gespeeld wordt.
     private boolean czarTurn;
     private static final int MAX_HAND_SIZE = 8;
+
+    private final Random rand = new Random();
     // Gekozen kaarten door de spelers in de HUIDIGE ronde.
 
     private Map<Player, PlayCard> chosenCards = new HashMap<>();
@@ -124,6 +127,14 @@ public class Game {
     // Een zwarte kaart wordt gekozen om te lezen en wordt meteen uit de te kiezen kaarten gehaald.
     public void pickBlackCard() {
         CzarCard card = czarCards.get(random.nextInt(czarCards.size()));
+        czarCards.remove(card);
+        czarCardsSubPile.add(card);
+
+        if (czarCards.isEmpty()) {
+            czarCards.addAll(czarCardsSubPile);
+            czarCardsSubPile = new ArrayList<>(czarCards.size());
+        }
+
         this.currentCzar = card;
     }
 
@@ -211,6 +222,7 @@ public class Game {
             for (PlayCard card : chosenCards.values()) {
                 builder.append(String.valueOf(card.getId()) + ",");
             }
+
             try {
                 lobby.messageClients(MessageType.CHOSEN_CARDS, builder.toString());
                 return true;

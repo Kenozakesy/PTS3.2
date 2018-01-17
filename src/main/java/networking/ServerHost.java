@@ -126,7 +126,7 @@ public class ServerHost {
 
         @Override
         public void run() {
-            byte[] buffer = new byte[512];
+            byte[] buffer = new byte[2048];
 
             while (receiveMessages && !client.isClosed()) {
                 try {
@@ -163,7 +163,7 @@ public class ServerHost {
                             index += messageLength;
                         }
 
-                        buffer = new byte[512];
+                        buffer = new byte[2048];
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

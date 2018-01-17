@@ -94,7 +94,6 @@ public class ServerClient {
                     if (len != 0) {
                         byte[] lengthBytes = Arrays.copyOfRange(buffer, 0, 4);
                         int messageLength = IntConverter.byteArrayToInt(lengthBytes) + 4;
-
                         byte[] messageBuffer = Arrays.copyOfRange(buffer, 5, messageLength);
 
                         MessageType messageType = MessageType.values()[buffer[4]];
@@ -109,6 +108,7 @@ public class ServerClient {
 
                             lengthBytes = Arrays.copyOfRange(resizedArray, 0, 4);
                             messageLength = IntConverter.byteArrayToInt(lengthBytes) + 4;
+
                             messageBuffer = Arrays.copyOfRange(resizedArray, 5, messageLength);
 
                             messageType = MessageType.values()[resizedArray[4]];

@@ -85,7 +85,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     @FXML
     private TextArea taBlackCard;
     @FXML
-    private TextArea taChatHistory;
+    private ListView lvChat;
     @FXML
     private TextField tbChat;
     @FXML
@@ -392,7 +392,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
 
     @Override
     public void onClientLeave(Socket client) {
-       //Not implemented
+        //Not implemented
     }
 
     @Override
@@ -472,6 +472,8 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                         p.increasePoints();
                     }
                 }
+
+                Platform.runLater(() -> lvChat.getItems().add(name + " has won this round!"));
 
                 this.highlight(cardData);
                 break;
