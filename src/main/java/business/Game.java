@@ -218,10 +218,7 @@ public class Game {
         StringBuilder builder = new StringBuilder();
 
         if (chosenCards.size() >= lobby.getPlayers().size() - 1 && lobby.isHost()) {
-            List<PlayCard> cards = new ArrayList<>(chosenCards.values());
-            Collections.shuffle(cards);
-
-            for (PlayCard card : cards) {
+            for (PlayCard card : chosenCards.values()) {
                 builder.append(String.valueOf(card.getId()) + ",");
             }
 
