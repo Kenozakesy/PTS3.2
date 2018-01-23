@@ -11,6 +11,5 @@ public class PlayCard extends Cards
         super(id, text, cardSet);
         this.blank = blank;
     }
-
 }
 

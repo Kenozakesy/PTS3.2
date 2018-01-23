@@ -41,7 +41,7 @@ public class SqlCard {
                 cards.add(card);
             }
         } catch(Exception ex) {
-            ex.printStackTrace();
+            //Do nothing
         }
         finally{
             sqlConnection.closeAll();
@@ -74,7 +74,7 @@ public class SqlCard {
                 cards.add(card);
             }
         } catch(Exception ex) {
-            ex.printStackTrace();
+            //Do nothing
         }
         finally{
             sqlConnection.closeAll();
@@ -106,7 +106,7 @@ public class SqlCard {
             }
             return card;
         } catch(Exception ex) {
-            ex.printStackTrace();
+            //Do nothing
             return null;
         }
         finally{

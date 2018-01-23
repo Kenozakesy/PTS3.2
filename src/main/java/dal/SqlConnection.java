@@ -27,7 +27,6 @@ public class SqlConnection {
             return DriverManager.getConnection("jdbc:sqlserver://studsql01.fhict.local;databaseName=dbi299244;", "dbi299244", "PTS3Groep1");
         }
         catch(Exception exception){
-            exception.printStackTrace();
             return null;
         }
     }
@@ -53,7 +52,7 @@ public class SqlConnection {
             try {
                 statement.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+               //Do nothing
             }
         }
     }
@@ -63,7 +62,7 @@ public class SqlConnection {
             try {
                 result.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                //Do nothing
             }
         }
     }
@@ -73,7 +72,7 @@ public class SqlConnection {
             try {
                 connection.close();
             } catch (SQLException e) {
-                e.printStackTrace();
+                //Do nothing
             }
         }
     }

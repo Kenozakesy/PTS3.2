@@ -122,7 +122,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             try {
                 lobby.messageServer(MessageType.RECEIVE_CARD, "!");
             } catch (NotClientException e) {
-                e.printStackTrace();
+                //Do nothing
             }
         }
     }
@@ -232,13 +232,13 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             try {
                 quitHost();
             } catch (NotHostException e) {
-                e.printStackTrace();
+                //Do nothing
             }
         } else {
             try {
                 lobby.messageServer(MessageType.QUIT_GAME, "");
             } catch (NotClientException e) {
-                e.printStackTrace();
+                //Do nothing
             }
         }
     }
@@ -254,7 +254,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 root1 = fxmlLoader.load();
                 MainServerManager.getInstance().setObserver(fxmlLoader.getController());
             } catch (IOException e1) {
-                e1.printStackTrace();
+                //Do nothing
             }
             Stage stage2 = new Stage();
             stage2.setScene(new Scene(root1));
@@ -290,7 +290,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
             taCard8.setText(cardsInHand.get(7).getText());
             taBlackCard.setText(czarCard.getText());
         } catch (Exception e) {
-            e.printStackTrace();
+            //Do nothing
         }
     }
 
@@ -373,7 +373,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     try {
                         list.addAll(lobby.getGame().getChosenCards().values());
                     } catch (NullPointerException e) {
-                        e.printStackTrace();
                         break;
                     }
 
@@ -401,7 +400,7 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                 try {
                     quitHost();
                 } catch (NotHostException e) {
-                    e.printStackTrace();
+                    //Do nothing
                 }
                 break;
 
@@ -469,7 +468,6 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
                     }
                     list.addAll(lobby.getGame().getChosenCards().values());
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
                     break;
                 }
                 showPlayedCards(list);
@@ -588,10 +586,12 @@ public class GameController implements Initializable, ServerHostEvents, ServerCl
     }
 
     private void deleteChosenCardsUI() {
-        taCzar1.setStyle("-fx-background-color: white");
-        taCzar2.setStyle("-fx-background-color: white");
-        taCzar3.setStyle("-fx-background-color: white");
-        taCzar4.setStyle("-fx-background-color: white");
+        final String whiteBackground = "-fx-background-color: white";
+
+        taCzar1.setStyle(whiteBackground);
+        taCzar2.setStyle(whiteBackground);
+        taCzar3.setStyle(whiteBackground);
+        taCzar4.setStyle(whiteBackground);
 
         taCzar1.clear();
         taCzar2.clear();

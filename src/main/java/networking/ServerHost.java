@@ -95,8 +95,7 @@ public class ServerHost {
                         host.clients.add(handler);
                         handler.start();
                     } catch (IOException | InterruptedException e) {
-                        e.printStackTrace();
-
+                        //Do nothing
                     }
                 }
             }
@@ -166,7 +165,6 @@ public class ServerHost {
                         buffer = new byte[2048];
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
                     this.close();
                 }
             }
@@ -179,7 +177,6 @@ public class ServerHost {
                 out.write(message.getBytes("UTF-8"));
                 out.flush();
             } catch (IOException e) {
-                e.printStackTrace();
                 this.close();
             }
         }
@@ -191,7 +188,7 @@ public class ServerHost {
                 this.receiveMessages = false;
                 this.client.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                //Do nothing
             }
         }
 

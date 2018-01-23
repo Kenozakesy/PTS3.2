@@ -279,7 +279,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                     if (set.getId() == id) {
                         lobby.getCardSetsUsing().remove(set);
                         lobby.getCardSetsNotUsing().add(set);
-                        Platform.runLater(() -> updateCardSets());
+                        Platform.runLater(this::updateCardSets);
                         return;
                     }
 
@@ -289,7 +289,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                     if (set.getId() == id) {
                         lobby.getCardSetsNotUsing().remove(set);
                         lobby.getCardSetsUsing().add(set);
-                        Platform.runLater(() -> updateCardSets());
+                        Platform.runLater(this::updateCardSets);
                         return;
                     }
                 }
@@ -317,7 +317,7 @@ public class CreateGameController implements Initializable, ChangeListener<Strin
                     lobby.getCardSetsUsing().add(set);
                 }
 
-                Platform.runLater(() -> updateCardSets());
+                Platform.runLater(this::updateCardSets);
                 break;
                 default: break;
         }

@@ -34,7 +34,7 @@ public class SqlCardSet {
                 sets.add(set);
             }
         } catch(Exception ex){
-            ex.printStackTrace();
+            //Do nothing
         }
         finally{
             sqlConnection.closeAll();
@@ -62,7 +62,6 @@ public class SqlCardSet {
             }
             return cardSet;
         } catch(Exception ex) {
-            ex.printStackTrace();
             return null;
         }
         finally{

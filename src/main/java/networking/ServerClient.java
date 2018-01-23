@@ -77,7 +77,6 @@ public class ServerClient {
 
                 this.readInput();
             } catch (IOException e) {
-                e.printStackTrace();
                 this.close();
             }
         }
@@ -122,7 +121,6 @@ public class ServerClient {
                         buffer = new byte[2048];
                     }
                 } catch (IOException ex) {
-                    ex.printStackTrace();
                     this.close();
                 }
             }
@@ -135,7 +133,7 @@ public class ServerClient {
                 out.write(message.getBytes(UTF_8));
                 out.flush();
             } catch (IOException e) {
-                e.printStackTrace();
+                //Do nothing
             }
         }
 
@@ -145,7 +143,7 @@ public class ServerClient {
                 this.client.eventHandler.onServerClose();
                 this.socket.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                //Do nothing
             }
         }
     }
